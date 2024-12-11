@@ -10,25 +10,14 @@
 
 <body>
     <header>
-        <h1>Toys Page</h1>
+        <h1>QR Home Page</h1>
         <nav>
             <a href="{{ route('home') }}">Home</a>
             <a href="{{ route('toys') }}">Toys</a>
             <a href="{{ route('qr-code') }}">QR Codes</a>
-
         </nav>
         <hr>
-        <p>This is the toys page</p>
-        <div>
-            <ul>
-                @foreach ($toys as $toy)
-                    <li>{{ $toy->name }} - ${{ $toy->price }}</li>
-                @endforeach
-            </ul>
-        </div>
-        <hr>
     </header>
-
 </body>
 
 </html>
