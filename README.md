@@ -41,14 +41,16 @@ composer install
 ## Artisan Serve/Hosting Problems
 ### Check firewall settings on your computer, ensure the port is open and accessible
 1. Open *Windows Defender -> Firewall -> Advanced Settings -> Inbound Rules
-2.  Modify existing rule for port
-   or
-    Add rule for port
-2.1 For adding rules:
-  2.2 Set rule type to Port
-  2.3 Set as TCP and specify port number
-  2.4 Allow connection & set to apply to all profiles
-3. Check if your device's connection is set to Private/Public by going to *Settings->'name of connection'->Network Profile (Private/Public)
+2.  Modify existing rule for port or... Add new rule for port
+      2.1 For adding rules:
+    
+      2.2 Set rule type to Port
+   
+      2.3 Set as TCP and specify port number
+  
+     2.4 Allow connection & set to apply to all profiles
+  
+4. Check if your device's connection is set to Private/Public by going to *Settings->'name of connection'->Network Profile (Private/Public)
     _(Network profiles can have certain restrictions)_
 
 ## Database Connection Problems
@@ -61,8 +63,13 @@ composer install
 2. Navigate to *SQL Server Network Configuration* -> Protocols for MSSQLSERVER
 3. Ensure TCP/IP is enabled
 4. To allow SQL server to listen on a specific TCP port
+   
    4.1 Open **SQL Server Configuration Manager**
+   
    4.2 Under **Protocols** for MSSQLSERVER, double-click **TCP/IP**
+   
    4.3 Enable and activate IP1 and IP2, ensure the same port number **_(IP1 is the first IP address SQL Server binds to)_**
+   
    4.4 Leave TCP Dynamic Ports as Blank (for IPAII) **_(IPAII represents all settings that apply to all IP addresses)_**
+   
      Leave TCP Dynamic Ports blank to make SQL Server listen to a specific port (1433 for defalt instances)
