@@ -1,0 +1,43 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('submissions', function (Blueprint $table) {
+            $table->id('SubmissionID'); // Primary key
+            $table->unsignedBigInteger('AssignmentID')->nullable();
+            $table->unsignedBigInteger('AssessmentID')->nullable();
+            $table->unsignedBigInteger('FacultyID');
+            $table->unsignedBigInteger('StudentID');
+            $table->text('Content')->nullable();
+            $table->string('FileName', 255)->nullable(false);
+            $table->string('FileType', 50)->nullable(false);
+            $table->binary('FileData')->nullable(false); 
+            $table->timestamp('SubmittedAt')->useCurrent();
+            $table->float('Grade')->nullable();
+        
+            // Foreign keys
+            $table->foreign('AssignmentID')->references('AssignmentID')->on('assignments')->onDelete('cascade');
+            $table->foreign('AssessmentID')->references('AssessmentID')->on('assessments')->onDelete('cascade');
+            $table->foreign('FacultyID')->references('UserID')->on('users')->onDelete('cascade');
+            $table->foreign('StudentID')->references('UserID')->on('users')->onDelete('cascade');
+        });
+        
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('submissions');
+    }
+};
