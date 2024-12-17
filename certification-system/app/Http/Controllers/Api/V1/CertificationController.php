@@ -7,14 +7,10 @@ use App\Models\Certification;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class CertificationController extends Controller
 {
-    
-    /* TO DO: ADD Certification model
-    *
-    */
-
 
     #Retrieve certifications with filtering and pagination.
     #https://laravel.com/docs/5.0/eloquent -> Eloquent ORM 
@@ -27,13 +23,13 @@ class CertificationController extends Controller
             // Advanced filtering options
             # https://laravel.com/docs/11.x/queries#where-clauses
             if ($request->has('search')) { // Checks if search parameter exists in the request (example request:GET /certifications?search=John)
-            # https://laravel.com/docs/11.x/queries#subquery-where-clauses
+                # https://laravel.com/docs/11.x/queries#subquery-where-clauses
                 $search = $request->search;
-                $query->where(function($q) use ($search) {  //function($q) anonymous function, use allows $search variable inside function
+                $query->where(function ($q) use ($search) {  //function($q) anonymous function, use allows $search variable inside function
                     $q->where('FirstName', 'LIKE', "%{$search}%") //$q constructs sub query logic (syntax: $query->where('column', 'operator', 'value')
-                      ->orWhere('LastName', 'LIKE', "%{$search}%") // Logical Grouping https://laravel.com/docs/master/queries#logical-grouping:~:text=%2D%3Eget()%3B-,Logical%20Grouping,-Sometimes%20you%20may
-                      ->orWhere('CertificationNumber', 'LIKE', "%{$search}%")
-                      ->orWhere('Email', 'LIKE', "%{$search}%");
+                        ->orWhere('LastName', 'LIKE', "%{$search}%") // Logical Grouping https://laravel.com/docs/master/queries#logical-grouping:~:text=%2D%3Eget()%3B-,Logical%20Grouping,-Sometimes%20you%20may
+                        ->orWhere('CertificationNumber', 'LIKE', "%{$search}%")
+                        ->orWhere('Email', 'LIKE', "%{$search}%");
                 });
             }
 
@@ -49,7 +45,7 @@ class CertificationController extends Controller
             // Date range filtering
             if ($request->has('start_date') && $request->has('end_date')) {
                 $query->whereBetween('IssuedAt', [
-                    $request->start_date, 
+                    $request->start_date,
                     $request->end_date
                 ]);
             }
@@ -70,7 +66,7 @@ class CertificationController extends Controller
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'success' => false, 
+                'success' => false,
                 'message' => 'Error retrieving certifications',
                 'error' => config('app.debug') ? $e->getMessage() : null
             ], 500);
@@ -84,7 +80,7 @@ class CertificationController extends Controller
             ->findOrFail($id);
 
         return response()->json([
-            'success' => true, 
+            'success' => true,
             'data' => $certification
         ]);
     }
@@ -124,7 +120,7 @@ class CertificationController extends Controller
             $certification = Certification::create($validated);
 
             return response()->json([
-                'success' => true, 
+                'success' => true,
                 'message' => 'Certification created successfully',
                 'data' => $certification
             ], 201);
@@ -144,7 +140,7 @@ class CertificationController extends Controller
             $certification = Certification::findOrFail($id);
 
             $validated = $request->validate([
-                'CertificationNumber' => 'sometimes|required|unique:certifications,CertificationNumber,'.$id.',CertificationID|max:100',
+                'CertificationNumber' => 'sometimes|required|unique:certifications,CertificationNumber,' . $id . ',CertificationID|max:100',
                 'StudentID' => 'sometimes|required|exists:students,StudentID',
                 'FirstName' => 'sometimes|required|string|max:50',
                 'MiddleName' => 'nullable|string|max:50',
@@ -177,22 +173,22 @@ class CertificationController extends Controller
             $certification->update($validated);
 
             return response()->json([
-                'success' => true, 
+                'success' => true,
                 'message' => 'Certification updated successfully',
                 'data' => $certification
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'success' => false, 
+                'success' => false,
                 'message' => 'Update failed',
                 'error' => config('app.debug') ? $e->getMessage() : null
             ], 500);
         }
     }
 
-    
-     # Soft delete a certification.
-  
+
+    # Soft delete a certification.
+
     public function destroy($id)
     {
         try {
@@ -200,15 +196,32 @@ class CertificationController extends Controller
             $certification->delete();
 
             return response()->json([
-                'success' => true, 
+                'success' => true,
                 'message' => 'Certification deleted successfully'
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'success' => false, 
+                'success' => false,
                 'message' => 'Deletion failed',
                 'error' => config('app.debug') ? $e->getMessage() : null
             ], 500);
         }
     }
+
+    public function GenerateQR($id)
+    {
+        $certification = Certification::findOrFail($id); // Retrieve certification details
+
+
+        $qrData = route('certifications.show', ['id' => $certification->id]);
+        $qrCode = QrCode::format('svg')->size(200)->generate($qrData);
+
+        return response()->json(
+            [
+                'success' => true,
+                'qr_code' => $qrCode,
+            ]
+        );
+    }
+
 }
