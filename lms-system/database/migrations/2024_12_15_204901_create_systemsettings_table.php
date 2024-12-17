@@ -23,8 +23,8 @@ return new class extends Migration
         
             // Foreign keys
             $table->foreign('ModuleID')->references('ModuleID')->on('modules')->onDelete('cascade');
-            $table->foreign('AssessmentID')->references('AssessmentID')->on('assessments')->onDelete('cascade');
-            $table->foreign('AssignmentID')->references('AssignmentID')->on('assignments')->onDelete('cascade');
+            $table->foreign('AssessmentID')->references('AssessmentID')->on('assessments')->onDelete('no action');
+            $table->foreign('AssignmentID')->references('AssignmentID')->on('assignments')->onDelete('no action');
         });
         
     }

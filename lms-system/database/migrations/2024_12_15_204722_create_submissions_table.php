@@ -25,10 +25,10 @@ return new class extends Migration
             $table->float('Grade')->nullable();
         
             // Foreign keys
-            $table->foreign('AssignmentID')->references('AssignmentID')->on('assignments')->onDelete('cascade');
-            $table->foreign('AssessmentID')->references('AssessmentID')->on('assessments')->onDelete('cascade');
-            $table->foreign('FacultyID')->references('UserID')->on('users')->onDelete('cascade');
-            $table->foreign('StudentID')->references('UserID')->on('users')->onDelete('cascade');
+            $table->foreign('AssignmentID')->references('AssignmentID')->on('assignments')->onDelete('no action');
+        $table->foreign('AssessmentID')->references('AssessmentID')->on('assessments')->onDelete('no action');
+        $table->foreign('FacultyID')->references('UserID')->on('users')->onDelete('no action');
+        $table->foreign('StudentID')->references('UserID')->on('users')->onDelete('no action');
         });
         
     }
