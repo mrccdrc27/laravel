@@ -3,6 +3,9 @@
 ## Project Overview
 This project integrates a Learning Management System (LMS) and a Certification System (CS) using two separate Laravel projects.
 
+## Required Libraries/Packages
+- [Prerequisites](./Prerequisites.md)
+  
 ## Setup Instructions
 1. Clone the repositories for both `lms-system` and `certification-system`.
 2. Install dependencies:
