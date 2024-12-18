@@ -85,7 +85,7 @@ class CertificationController extends Controller
         ]);
     }
 
-    # Create new certification
+    # Create new certification (from LMS POST)
     public function store(Request $request)
     {
         try {
