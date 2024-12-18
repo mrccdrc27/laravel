@@ -22,7 +22,7 @@ class CertificationController extends Controller
 
             // Advanced filtering options
             # https://laravel.com/docs/11.x/queries#where-clauses
-            if ($request->has('search')) { // Checks if search parameter exists in the request (example request:GET /certifications?search=John)
+            if ($request->has('search')) { // Checks if search parameter exists in the request (example request:GET /certifications?search=text)
                 # https://laravel.com/docs/11.x/queries#subquery-where-clauses
                 $search = $request->search;
                 $query->where(function ($q) use ($search) {  //function($q) anonymous function, use allows $search variable inside function
@@ -53,7 +53,7 @@ class CertificationController extends Controller
             // Pagination with relationships
             # https://laravel.com/docs/11.x/pagination
             $certifications = $query->with(['student', 'course', 'issuer'])
-                ->paginate($request->get('per_page', 15));
+                ->paginate($request->get('per_page', 15)); //Example: GET /certifications?per_page=20
 
             return response()->json([
                 'success' => true,

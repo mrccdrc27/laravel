@@ -52,7 +52,7 @@ class Certification extends Model
     }
 
     /** @todo 
-     * Add integration relationship (course, student, etc)
+     * Add integration relationship (course, student)
      */
 
     public function certificationLog(){
