@@ -93,7 +93,8 @@ class CertificationController extends Controller
             # https://laravel.com/docs/11.x/validation 
             $validated = $request->validate([
                 'CertificationNumber' => 'required|unique:certifications|max:100',
-                'StudentID' => 'required|exists:students,StudentID',
+                'StudentID' => 'required|integer',
+                // 'StudentID' => 'required|exists:users,UserID',
                 'FirstName' => 'required|string|max:50',
                 'MiddleName' => 'nullable|string|max:50',
                 'LastName' => 'required|string|max:50',
@@ -102,12 +103,14 @@ class CertificationController extends Controller
                 'Sex' => 'required|boolean',
                 'Nationality' => 'required|string|max:50',
                 'BirthPlace' => 'required|string|max:100',
-                'CourseID' => 'required|exists:courses,CourseID',
+                'CourseID' => 'required|integer',
+                // 'CourseID' => 'required|exists:courses,CourseID',
                 'Title' => 'required|string|max:100',
                 'Description' => 'required|string',
                 'IssuedAt' => 'required|date',
                 'ExpiryDate' => 'nullable|date|after:IssuedAt',
-                'CertificationPath' => 'required|file|mimes:pdf,jpg,png|max:2048',
+                'CertificationPath' => 'required|string',
+                // 'IssuerID' => 'nullable|exists:issuer_information,IssuerID'
                 'IssuerID' => 'nullable|exists:issuer_information,IssuerID'
             ]);
 
@@ -141,7 +144,7 @@ class CertificationController extends Controller
 
             $validated = $request->validate([
                 'CertificationNumber' => 'sometimes|required|unique:certifications,CertificationNumber,' . $id . ',CertificationID|max:100',
-                'StudentID' => 'sometimes|required|exists:students,StudentID',
+                'StudentID' => 'sometimes|required|exists:users,UserID',
                 'FirstName' => 'sometimes|required|string|max:50',
                 'MiddleName' => 'nullable|string|max:50',
                 'LastName' => 'sometimes|required|string|max:50',

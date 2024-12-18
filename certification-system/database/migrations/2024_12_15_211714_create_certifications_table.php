@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('LastName', 50)->nullable(false);
             $table->string('Email', 100)->nullable(false);
             $table->date('BirthDate')->nullable(false);
-            $table->boolean('Sex')->nullable(false); // 1 for male, 0 for female
+            $table->boolean('Sex')->nullable(false); // true for male, false for female
             $table->string('Nationality', 50)->nullable(false);
             $table->string('BirthPlace', 100)->nullable(false);
 
