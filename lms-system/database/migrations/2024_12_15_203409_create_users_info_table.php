@@ -24,14 +24,12 @@ return new class extends Migration {
             $table->string('Nationality', 50)->nullable(false);
             $table->string('BirthPlace', 100)->nullable(false);
 
-            $table->string('Email', 100)->nullable(false)->unique();
-
             $table->timestamp('CreatedAt')->useCurrent();
             $table->boolean('IsActive')->default(true);
 
             // Foreign keys
             $table->unsignedBigInteger('UserID'); 
-            $table->foreign('UserID')->references('UserID')->on('users')->onDelete('cascade');
+            $table->foreign('UserID')->references('id')->on('users')->onDelete('cascade');
         });
 
     }

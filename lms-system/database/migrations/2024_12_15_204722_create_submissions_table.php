@@ -27,8 +27,8 @@ return new class extends Migration
             // Foreign keys
             $table->foreign('AssignmentID')->references('AssignmentID')->on('assignments')->onDelete('no action');
         $table->foreign('AssessmentID')->references('AssessmentID')->on('assessments')->onDelete('no action');
-        $table->foreign('FacultyID')->references('UserID')->on('users')->onDelete('no action');
-        $table->foreign('StudentID')->references('UserID')->on('users')->onDelete('no action');
+        $table->foreign('FacultyID')->references('id')->on('users')->onDelete('no action');
+        $table->foreign('StudentID')->references('id')->on('users')->onDelete('no action');
         });
         
     }

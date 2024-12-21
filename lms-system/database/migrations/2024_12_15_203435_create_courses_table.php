@@ -23,8 +23,8 @@ return new class extends Migration {
         $table->timestamp('CreatedAt')->useCurrent();
 
         // Foreign keys with NO ACTION to avoid multiple cascade paths
-        $table->foreign('FacultyID')->references('UserID')->on('users')->onDelete('no action');
-        $table->foreign('StudentID')->references('UserID')->on('users')->onDelete('no action');
+        $table->foreign('FacultyID')->references('id')->on('users')->onDelete('no action');
+        $table->foreign('StudentID')->references('id')->on('users')->onDelete('no action');
     });
 }
 
