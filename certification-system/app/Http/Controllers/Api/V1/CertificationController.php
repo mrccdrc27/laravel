@@ -85,8 +85,9 @@ class CertificationController extends Controller
     # Retrieve specific certification
     public function show($id)
     {
-        $certification = Certification::with(['student', 'course', 'issuer'])
-            ->findOrFail($id);
+        //$certification = Certification::with(['student', 'course', 'issuer'])->findOrFail($id);
+        $certification = Certification::findOrFail($id);
+          
 
         return response()->json([
             'success' => true,
