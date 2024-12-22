@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\Api\V1\CertificationController;
-use App\Http\Controllers\Api\V1\IssuerInformationController;
-
+// use App\Http\Controllers\Api\V1\CertificationController;
+// use App\Http\Controllers\Api\V1\IssuerInformationController;
+use App\Http\Controllers\Api\V2\CertificationController;
+use App\Http\Controllers\Api\V2\IssuerInformationController;
 # https://laravel.com/docs/11.x/routing 
 
 
@@ -34,6 +35,14 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('certifications', CertificationController::class);
     Route::apiResource('issuers', IssuerInformationController::class);
 });
+
+Route::prefix('v2')->group(function () {
+
+    Route::apiResource('certifications', CertificationController::class);
+    Route::apiResource('issuers', IssuerInformationController::class);
+});
+
+
 
 
 
