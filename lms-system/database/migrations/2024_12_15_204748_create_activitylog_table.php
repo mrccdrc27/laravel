@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamp('ActivityDate')->useCurrent();
         
             // Foreign keys
-            $table->foreign('StudentID')->references('UserID')->on('users')->onDelete('cascade');
+            $table->foreign('StudentID')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('CourseID')->references('CourseID')->on('courses')->onDelete('cascade');
         });
         
