@@ -12,9 +12,18 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 class CertificationController extends Controller
 {
 
-    #Retrieve certifications with filtering and pagination.
-    #https://laravel.com/docs/5.0/eloquent -> Eloquent ORM 
-    #https://laracasts.com/discuss/channels/requests/request-vs-request?page=1&replyId=379336
+    
+    
+    
+    /**
+     * Retrieve all certifications with optional filtering and pagination.
+     *
+     * @param Request $request The HTTP request object.
+     * @return \Illuminate\Http\JsonResponse JSON response containing certifications data or error message.
+     * @link https://laracasts.com/discuss/channels/requests/request-vs-request?page=1&replyId=379336
+     * @link https://laravel.com/docs/5.0/eloquent -> Eloquent ORM 
+     */
+    
     public function index(Request $request)
     {
         try {
@@ -85,7 +94,12 @@ class CertificationController extends Controller
         ]);
     }
 
-    # Create new certification (from LMS POST)
+    /**
+     * Create a new certification entry in the database.
+     *
+     * @param Request $request The HTTP request containing the certification data.
+     * @return \Illuminate\Http\JsonResponse JSON response indicating success or validation errors.
+     */
     public function store(Request $request)
     {
         try {
@@ -104,23 +118,24 @@ class CertificationController extends Controller
                 'Nationality' => 'required|string|max:50',
                 'BirthPlace' => 'required|string|max:100',
                 'CourseID' => 'required|integer',
-                // 'CourseID' => 'required|exists:courses,CourseID',
+                // 'CourseID' => 'required|exists:courses,CourseID', -> original
                 'Title' => 'required|string|max:100',
                 'Description' => 'required|string',
                 'IssuedAt' => 'required|date',
                 'ExpiryDate' => 'nullable|date|after:IssuedAt',
-                'CertificationPath' => 'required|string',
-                // 'IssuerID' => 'nullable|exists:issuer_information,IssuerID'
-                'IssuerID' => 'nullable|exists:issuer_information,IssuerID'
+                // 'IssuerID' => 'nullable|exists:issuer_information,IssuerID' -> original
+                'IssuerID' => 'nullable|integer'
             ]);
 
-            // Handle file upload
-            if ($request->hasFile('CertificationPath')) {
-                $path = $request->file('CertificationPath')->store('certifications', 'public');
-                $validated['CertificationPath'] = $path;
-            }
-
             $certification = Certification::create($validated);
+
+            // Generate QR code and store its path in the database
+            $qrCodeData = $this->generateQRCode($certification);
+
+            // Update the certification path
+            $certification->update(['CertificationPath' => $qrCodeData['url']]);
+
+
 
             return response()->json([
                 'success' => true,
@@ -211,20 +226,45 @@ class CertificationController extends Controller
         }
     }
 
-    public function GenerateQR($id)
+
+    /**
+     * Generate a QR code for a given certification and save it as an SVG file.
+     *
+     * @param Certification $certification The certification for which the QR code is generated.
+     * @return array Contains the URL path to the QR code.
+     */
+    protected function generateQRCode($certification)
     {
-        $certification = Certification::findOrFail($id); // Retrieve certification details
+        // URL route
+        $qrData = route('certifications.qr-code', ['id' => $certification->CertificationID]);
 
 
-        $qrData = route('certifications.show', ['id' => $certification->id]);
+  
         $qrCode = QrCode::format('svg')->size(200)->generate($qrData);
 
-        return response()->json(
-            [
-                'success' => true,
-                'qr_code' => $qrCode,
-            ]
-        );
+        // Save SVG to file
+        $qrCodePath = 'certifications/qr_codes/' . $certification->CertificationID . '.svg';
+        file_put_contents(storage_path('app/public/' . $qrCodePath), $qrCode);
+
+        // Public path for views or database storage
+        return [
+            'url' => asset('storage/' . $qrCodePath), // Publicly accessible URL
+        ];
     }
+
+    /**
+     * Display the certification QR code and its details on a web page.
+     *
+     * @param int $id The ID of the certification.
+     * @return \Illuminate\View\View The rendered view of the QR code page.
+     */
+    public function showQR($id)
+{
+    $certification = Certification::findOrFail($id);
+    return view('certifications.qr-code', ['certification' => $certification]);
+}
+
+
+
 
 }

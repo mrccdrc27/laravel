@@ -31,9 +31,8 @@ use App\Http\Controllers\Api\V1\CertificationController;
 Route::prefix('v1')->group(function () {
 
     Route::apiResource('certifications', CertificationController::class);
-    
+   ;
 });
-# API or Web Routes? (GenerateQR is a API json response method)
-Route::get('/certifications/{id}/generate-qr',[CertificationController::class,'GenerateQR']);
+
 
 
