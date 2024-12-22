@@ -76,3 +76,7 @@ composer install
    4.4 Leave TCP Dynamic Ports as Blank (for IPAII) **_(IPAII represents all settings that apply to all IP addresses)_**
    
      Leave TCP Dynamic Ports blank to make SQL Server listen to a specific port (1433 for defalt instances)
+
+## Auth 
+   1. php artisan breeze:install
+
