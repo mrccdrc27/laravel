@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserInfo;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -30,17 +31,34 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            // 'name' => ['required', 'string', 'max:255'],
+            'FirstName' => ['required', 'string', 'max:50'],
+            'LastName' => ['required', 'string', 'max:50'],
+            'BirthDate' => ['required', 'date', 'before_or_equal:today'],
+            'Sex' => ['required', 'boolean'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
-            // 'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
+
+        // Save informations in the users_info table
+        UserInfo::create([
+        'UserID' => $user->id, // Associate with the user
+        'FirstName' => $request->FirstName,
+        'MiddleName' => $request->MiddleName,
+        'LastName' => $request->LastName,
+        'BirthDate' => $request->BirthDate,
+        'Nationality'=> $request->Nationality,
+        'BirthPlace'=> $request->BirthPlace,
+        'Sex' => $request->Sex,
+        'Role' => $request->role ?? 'student',
+        ]);
+
+        
         event(new Registered($user));
 
         Auth::login($user);
