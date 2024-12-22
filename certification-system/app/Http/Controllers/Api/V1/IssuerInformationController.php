@@ -115,6 +115,17 @@ class IssuerInformationController extends Controller
                 }
                 $validated['IssuerSignature'] = $request->file('IssuerSignature')->store('issuer_signatures', 'public');
             }
+
+            $issuer->update($validated);
+
+            return response()->json(['success' => true, 'data' => $issuer], 200);
+
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['success' => false, 'message' => 'Issuer not found'], 404);
+        } catch (ValidationException $e) {
+            return response()->json(['success' => false, 'message' => 'Validation failed', 'errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Failed to update issuer'], 500);
         }
     }
 
