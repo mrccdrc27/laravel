@@ -16,7 +16,7 @@ class Certification extends Model
     protected $table = 'certifications';
 
     // Primary key
-    protected $primaryKey   = 'CertificationID';
+    protected $primaryKey = 'CertificationID';
 
     // Mass assignment for columns
     protected $fillable = [
@@ -36,30 +36,30 @@ class Certification extends Model
         'IssuedAt',
         'ExpiryDate',
         'CertificationPath',
-        'IssuerID',
+        'IssuerID'
     ];
 
-    public function student()
-{
-    return $this->belongsTo(User::class, 'StudentID', 'UserID');
-}
+    // public function student()
+    // {
+    //     return $this->belongsTo(UsersInfo::class, 'StudentID', 'UserID');
+    // }
 
 
+    // public function course()
+    // {
+    //     return $this->belongsTo(Course::class, 'CourseID', 'CourseID');
+    // }
 
-    /** @todo 
-     * Define relationships
-     */
 
     public function issuer()
     {
         return $this->belongsTo(IssuerInformation::class, 'IssuerID', 'IssuerID'); // (related model, foreign key in current model's table, primary key in related model's table)
     }
 
-    /** @todo 
-     * Add integration relationship (course, student)
-     */
 
-    public function certificationLog(){
-        return $this->hasMany(CertificationLog::class,'CertificationID','CertificationID');
+
+    public function certificationLog()
+    {
+        return $this->hasMany(CertificationLog::class, 'CertificationID', 'CertificationID');
     }
 }

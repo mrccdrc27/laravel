@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class IssuerInformation extends Model
 {
-
+    
     use HasFactory;
 
     // Table name
@@ -23,7 +23,7 @@ class IssuerInformation extends Model
         'IssuerMiddleName',
         'IssuerLastName',
         'Logo',
-        'IssuersSignature'
+        'IssuerSignature'
     ];
 
     public function certifications(){

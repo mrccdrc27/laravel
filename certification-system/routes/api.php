@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\CertificationController;
+use App\Http\Controllers\Api\V1\IssuerInformationController;
 
 # https://laravel.com/docs/11.x/routing 
 
@@ -31,7 +32,7 @@ use App\Http\Controllers\Api\V1\CertificationController;
 Route::prefix('v1')->group(function () {
 
     Route::apiResource('certifications', CertificationController::class);
-   ;
+    Route::apiResource('issuers', IssuerInformationController::class);
 });
 
 
