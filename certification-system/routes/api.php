@@ -4,6 +4,7 @@
 // use App\Http\Controllers\Api\V1\IssuerInformationController;
 use App\Http\Controllers\Api\V2\CertificationController;
 use App\Http\Controllers\Api\V2\IssuerInformationController;
+use App\Http\Controllers\Api\V2\certview;
 # https://laravel.com/docs/11.x/routing 
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V2;
 
 use App\Http\Controllers\Controller;
 use App\Models\Certification;
+use App\Models\IssuerInformation;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Storage;
@@ -87,11 +88,50 @@ class CertificationController extends Controller
         //planned to include QR code generated or the url for this
         $url = 'http://127.0.0.1:8000/api/v2/certifications/'.($id);
         $certification = Certification::findOrFail($id);
-        return response()->json([
-            'success' => true,
-            'data' => $certification,
-            'url' => $url
-        ]);
+
+        //added issuer
+        $issuer = IssuerInformation::findOrFail($certification->IssuerID);
+        // return response()->json([
+        //     'success' => true,
+        //     'data' => $certification,
+        //     'url' => $url
+        // ]);
+            // Example structure, adapt as per your Certification model relationships
+            
+
+            $logoData = $issuer->Logo;
+            // Convert the binary data to a base64 string
+            $base64Image = base64_encode($logoData);
+            $signatureData = $issuer->IssuerSignature;
+            $base64sign = base64_encode($signatureData);
+
+
+            $data = [
+                'certificationID' => $certification->CertificationID,
+                'certificationNumber' => $certification->CertificationNumber,
+                'studentID' => $certification->StudentID,
+                'firstName' => $certification->FirstName,
+                'middleName' => $certification->MiddleName,
+                'lastName' => $certification->LastName,
+                'email' => $certification->Email,
+                'birthDate' => $certification->BirthDate,
+                'sex' => $certification->Sex,
+                'nationality' => $certification->Nationality,
+                'birthPlace' => $certification->BirthPlace,
+                'courseID' => $certification->CourseID,
+                'title' => $certification->Title,
+                'description' => $certification->Description,
+                'issuedAt' => $certification->IssuedAt,
+                'expiryDate' => $certification->ExpiryDate,
+                'issuerID' => $issuer->IssuerFirstName . ' ' . $issuer->IssuerMiddleName . ' ' . $issuer->IssuerLastName,
+                'organizationName' => $issuer-> OrganizationName,
+                'organizationLogo' => $base64Image,
+                'IssuerSignature' => $base64sign
+            ];
+            
+        
+            // Return the view with the certification data
+            return view('dashboard.certificate', compact('data'));
     }
 
     /**
