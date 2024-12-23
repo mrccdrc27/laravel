@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Course extends Model
 {
@@ -47,5 +48,6 @@ class Course extends Model
         public function assignments(){
             return $this->hasMany(Assignment::class,'CourseID','CourseID');
         }
+
 
 }

@@ -39,10 +39,7 @@ class Certification extends Model
         'IssuerID'
     ];
 
-    // public function student()
-    // {
-    //     return $this->belongsTo(UsersInfo::class, 'StudentID', 'UserID');
-    // }
+ 
 
 
     // public function course()

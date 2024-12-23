@@ -12,9 +12,9 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 class CertificationController extends Controller
 {
 
-    
-    
-    
+
+
+
     /**
      * Retrieve all certifications with optional filtering and pagination.
      *
@@ -23,7 +23,7 @@ class CertificationController extends Controller
      * @link https://laracasts.com/discuss/channels/requests/request-vs-request?page=1&replyId=379336
      * @link https://laravel.com/docs/5.0/eloquent -> Eloquent ORM 
      */
-    
+
     public function index(Request $request)
     {
         try {
@@ -239,12 +239,12 @@ class CertificationController extends Controller
         $qrData = route('certifications.qr-code', ['id' => $certification->CertificationID]);
 
 
-  
-        $qrCode = QrCode::format('svg')->size(200)->generate($qrData);
+
+        $qrCode = QrCode::format('svg')->size(200)->generate($qrData); // an SVG string
 
         // Save SVG to file
         $qrCodePath = 'certifications/qr_codes/' . $certification->CertificationID . '.svg';
-        file_put_contents(storage_path('app/public/' . $qrCodePath), $qrCode);
+        Storage::disk('public')->put($qrCodePath, $qrCode); // resolves to the storage/app/public
 
         // Public path for views or database storage
         return [
@@ -259,10 +259,10 @@ class CertificationController extends Controller
      * @return \Illuminate\View\View The rendered view of the QR code page.
      */
     public function showQR($id)
-{
-    $certification = Certification::findOrFail($id);
-    return view('certifications.qr-code', ['certification' => $certification]);
-}
+    {
+        $certification = Certification::findOrFail($id);
+        return view('certifications.qr-code', ['certification' => $certification]);
+    }
 
 
 

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Module extends Model
@@ -31,4 +32,5 @@ class Module extends Model
     public function faculty(){
         return $this->belongsTo(User::class,'FacultyID','UserID');
     }
+
 }

@@ -35,3 +35,4 @@ class UserInfo extends Model
     }
 }
 
+

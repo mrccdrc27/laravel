@@ -32,4 +32,5 @@ class Assignment extends Model
         public function faculty(){
             return $this->belongsTo(User::class,'FacultyID','UserID');
         }
+
 }

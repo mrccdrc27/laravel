@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
+
     use HasFactory;
 
     protected $table = 'users';
@@ -22,4 +24,5 @@ class User extends Model
     public function users(){
         return $this->hasMany(UserInfo::class, 'UserID', 'UserID');
     }
+
 }
