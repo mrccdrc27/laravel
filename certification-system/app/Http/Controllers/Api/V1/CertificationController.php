@@ -119,7 +119,19 @@ class CertificationController extends Controller
                 'Nationality' => 'required|string|max:50',
                 'BirthPlace' => 'required|string|max:100',
                 // 'CourseID' => 'required|integer',
-                'CourseID' => 'required|exists:courses,CourseID',
+                'CourseID' => [
+                    'required',
+                    function ($attribute, $value, $fail) {
+                        $exists = \DB::connection('sqlsrv_lms')
+                            ->table('courses')
+                            ->where('CourseID', $value)
+                            ->exists();
+
+                        if (!$exists) {
+                            $fail('The selected course does not exist in the LMS.');
+                        }
+                    }
+                ],
                 'Title' => 'required|string|max:100',
                 'Description' => 'required|string',
                 'IssuedAt' => 'required|date',
@@ -249,7 +261,7 @@ class CertificationController extends Controller
         $qrCode = QrCode::format('svg')->size(200)->generate($qrData); // an SVG string
 
         // Save SVG to file
-        $qrCodePath = 'certifications/qr_codes/' . $certification->CertificationID . '_' . $certification->CertificationNumber.'.svg';
+        $qrCodePath = 'certifications/qr_codes/' . $certification->CertificationID . '_' . $certification->CertificationNumber . '.svg';
         Storage::disk('public')->put($qrCodePath, $qrCode); // resolves to the storage/app/public
 
         // Public path for views or database storage

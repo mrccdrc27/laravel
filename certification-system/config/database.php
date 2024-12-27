@@ -112,6 +112,21 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
+        'sqlsrv_lms' => [
+            'driver' => 'sqlsrv',
+            'url' => env('DB_URL'),
+            'host' => env('LMS_DB_HOST', '127.0.0.1'),
+            'port' => env('LMS_DB_PORT', '1433'),
+            'database' => env('LMS_DB_DATABASE', 'LMS-System'),
+            'username' => env('LMS_DB_USERNAME', 'root'),
+            'password' => env('LMS_DB_PASSWORD', ''),
+            'charset' => env('DB_CHARSET', 'utf8'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            // 'encrypt' => env('DB_ENCRYPT', 'yes'),
+            // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
+        ],
+
     ],
 
     /*
