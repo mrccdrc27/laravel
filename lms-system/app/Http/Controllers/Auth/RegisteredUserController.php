@@ -37,7 +37,7 @@ class RegisteredUserController extends Controller
             'Sex' => ['required', 'boolean'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'FirstName' => []
+            
         ]);
 
         $user = User::create([
@@ -49,7 +49,7 @@ class RegisteredUserController extends Controller
         // Save informations in the users_info table
         UserInfo::create([
         'UserID' => $user->id, // Associate with the user
-        'FirstName' => $request->name,
+        'FirstName' => $request->FirstName,
         'MiddleName' => $request->MiddleName,
         'LastName' => $request->LastName,
         'BirthDate' => $request->BirthDate,
