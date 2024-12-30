@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Certification;
+use App\Rules\ExistsInLMS;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Storage;
@@ -33,7 +34,7 @@ class CertificationController extends Controller
             # https://laravel.com/docs/11.x/queries#where-clauses
             if ($request->has('search')) { // Checks if search parameter exists in the request (example request:GET /certifications?search=text)
                 # https://laravel.com/docs/11.x/queries#subquery-where-clauses
-                $search = $request->search;
+                $search = trim($request->search);
                 $query->where(function ($q) use ($search) {  //function($q) anonymous function, use allows $search variable inside function
                     $q->where('FirstName', 'LIKE', "%{$search}%") //$q constructs sub query logic (syntax: $query->where('column', 'operator', 'value')
                         ->orWhere('LastName', 'LIKE', "%{$search}%") // Logical Grouping https://laravel.com/docs/master/queries#logical-grouping:~:text=%2D%3Eget()%3B-,Logical%20Grouping,-Sometimes%20you%20may
@@ -109,7 +110,8 @@ class CertificationController extends Controller
             $validated = $request->validate([
                 'CertificationNumber' => 'required|unique:certifications|max:100',
                 // 'StudentID' => 'required|integer',
-                'StudentID' => 'required|exists:users,UserID',
+                // 'StudentID' => 'required|exists:users,UserID',
+                'StudentID' => ['required', new ExistsInLMS('users', 'UserID')],
                 'FirstName' => 'required|string|max:50',
                 'MiddleName' => 'nullable|string|max:50',
                 'LastName' => 'required|string|max:50',
@@ -119,19 +121,7 @@ class CertificationController extends Controller
                 'Nationality' => 'required|string|max:50',
                 'BirthPlace' => 'required|string|max:100',
                 // 'CourseID' => 'required|integer',
-                'CourseID' => [
-                    'required',
-                    function ($attribute, $value, $fail) {
-                        $exists = \DB::connection('sqlsrv_lms')
-                            ->table('courses')
-                            ->where('CourseID', $value)
-                            ->exists();
-
-                        if (!$exists) {
-                            $fail('The selected course does not exist in the LMS.');
-                        }
-                    }
-                ],
+                'CourseID' => ['required', new ExistsInLMS('courses', 'CourseID')],
                 'Title' => 'required|string|max:100',
                 'Description' => 'required|string',
                 'IssuedAt' => 'required|date',
@@ -171,8 +161,12 @@ class CertificationController extends Controller
             $certification = Certification::findOrFail($id);
 
             $validated = $request->validate([
-                'CertificationNumber' => 'sometimes|required|unique:certifications,CertificationNumber,' . $id . ',CertificationID|max:100', //checks in table 'certifications', checks uniqueness in CertificationNumber| $id - ignore ID (CertificationID)
-                'StudentID' => 'sometimes|required|exists:users,UserID',
+                'CertificationNumber' => 'sometimes|required|unique:certifications,CertificationNumber,' . $id . ',CertificationID|max:100', // [unique:table,column,ignore_value,ignore_column] checks in table 'certifications', checks uniqueness in CertificationNumber| $id - ignore ID (CertificationID)
+                'StudentID' => [
+                    'sometimes',
+                    'required',
+                    new ExistsInLMS('users', 'UserID')
+                ],
                 'FirstName' => 'sometimes|required|string|max:50',
                 'MiddleName' => 'nullable|string|max:50',
                 'LastName' => 'sometimes|required|string|max:50',
@@ -181,7 +175,11 @@ class CertificationController extends Controller
                 'Sex' => 'sometimes|required|boolean',
                 'Nationality' => 'sometimes|required|string|max:50',
                 'BirthPlace' => 'sometimes|required|string|max:100',
-                'CourseID' => 'sometimes|required|exists:courses,CourseID',
+                'CourseID' => [
+                    'sometimes',
+                    'required',
+                    new ExistsInLMS('courses', 'CourseID')
+                ],
                 'Title' => 'sometimes|required|string|max:100',
                 'Description' => 'sometimes|required|string',
                 'IssuedAt' => 'sometimes|required|date',

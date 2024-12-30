@@ -39,21 +39,25 @@ class Certification extends Model
         'IssuerID'
     ];
 
- 
 
 
-    // public function course()
-    // {
-    //     return $this->belongsTo(Course::class, 'CourseID', 'CourseID');
-    // }
 
+    public function course()
+    {
+        return $this->belongsTo(Course::class, 'CourseID', 'CourseID')
+            ->on('sqlsrv_lms'); 
+    }
+
+    public function student()
+    {
+        return $this->belongsTo(User::class, 'StudentID', 'UserID')
+                    ->on('sqlsrv_lms'); 
+    }
 
     public function issuer()
     {
         return $this->belongsTo(IssuerInformation::class, 'IssuerID', 'IssuerID'); // (related model, foreign key in current model's table, primary key in related model's table)
     }
-
-
 
     public function certificationLog()
     {

@@ -17,10 +17,12 @@ class IssuerInformationController extends Controller
 
             $query = IssuerInformation::query();
             if ($request->has('search')) {
-                $search = $request->search;
-                $query->where('OrganizationName', 'LIKE', "%{$search}%")
-                    ->orWhere('IssuerFirstName', 'LIKE', "%{$search}%")
-                    ->orWhere('IssuerLastName', 'LIKE', "%{$search}%");
+                $search = trim($request->search);
+                $query->where(function ($q) use ($search) {
+                    $q->where('OrganizationName', 'LIKE', "%{$search}%")
+                        ->orWhere('IssuerFirstName', 'LIKE', "%{$search}%")
+                        ->orWhere('IssuerLastName', 'LIKE', "%{$search}%");
+                });
             }
 
 
@@ -56,12 +58,14 @@ class IssuerInformationController extends Controller
             );
 
             if ($request->hasFile('Logo')) {
-                $validated['Logo'] = file_get_contents($request->file('Logo'));
+                $validated['Logo'] = $request->file('Logo')->store('issuer_logos', 'public');
             }
 
             if ($request->hasFile('IssuerSignature')) {
-                $validated['IssuerSignature'] = file_get_contents($request->file('IssuerSignature'));
+                $validated['IssuerSignature'] = $request->file('IssuerSignature')
+                    ->store('issuer_signatures', 'public');
             }
+
 
             $issuer = IssuerInformation::create($validated);
 
@@ -79,7 +83,7 @@ class IssuerInformationController extends Controller
     public function show($id)
     {
         try {
-            $issuer = IssuerInformation::find($id);
+            $issuer = IssuerInformation::findOrFail($id);
             return response()->json(['success' => true, 'data' => $issuer]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['success' => false, 'message' => 'Issuer not found'], 404);
@@ -98,8 +102,8 @@ class IssuerInformationController extends Controller
                     'IssuerFirstName' => 'required|string|max:50',
                     'IssuerMiddleName' => 'nullable|string|max:50',
                     'IssuerLastName' => 'required|string|max:50',
-                    'Logo' => 'required|file|mimes:png,jpg,jpeg|max:5120',
-                    'IssuerSignature' => 'required|file|mimes:png,jpg,jpeg|max:5120'
+                    'Logo' => 'sometimes|file|mimes:png,jpg,jpeg|max:5120',
+                    'IssuerSignature' => 'sometimes|file|mimes:png,jpg,jpeg|max:5120'
                 ]
             );
             // Handle file replacements
@@ -133,6 +137,13 @@ class IssuerInformationController extends Controller
     {
         try {
             $issuer = IssuerInformation::findOrFail($id);
+
+            if ($issuer->certifications()->exists()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cannot delete issuer with existing certifications'
+                ], 409);
+            }
 
             // Delete files
             if ($issuer->Logo) {
