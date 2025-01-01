@@ -216,7 +216,7 @@ class CertificationController extends Controller
     }
 
 
-    # Soft delete a certification.
+    # Delete a certification.
 
     public function destroy($id)
     {

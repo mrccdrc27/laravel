@@ -163,5 +163,17 @@ class IssuerInformationController extends Controller
         }
     }
 
+    /**
+ * Display the issuer details on a web page.
+ *
+ * @param int $id The ID of the issuer.
+ * @return \Illuminate\View\View The rendered view of the issuer details page.
+ */
+public function showDetails($id)
+{
+    $issuer = IssuerInformation::findOrFail($id);
+    return view('issuers.details', ['issuer' => $issuer]);
+}
+
 
 }
