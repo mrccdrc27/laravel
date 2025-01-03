@@ -5,6 +5,9 @@ This project integrates a Learning Management System (LMS) and a Certification S
 
 ## Required Libraries/Packages
 - [Prerequisites](./Prerequisites.md)
+
+## Code Guide
+- [Codes](./code-explanation.md)
   
 ## Setup Instructions
 1. Clone the repositories for both `lms-system` and `certification-system`.
@@ -76,3 +79,8 @@ composer install
    4.4 Leave TCP Dynamic Ports as Blank (for IPAII) **_(IPAII represents all settings that apply to all IP addresses)_**
    
      Leave TCP Dynamic Ports blank to make SQL Server listen to a specific port (1433 for defalt instances)
+
+
+   ## Setup Instructions
+1. Clone the repositories for both `lms-system` and `certification-system`.
+2. Install dependencies:
