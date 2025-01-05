@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\DB;
 
 class CertificationController extends Controller
 {
@@ -104,6 +105,7 @@ class CertificationController extends Controller
      */
     public function store(Request $request)
     {
+        DB::beginTransaction();
         try {
             // Validation constraints for incoming data
             # https://laravel.com/docs/11.x/validation 
@@ -130,43 +132,54 @@ class CertificationController extends Controller
                 // 'IssuerID' => 'nullable|integer'
             ]);
 
-            $certification = Certification::create($validated);
+            $certification = new Certification($validated);
 
-            // Generate QR code and store its path in the database
-            $qrCodeData = $this->generateQRCode($certification);
+            try {
+                $certificationPath = $this->generateQRCode($certification);
+                $validated['CertificationPath'] = $certificationPath;
 
-            // Update the certification path
-            $certification->update(['CertificationPath' => $qrCodeData['url']]);
+                $certification = Certification::create($validated);
+                DB::commit();
 
-
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Certification created successfully',
-                'data' => $certification
-            ], 201);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Certification created successfully',
+                    'data' => $certification,
+                    'qr_code_url' => asset('storage/' . $certificationPath)
+                ], 201);
+            } catch (\Exception $e) {
+                if (isset($certificationPath)) {
+                    Storage::disk('public')->delete($certificationPath);
+                }
+                throw $e;
+            }
         } catch (ValidationException $e) {
+            DB::rollBack();
             return response()->json([
                 'success' => false,
                 'message' => 'Validation failed',
                 'errors' => $e->errors()
             ], 422);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create certification',
+                'error' => config('app.debug') ? $e->getMessage() : null
+            ], 500);
         }
     }
 
     # Update existing certification
     public function update(Request $request, $id)
     {
+        DB::beginTransaction();
         try {
             $certification = Certification::findOrFail($id);
 
             $validated = $request->validate([
-                'CertificationNumber' => 'sometimes|required|unique:certifications,CertificationNumber,' . $id . ',CertificationID|max:100', // [unique:table,column,ignore_value,ignore_column] checks in table 'certifications', checks uniqueness in CertificationNumber| $id - ignore ID (CertificationID)
-                'StudentID' => [
-                    'sometimes',
-                    'required',
-                    new ExistsInLMS('users', 'UserID')
-                ],
+                'CertificationNumber' => 'sometimes|required|unique:certifications,CertificationNumber,' . $id . ',CertificationID|max:100',
+                'StudentID' => 'sometimes|required|integer',
                 'FirstName' => 'sometimes|required|string|max:50',
                 'MiddleName' => 'nullable|string|max:50',
                 'LastName' => 'sometimes|required|string|max:50',
@@ -175,38 +188,50 @@ class CertificationController extends Controller
                 'Sex' => 'sometimes|required|boolean',
                 'Nationality' => 'sometimes|required|string|max:50',
                 'BirthPlace' => 'sometimes|required|string|max:100',
-                'CourseID' => [
-                    'sometimes',
-                    'required',
-                    new ExistsInLMS('courses', 'CourseID')
-                ],
+                'CourseID' => 'sometimes|required|integer',
                 'Title' => 'sometimes|required|string|max:100',
                 'Description' => 'sometimes|required|string',
                 'IssuedAt' => 'sometimes|required|date',
                 'ExpiryDate' => 'nullable|date|after:IssuedAt',
-                'CertificationPath' => 'sometimes|file|mimes:pdf,jpg,png|max:2048',
-                'IssuerID' => 'nullable|exists:issuer_information,IssuerID'
+                'IssuerID' => 'nullable|integer'
             ]);
 
-            // Handle file upload if new file is provided
-            if ($request->hasFile('CertificationPath')) {
-                // Delete old file if exists
-                if ($certification->CertificationPath) {
-                    Storage::disk('public')->delete($certification->CertificationPath);
+            $oldPath = $certification->CertificationPath;
+
+            try {
+                if ($request->has('CertificationNumber') && $certification->CertificationNumber !== $validated['CertificationNumber']) {
+                    $certificationPath = $this->generateQRCode($certification);
+                    $validated['CertificationPath'] = $certificationPath;
                 }
 
-                $path = $request->file('CertificationPath')->store('certifications', 'public');
-                $validated['CertificationPath'] = $path;
+                $certification->update($validated);
+
+                if (isset($certificationPath) && $oldPath) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+
+                DB::commit();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Certification updated successfully',
+                    'data' => $certification
+                ]);
+            } catch (\Exception $e) {
+                if (isset($certificationPath)) {
+                    Storage::disk('public')->delete($certificationPath);
+                }
+                throw $e;
             }
-
-            $certification->update($validated);
-
+        } catch (ValidationException $e) {
+            DB::rollBack();
             return response()->json([
-                'success' => true,
-                'message' => 'Certification updated successfully',
-                'data' => $certification
-            ]);
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json([
                 'success' => false,
                 'message' => 'Update failed',
@@ -215,69 +240,57 @@ class CertificationController extends Controller
         }
     }
 
-
     # Delete a certification.
-
     public function destroy($id)
     {
+        DB::beginTransaction();
         try {
             $certification = Certification::findOrFail($id);
-            $filePath = str_replace(asset('storage') . '/', '', $certification->certificationPath); // Obtains relative path (e.g., certifications/file.svg)
+            $filePath = str_replace(asset('storage') . '/', '', $certification->CertificationPath);
+
+            $certification->delete();
 
             if (Storage::disk('public')->exists($filePath)) {
                 Storage::disk('public')->delete($filePath);
             }
 
-            $certification->delete();
+            DB::commit();
             return response()->json([
                 'success' => true,
                 'message' => 'Certification deleted successfully'
             ]);
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json([
                 'success' => false,
                 'message' => 'Deletion failed',
-                'error' => config('app.debug') ? $e->getMessage() : null // Checks for debug mode
+                'error' => config('app.debug') ? $e->getMessage() : null
             ], 500);
         }
     }
 
 
-    /**
-     * Generate a QR code for a given certification and save it as an SVG file.
-     *
-     * @param Certification $certification The certification for which the QR code is generated.
-     * @return array Contains the URL path to the QR code.
-     */
     protected function generateQRCode($certification)
     {
-        // URL route
         $qrData = route('certifications.qr-code', ['id' => $certification->CertificationID]);
-
-
-
-        $qrCode = QrCode::format('svg')->size(200)->generate($qrData); // an SVG string
-
-        // Save SVG to file
+        $qrCode = QrCode::format('svg')->size(200)->generate($qrData);
         $qrCodePath = 'certifications/qr_codes/' . $certification->CertificationID . '_' . $certification->CertificationNumber . '.svg';
-        Storage::disk('public')->put($qrCodePath, $qrCode); // resolves to the storage/app/public
-
-        // Public path for views or database storage
-        return [
-            'url' => asset('storage/' . $qrCodePath), // Publicly accessible URL
-        ];
+        Storage::disk('public')->put($qrCodePath, $qrCode);
+        return $qrCodePath;
     }
 
-    /**
-     * Display the certification QR code and its details on a web page.
-     *
-     * @param int $id The ID of the certification.
-     * @return \Illuminate\View\View The rendered view of the QR code page.
-     */
     public function showQR($id)
     {
-        $certification = Certification::findOrFail($id);
-        return view('certifications.qr-code', ['certification' => $certification]);
+        try {
+            $certification = Certification::findOrFail($id);
+            return view('certifications.qr-code', ['certification' => $certification]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving QR code',
+                'error' => config('app.debug') ? $e->getMessage() : null
+            ], 404);
+        }
     }
 
 
