@@ -21,8 +21,12 @@ class User extends Model
         'PasswordHash'
     ];
 
-    public function users(){
+    public function userInfo(){
         return $this->hasMany(UserInfo::class, 'UserID', 'UserID');
+    }
+
+    public function certifications(){
+        return $this->hasMany(Certification::class, 'UserID', 'StudentID');
     }
 
 }

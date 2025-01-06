@@ -84,18 +84,7 @@ class CertificationController extends Controller
         }
     }
 
-    # Retrieve specific certification
-    public function show($id)
-    {
-        $certification = Certification::with(['issuer'])->findOrFail($id);
 
-
-
-        return response()->json([
-            'success' => true,
-            'data' => $certification
-        ]);
-    }
 
     /**
      * Create a new certification entry in the database.
@@ -168,6 +157,19 @@ class CertificationController extends Controller
                 'error' => config('app.debug') ? $e->getMessage() : null
             ], 500);
         }
+    }
+
+    # Retrieve specific certification
+    public function show($id)
+    {
+        $certification = Certification::with(['issuer'])->findOrFail($id);
+
+
+
+        return response()->json([
+            'success' => true,
+            'data' => $certification
+        ]);
     }
 
     # Update existing certification

@@ -99,6 +99,7 @@ return [
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
+            'url' => env('DB_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '1433'),
             'database' => env('DB_DATABASE', 'LMS-System'),
@@ -107,6 +108,21 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
+            'trust_server_certificate' => true,
+        ],
+        
+        'sqlsrv_cs' => [  // Note: Changed from sqlsrv-cs to sqlsrv_cs for consistency
+            'driver' => 'sqlsrv',
+            'url' => env('CS_DB_URL'),
+            'host' => env('CS_DB_HOST', '127.0.0.1'),
+            'port' => env('CS_DB_PORT', '1433'),
+            'database' => env('CS_DB_DATABASE', 'CS-System'),
+            'username' => env('CS_DB_USERNAME', 'root'),
+            'password' => env('CS_DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'trust_server_certificate' => true,
         ],
         
 

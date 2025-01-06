@@ -23,31 +23,42 @@ class Course extends Model
         'FileType',
         'FileData',
         'CreatedAt'
-        ];
+    ];
 
-        public function faculty(){
-            return $this->belongsTo(User::class,'FacultyID','UserID');
-        }
+    public function faculty()
+    {
+        return $this->belongsTo(User::class, 'FacultyID', 'UserID');
+    }
 
-        public function student(){
-            return $this->belongsTo(User::class,'StudentID','UserID');
-        }
+    public function student()
+    {
+        return $this->belongsTo(User::class, 'StudentID', 'UserID');
+    }
 
-        public function enrollments(){
-            return $this->hasMany(Enrollment::class,'CourseID','CourseID');
-        }
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class, 'CourseID', 'CourseID');
+    }
 
-        public function modules(){
-            return $this->hasMany(Module::class,'CourseID','CourseID');
-        }
+    public function modules()
+    {
+        return $this->hasMany(Module::class, 'CourseID', 'CourseID');
+    }
 
-        public function assessments(){
-            return $this->hasMany(Assessment::class,'CourseID','CourseID');
-        }
+    public function assessments()
+    {
+        return $this->hasMany(Assessment::class, 'CourseID', 'CourseID');
+    }
 
-        public function assignments(){
-            return $this->hasMany(Assignment::class,'CourseID','CourseID');
-        }
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class, 'CourseID', 'CourseID');
+    }
+    public function certifications()
+    {
+        return $this->hasMany(Certification::class, 'CourseID', 'CourseID')
+            ->on('sqlsrv_cs'); 
+    }
 
 
 }

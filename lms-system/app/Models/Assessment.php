@@ -22,7 +22,7 @@ class Assessment extends Model
         'FileType',
         'FileData',
         'DueDate',
-        'CreatedAt',
+        'CreatedAt'
         ];
 
         public function course(){

@@ -20,8 +20,7 @@ class Assignment extends Model
         'FileData',
         'Instructions',
         'DueDate',
-        'CreatedAt',
-
+        'CreatedAt'
         ];
 
         public function course(){
