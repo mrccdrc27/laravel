@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\UserInfoController;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\V1\AssessmentController;
 
 /**
  * Certification API Routes
@@ -23,6 +24,7 @@ use App\Http\Controllers\Api\V1\UserController;
 
 Route::prefix('v1')->group(function () {
     Route::apiResource('user', UserController::class);
+    Route::apiResource('assessments', AssessmentController::class);
 });
 
 

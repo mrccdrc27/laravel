@@ -20,16 +20,23 @@ class Assessment extends Model
         'Type',
         'FileName',
         'FileType',
-        'FileData',
+        'FileData', // Path to file
         'DueDate',
         'CreatedAt'
-        ];
+    ];
 
-        public function course(){
-            return $this->belongsTo(Course::class,'CourseID','CourseID');
-        }
-        public function faculty(){
-            return $this->belongsTo(User::class,'FacultyID','UserID');
-        }
+    public function course()
+    {
+        return $this->belongsTo(Course::class, 'CourseID', 'CourseID');
+    }
+    public function faculty()
+    {
+        return $this->belongsTo(User::class, 'FacultyID', 'UserID');
+    }
+
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class, 'AssessmentID', 'AssessmentID');
+    }
 
 }
