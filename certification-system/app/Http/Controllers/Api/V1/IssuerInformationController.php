@@ -120,7 +120,7 @@ class IssuerInformationController extends Controller
     public function show($id)
     {
         try {
-            $issuer = IssuerInformation::findOrFail($id);
+            $issuer = IssuerInformation::with('certifications')->findOrFail($id);
             return response()->json(['success' => true, 'data' => $issuer]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['success' => false, 'message' => 'Issuer not found'], 404);
@@ -148,7 +148,7 @@ class IssuerInformationController extends Controller
             $newLogoPath = null;
             $newSignaturePath = null;
 
-            try {
+            try {        
                 // Handle Logo update
                 if ($request->hasFile('Logo')) {
                     $filename = Str::slug($validated['OrganizationName']) . '_logo_' . time() . '.' .
@@ -350,8 +350,8 @@ class IssuerInformationController extends Controller
     /* Call with:
 
     JS:
-    const logoUrl = `api/v1/issuers/${issuerId}/logo`;
-    const signatureUrl = `api/v1/issuers/${issuerId}/signature`;
+    const logoUrl = `api/v1/issuers/${IssuerId}/logo`;
+    const signatureUrl = `api/v1/issuers/${IssuerId}/signature`;
 
     HTML:
     <img src="/api/v1/issuers/123/logo" alt="Issuer Logo">

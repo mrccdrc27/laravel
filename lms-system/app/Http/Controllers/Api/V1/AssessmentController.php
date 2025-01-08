@@ -52,7 +52,7 @@ class AssessmentController
                 'FacultyID' => 'required|exists:users,UserID',
                 'Title' => 'required|string|max:100',
                 'Type' => 'required|string|in:Multiple Choice,Identification|max:50',
-                'FileName' => 'required|file|mimes:pdf,doc,docx|max:5120', // Adjust allowed types and size
+                'FileName' => 'required|file|mimes:pdf,doc,docx|max:5120', 
                 'DueDate' => 'nullable|date|after:today'
             ]);
 
