@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\DB;
-
+use RateLimiter;
 class CertificationController extends Controller
 {
 
@@ -284,7 +284,18 @@ class CertificationController extends Controller
     public function showQR($id)
     {
         try {
-            $certification = Certification::findOrFail($id);
+            $certification = Certification::with(['issuer', 'course', 'student'])->findOrFail($id);
+            
+            if (RateLimiter::tooManyAttempts('view-qr-' . request()->ip(), 60)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Too many attempts. Please try again later.'
+                ], 429);
+            }
+            
+            RateLimiter::hit('view-qr-' . request()->ip());
+            
+            
             return view('certifications.qr-code', ['certification' => $certification]);
         } catch (\Exception $e) {
             return response()->json([

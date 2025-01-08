@@ -10,9 +10,20 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use RateLimiter;
 
 class IssuerInformationController extends Controller
 {
+
+    public function __construct()
+    {
+        // Protect all routes except public ones
+        $this->middleware('auth:api')->except(['getLogo', 'getSignature']);
+        
+        // Add admin middleware for sensitive operations
+        $this->middleware('admin')->only(['store', 'update', 'destroy']);
+    }
+
     public function index(Request $request)
     {
         try {
@@ -298,6 +309,15 @@ class IssuerInformationController extends Controller
                     'message' => 'Logo not found'
                 ], 404);
             }
+
+            if (RateLimiter::tooManyAttempts('view-logo-' . request()->ip(), 60)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Too many attempts. Please try again later.'
+                ], 429);
+            }
+            
+            RateLimiter::hit('view-logo-' . request()->ip());
 
             /*  storage_path('app/public/issuer_logos/example-logo.png') generates the absolute path
                 $issuer->Logo contains issuer_logos/logo.jpg
