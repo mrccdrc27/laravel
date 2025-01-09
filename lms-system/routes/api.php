@@ -1,8 +1,8 @@
 <?php
-
-use App\Http\Controllers\Api\V1\UserInfoController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\AssessmentController;
+use AuthController;
+use App\Http\Middleware\AuthMiddleware;
 
 /**
  * Certification API Routes
@@ -19,15 +19,21 @@ use App\Http\Controllers\Api\V1\AssessmentController;
  * DELETE      - destroy()
  * 
  * @package App\Http\Controllers\Api
- * @uses UserController
+ * 
  */
 
 Route::prefix('v1')->group(function () {
     Route::apiResource('user', UserController::class);
     Route::apiResource('assessments', AssessmentController::class);
+
+    Route::post('login', [AuthController::class, 'login']);
 });
 
-
+Route::middleware(AuthMiddleware::class)->group(function () {
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('me', [AuthController::class, 'me']);
+    Route::put('change-password', [AuthController::class, 'changePassword']);
+});
 
 
 
