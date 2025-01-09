@@ -77,9 +77,24 @@ class UserInfo extends Model
         return $this->belongsTo(User::class, 'UserID', 'UserID');
     }
 
+
+
+    /**
+     * 
+     * @link https://laravel.com/docs/11.x/eloquent#query-scopes
+     * @link https://laravel.com/docs/11.x/eloquent#local-scopes
+     * @param mixed $query
+     * @return mixed||void
+     * Eloquent query scopes query logic for filtering and structuring 
+     * queries
+     * Scope prefix must be ommitted
+     */
     public function scopeAdmins($query)
     {
         return $query->where('Role', self::ROLE_ADMIN);
+        /* $admins = UserInfo::admins()->get();
+            Calls scope 'scopeAdmins', adds 'WHERE Role = 'Admin' to query
+            ->gets() executes query and returns all UserInfo where Role is Admin*/
     }
 
     public function scopeFaculty($query)

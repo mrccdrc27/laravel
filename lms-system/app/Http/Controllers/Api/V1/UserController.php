@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -12,7 +13,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(User::all());
     }
 
     /**
@@ -20,7 +21,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'Username' => 'required|unique:users,Username|max:50',
+            'PasswordHash' => 'required',
+        ]);
+
+        $user = User::create([
+            'Username' => $request->Username,
+            'PasswordHash' => bcrypt($request->PasswordHash),
+        ]);
+
+        return response()->json($user, 201);
     }
 
     /**
@@ -28,7 +39,8 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+        return response()->json($user);
     }
 
     /**
@@ -36,7 +48,18 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'Username' => 'required|max:50',
+            'PasswordHash' => 'required',
+        ]);
+
+        $user = User::findOrFail($id);
+        $user->update([
+            'Username' => $request->Username,
+            'PasswordHash' => bcrypt($request->PasswordHash),
+        ]);
+
+        return response()->json($user);
     }
 
     /**
@@ -44,6 +67,9 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return response()->json(['message' => 'User deleted successfully']);
     }
 }

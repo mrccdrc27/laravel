@@ -30,16 +30,14 @@ use App\Http\Controllers\Api\V1\IssuerInformationController;
  * @uses CertificationController
  */
 Route::prefix('v1')->group(function () {
-
-    Route::apiResource('certifications', CertificationController::class);
+    Route::middleware(['auth:api', 'lms.auth'])->group(function () {
+        Route::apiResource('certifications', CertificationController::class)
+            ->except(['index', 'show']); // Public access to view certificates
+    });
     Route::apiResource('issuers', IssuerInformationController::class);
     Route::get('issuers/{id}/logo', [IssuerInformationController::class, 'getLogo']);
     Route::get('issuers/{id}/signature', [IssuerInformationController::class, 'getSignature']);
-
+    Route::get('certifications', [CertificationController::class, 'index']);
+    Route::get('certifications/{id}', [CertificationController::class, 'show']);
 });
-
-
-
-
-
 

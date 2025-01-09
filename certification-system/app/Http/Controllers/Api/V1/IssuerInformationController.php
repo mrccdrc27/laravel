@@ -15,14 +15,7 @@ use RateLimiter;
 class IssuerInformationController extends Controller
 {
 
-    public function __construct()
-    {
-        // Protect all routes except public ones
-        $this->middleware('auth:api')->except(['getLogo', 'getSignature']);
-        
-        // Add admin middleware for sensitive operations
-        $this->middleware('admin')->only(['store', 'update', 'destroy']);
-    }
+    
 
     public function index(Request $request)
     {
