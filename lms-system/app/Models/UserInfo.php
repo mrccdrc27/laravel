@@ -37,9 +37,11 @@ class UserInfo extends Model
         'Nationality',
         'BirthPlace',
         'Email',
-        'CreatedAt',
         'IsActive',
         'UserID',
+        'UpdatedAt',
+        'created_at',
+        'updated_at'
     ];
 
     public static function isValidRole(string $role): bool

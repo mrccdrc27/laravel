@@ -180,7 +180,7 @@ class CertificationController extends Controller
 
             $validated = $request->validate([
                 'CertificationNumber' => 'sometimes|required|unique:certifications,CertificationNumber,' . $id . ',CertificationID|max:100',
-                'StudentID' => 'sometimes|required|integer',
+                'StudentID' => ['required', new ExistsInLMS('users', 'UserID')],
                 'FirstName' => 'sometimes|required|string|max:50',
                 'MiddleName' => 'nullable|string|max:50',
                 'LastName' => 'sometimes|required|string|max:50',
@@ -189,7 +189,7 @@ class CertificationController extends Controller
                 'Sex' => 'sometimes|required|boolean',
                 'Nationality' => 'sometimes|required|string|max:50',
                 'BirthPlace' => 'sometimes|required|string|max:100',
-                'CourseID' => 'sometimes|required|integer',
+                'CourseID' => ['required', new ExistsInLMS('courses', 'CourseID')],
                 'Title' => 'sometimes|required|string|max:100',
                 'Description' => 'sometimes|required|string',
                 'IssuedAt' => 'sometimes|required|date',

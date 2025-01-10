@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
@@ -57,7 +58,9 @@ class UserController extends Controller
             // Create user
             $user = User::create([
                 'Username' => $validated['Username'],
-                'PasswordHash' => Hash::make($validated['Password'])
+                'PasswordHash' => Hash::make($validated['Password']),
+                'created_at' => now(),
+                'updated_at' => now()
             ]);
 
             // Create user info
@@ -72,7 +75,8 @@ class UserController extends Controller
                 'Nationality' => $validated['Nationality'],
                 'BirthPlace' => $validated['BirthPlace'],
                 'IsActive' => true,
-                'CreatedAt' => now()
+                'created_at' => now(),
+                'updated_at' => now()
             ]);
 
             $user->userInfo()->save($userInfo); // Eloquent sets the UserID foreign key in the users_info table based on the primary key of the $user
@@ -159,6 +163,7 @@ class UserController extends Controller
             if (isset($validated['Password'])) {
                 $user->PasswordHash = Hash::make($validated['Password']);
             }
+            $user->updated_at = now();  // Add this line
             $user->save();
 
             // Update user info if present
@@ -177,10 +182,10 @@ class UserController extends Controller
                     'IsActive'
                 ]));
                 if (!empty($userInfoData)) {
+                    $userInfoData['updated_at'] = now();  // Add this line
                     $userInfo->update($userInfoData);
                 }
             }
-
             DB::commit();
 
             return response()->json([

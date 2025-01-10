@@ -1,9 +1,8 @@
 <?php
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\AssessmentController;
-use AuthController;
 use App\Http\Middleware\AuthMiddleware;
-
+use App\Http\Controllers\Api\V1\AuthController;
 /**
  * Certification API Routes
  * 
