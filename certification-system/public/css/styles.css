@@ -1,0 +1,237 @@
+/* General Reset */
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: auto;
+}
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f4f4f9;
+  }
+  
+  /* Navbar */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #c63237;
+    color: #fff;
+    padding: 10px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .navbar-logo {
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-logo-img {
+    max-width: 70px;
+    height: auto;
+  }
+  
+  .navbar-menu {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navbar-menu li {
+    margin-left: 20px;
+  }
+  
+  .navbar-menu a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    transition: color 0.3s;
+  }
+  
+  .navbar-menu a:hover {
+    color: #16a085;
+  }
+  
+  /* Certificate Container */
+  .certificate-container {
+    width: 80%;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 10px solid #2c3e50;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .certificate-header {
+    margin-bottom: 20px;
+  }
+  
+  .organization-logo {
+    max-width: 100px;
+    margin-bottom: 10px;
+  }
+  
+  .organization-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #34495e;
+  }
+  
+  .certificate-body {
+    margin: 20px 0;
+  }
+  
+  .certificate-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #2c3e50;
+  }
+  
+  .certificate-description {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #7f8c8d;
+  }
+  
+  .awardee-name {
+    font-weight: bold;
+    color: #2c3e50;
+  }
+  
+  .certification-title {
+    font-style: italic;
+    color: #16a085;
+  }
+  
+  .certificate-footer {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #7f8c8d;
+  }
+  
+  .issued-at, .expiration-date {
+    font-weight: bold;
+    color: #2c3e50;
+  }
+  
+  .qr-code-container {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .qr-code {
+    max-width: 120px;
+    margin-top: 10px;
+  }
+  
+  .qr-code-container p {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin: 5px 0 0;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .navbar-menu {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .navbar-menu li {
+      margin: 10px 0;
+    }
+  
+    .certificate-container {
+      width: 90%;
+      padding: 15px;
+    }
+  }
+  
+  /* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+.navbar-logo-img {
+  height: 50px;
+}
+
+.navbar-menu {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-menu li a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.navbar-menu li a:hover {
+  color: #cce7ff;
+}
+
+/* Form Styles */
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+}
+
+form label {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-align: left;
+  width: 100%;
+}
+
+form input {
+  padding: 0.5rem;
+  font-size: 1rem;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+form button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+form button:hover {
+  background-color: #0056b3;
+}

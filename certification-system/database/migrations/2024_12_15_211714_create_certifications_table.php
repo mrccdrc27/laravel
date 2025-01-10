@@ -33,7 +33,7 @@ return new class extends Migration
             $table->text('Description')->nullable(false); 
             $table->timestamp('IssuedAt')->useCurrent()->nullable(false);
             $table->date('ExpiryDate')->nullable();
-            $table->string('CertificationPath', 255)->nullable(false); // Path to the certification file
+            //$table->string('CertificationPath', 255)->nullable(false); // Path to the certification file
             $table->unsignedBigInteger('IssuerID')->nullable(); // Foreign key for issuer
         
             // Foreign keys
