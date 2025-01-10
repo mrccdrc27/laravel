@@ -11,20 +11,20 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('modules', function (Blueprint $table) {
-            $table->id('ModuleID'); // Primary key
+            $table->id('moduleID'); // Primary key
             
-            $table->unsignedBigInteger('CourseID');
-            $table->unsignedBigInteger('FacultyID');
-            $table->string('Title', 100)->nullable(false);
-            $table->text('Content')->nullable();
-            $table->string('FileName', 255)->nullable(false);
-            $table->string('FileType', 50)->nullable(false);
-            $table->binary('FileData')->nullable(false); 
-            $table->timestamp('CreatedAt')->useCurrent();
+            $table->unsignedBigInteger('courseID');
+            $table->unsignedBigInteger('facultyID');
+            $table->string('title', 100)->nullable(false);
+            $table->text('content')->nullable();
+            $table->string('fileName', 255)->nullable(false);
+            $table->string('fileType', 50)->nullable(false);
+            $table->binary('fileData')->nullable(false); 
+            $table->timestamp('createdAt')->useCurrent();
 
             // Foreign keys
-            $table->foreign('CourseID')->references('CourseID')->on('courses')->onDelete('cascade');
-            $table->foreign('FacultyID')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('courseID')->references('courseID')->on('courses')->onDelete('cascade');
+            $table->foreign('facultyID')->references('id')->on('users')->onDelete('cascade');
         });
 
     }

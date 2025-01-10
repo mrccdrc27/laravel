@@ -12,14 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('activity_log', function (Blueprint $table) {
-            $table->id('ActivityID'); // Primary key
-            $table->unsignedBigInteger('StudentID');
-            $table->unsignedBigInteger('CourseID');
-            $table->timestamp('ActivityDate')->useCurrent();
+            $table->id('activityID'); // Primary key
+            $table->unsignedBigInteger('studentID');
+            $table->unsignedBigInteger('courseID');
+            $table->timestamp('activityDate')->useCurrent();
         
             // Foreign keys
-            $table->foreign('StudentID')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('CourseID')->references('CourseID')->on('courses')->onDelete('cascade');
+            $table->foreign('studentID')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('courseID')->references('CourseID')->on('courses')->onDelete('cascade');
         });
         
     }

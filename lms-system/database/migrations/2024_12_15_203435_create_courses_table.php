@@ -11,20 +11,20 @@ return new class extends Migration {
     public function up(): void
 {
     Schema::create('courses', function (Blueprint $table) {
-        $table->id('CourseID'); // Primary key
-        $table->string('Title', 100)->nullable(false);
-        $table->text('Description')->nullable(); 
-        $table->unsignedBigInteger('FacultyID')->nullable();  // Nullable Foreign Key
-        $table->unsignedBigInteger('StudentID')->nullable();  // Nullable Foreign Key
-        $table->boolean('IsPublic')->default(false);
-        $table->string('FileName', 255)->nullable(false);
-        $table->string('FileType', 50)->nullable(false);
-        $table->binary('FileData')->nullable(false); 
-        $table->timestamp('CreatedAt')->useCurrent();
+        $table->id('courseID'); // Primary key
+        $table->string('title', 100)->nullable(false);
+        $table->text('description')->nullable(); 
+        $table->unsignedBigInteger('facultyID')->nullable();  // Nullable Foreign Key
+        $table->unsignedBigInteger('studentID')->nullable();  // Nullable Foreign Key
+        $table->boolean('isPublic')->default(false);
+        $table->string('fileName', 255)->nullable(false);
+        $table->string('fileType', 50)->nullable(false);
+        $table->binary('fileData')->nullable(false); 
+        $table->timestamp('createdAt')->useCurrent();
 
         // Foreign keys with NO ACTION to avoid multiple cascade paths
-        $table->foreign('FacultyID')->references('id')->on('users')->onDelete('no action');
-        $table->foreign('StudentID')->references('id')->on('users')->onDelete('no action');
+        $table->foreign('facultyID')->references('id')->on('users')->onDelete('no action');
+        $table->foreign('studentID')->references('id')->on('users')->onDelete('no action');
     });
 }
 

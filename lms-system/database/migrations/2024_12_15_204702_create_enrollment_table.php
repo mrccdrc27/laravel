@@ -11,15 +11,15 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('enrollment', function (Blueprint $table) {
-            $table->id('EnrollmentID'); // Primary key
-            $table->unsignedBigInteger('CourseID');
-            $table->unsignedBigInteger('StudentID');
-            $table->timestamp('EnrolledAt')->useCurrent();
-            $table->boolean('IsActive')->default(true);
+            $table->id('enrollmentID'); // Primary key
+            $table->unsignedBigInteger('courseID');
+            $table->unsignedBigInteger('studentID');
+            $table->timestamp('enrolledAt')->useCurrent();
+            $table->boolean('isActive')->default(true);
 
             // Foreign keys
-            $table->foreign('CourseID')->references('CourseID')->on('courses')->onDelete('cascade');
-            $table->foreign('StudentID')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('courseID')->references('courseID')->on('courses')->onDelete('cascade');
+            $table->foreign('studentID')->references('id')->on('users')->onDelete('cascade');
         });
 
     }

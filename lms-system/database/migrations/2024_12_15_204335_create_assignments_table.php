@@ -12,20 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('assignments', function (Blueprint $table) {
-            $table->id('AssignmentID'); // Primary key
-            $table->unsignedBigInteger('CourseID');
-            $table->unsignedBigInteger('FacultyID');
-            $table->string('Title', 100)->nullable(false);
-            $table->string('FileName', 255)->nullable(false);
-            $table->string('FileType', 50)->nullable(false);
-            $table->binary('FileData')->nullable(false); // VARBINARY(MAX)
-            $table->text('Instructions')->nullable();
-            $table->timestamp('DueDate')->nullable();
-            $table->timestamp('CreatedAt')->useCurrent();
+            $table->id('assignmentID'); // Primary key
+            $table->unsignedBigInteger('courseID');
+            $table->unsignedBigInteger('facultyID');
+            $table->string('title', 100)->nullable(false);
+            $table->string('fileName', 255)->nullable(false);
+            $table->string('fileType', 50)->nullable(false);
+            $table->binary('fileData')->nullable(false); // VARBINARY(MAX)
+            $table->text('instructions')->nullable();
+            $table->timestamp('dueDate')->nullable();
+            $table->timestamp('createdAt')->useCurrent();
         
             // Foreign keys
-            $table->foreign('CourseID')->references('CourseID')->on('courses')->onDelete('cascade');
-            $table->foreign('FacultyID')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('courseID')->references('courseID')->on('courses')->onDelete('cascade');
+            $table->foreign('facultyID')->references('id')->on('users')->onDelete('cascade');
         });
         
     }
