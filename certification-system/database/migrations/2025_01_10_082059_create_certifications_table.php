@@ -19,7 +19,7 @@ return new class extends Migration
         $table->text('description');
         $table->dateTime('issuedAt')->default(DB::raw('CURRENT_TIMESTAMP'));
         $table->date('expiryDate')->nullable();
-        $table->string('certificationPath', 255);
+        //$table->string('certificationPath', 255);
         $table->unsignedBigInteger('issuerID')->nullable();
         $table->unsignedBigInteger('userID')->nullable();
         $table->foreign('issuerID')->references('issuerID')->on('issuer_information');
