@@ -17,6 +17,8 @@ return new class extends Migration
         $table->string('middleName', 50)->nullable();
         $table->string('lastName', 50);
         $table->binary('issuerSignature');
+        $table->unsignedBigInteger('organizationID');
+        $table->foreign('organizationID')->references('organizationID')->on('organization');
         $table->timestamps();
     });
 }

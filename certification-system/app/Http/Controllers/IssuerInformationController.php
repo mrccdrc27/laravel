@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\issuer_information;
 use App\Http\Requests\Storeissuer_informationRequest;
 use App\Http\Requests\Updateissuer_informationRequest;
+use illuminate\Http\Request;
 
 class IssuerInformationController extends Controller
 {
@@ -13,15 +14,15 @@ class IssuerInformationController extends Controller
      */
     public function index()
     {
-        //
+        return issuer_information::all();
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Storeissuer_informationRequest $request)
+    public function store(Request $request)
     {
-        //
+
     }
 
     /**
