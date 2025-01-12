@@ -1,5 +1,5 @@
 @extends('layout.layout')
 
 @section('content')
-search
+about
 @endsection
