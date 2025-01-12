@@ -18,9 +18,9 @@ class organization extends Model
         'logo',
     ];
 
-    protected $casts = [
-        'logo' => 'binary',
-    ];
+    // protected $casts = [
+    //     'logo' => 'binary',
+    // ];
 
     public $timestamps = true; // Timestamps are enabled by default
 }

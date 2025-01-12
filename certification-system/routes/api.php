@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\CertificationsController;
 use App\Http\Controllers\IssuerInformationController;
+use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserInfoController;
 use App\Models\user_info;
@@ -16,5 +18,6 @@ Route::get('/user', function (Request $request) {
 // });
 
 Route::apiResource('user_info', UserInfoController::class);
-
-
+Route::apiResource('issuer', IssuerInformationController::class);
+Route::apiResource('org', OrganizationController::class);
+Route::apiResource('cert', CertificationsController::class);

@@ -6,6 +6,7 @@ use App\Models\organization;
 use App\Http\Requests\StoreorganizationRequest;
 use App\Http\Requests\UpdateorganizationRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrganizationController extends Controller
 {
@@ -20,25 +21,27 @@ class OrganizationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreorganizationRequest $request)
+    public function store(Request $request)
     {
-        
-        // Validate the incoming request
-        $request->validate([
-            'name' => 'required|string|max:50',
-            'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+         // Validate the incoming request
+         $request->validate([
+            'OrganizationName' => 'required|string|max:50',
+            'Logo' => 'required|file|mimes:png,jpg,jpeg|max:5120',
         ]);
 
-        // Handle the uploaded logo image
-        $logoPath = $request->file('logo')->store('logos', 'public');
+        // Convert Logo to binary
+        $logo = file_get_contents($request->file('Logo')->getRealPath());
+        $logoData = unpack("H*hex", $logo); // Unpack to hexadecimal string
+        $logoData = '0x' . $logoData['hex']; // Prefix with '0x' to indicate binary data
 
-        // Create the new organization
+        // Create the new organization record
         $organization = Organization::create([
-            'name' => $request->input('name'),
-            'logo' => $logoPath, // Store the logo's file path
+            'name' => $request->OrganizationName,
+            'logo' => DB::raw("CONVERT(VARBINARY(MAX), {$logoData})"), // Store logo as binary in database
         ]);
 
-        return response()->json($organization, 201);
+        // Return response with success message and the created organization
+        return response()->json(['success' => true, 'data' => $organization], 201);
     }
 
     /**
