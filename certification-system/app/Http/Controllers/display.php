@@ -6,7 +6,7 @@ use App\Models\certifications;
 use App\Models\issuer_information;
 use App\Models\organization;
 use App\Models\user_info;
-
+use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -32,6 +32,19 @@ class display extends Controller
     );
 
     }
+    public function count()
+{
+    $data = [
+        'orgCount' => Organization::count(),
+        'userinfoCount' => user_info::count(),
+        'certCount' => certifications::count(),
+        'issuerCount' => issuer_information::count(),
+    ];
+
+    // Return the counts to the view with the compacted variable
+    return view('dashboard.count', compact('data'));
+}
+
 
     /**
      * Show the form for creating a new resource.

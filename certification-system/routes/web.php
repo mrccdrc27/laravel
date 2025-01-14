@@ -16,7 +16,6 @@ Route::get('certificate', function () {
 //     return view('dashboard.home');
 // });
 Route::get('home', [display::class, 'index'])->name('home');
-
 Route::get('/', function () {
     return redirect()->route('home');
 });

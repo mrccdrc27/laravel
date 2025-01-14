@@ -21,3 +21,5 @@ Route::apiResource('user_info', UserInfoController::class);
 Route::apiResource('issuer', IssuerInformationController::class);
 Route::apiResource('org', OrganizationController::class);
 Route::apiResource('cert', CertificationsController::class);
+    Route::get('search/cert', [CertificationsController::class, 'showname']);
+    

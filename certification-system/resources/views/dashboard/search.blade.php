@@ -1,5 +1,6 @@
 @extends('layout.layout')
 
 @section('content')
-search
+<x-search/>
+<x-searchname/>
 @endsection

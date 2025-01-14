@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\organization;
+use App\Models\certifications;
+
 
 class issuer_information extends Model
 {
@@ -13,6 +15,7 @@ class issuer_information extends Model
 
     // Table associated with the model
     protected $table = 'issuer_information';
+    protected $primaryKey = 'issuerID';
 
     // The attributes that are mass assignable
     protected $fillable = [
@@ -22,6 +25,10 @@ class issuer_information extends Model
         'issuerSignature',
         'organizationID',
     ];
+
+    // In your issuer_information model
+
+
 
     // Cast the binary fields
     // protected $casts = [
@@ -33,8 +40,19 @@ class issuer_information extends Model
     {
         return $this->belongsTo(Organization::class, 'organizationID');
     }
+
+    public function certifications()
+    {
+        return $this->belongsTo(Certifications::class, 'issuerID');
+    }
     public function getissuerSignatureBase64Attribute()
     {
         return base64_encode($this->issuerSignature);
+    }
+    public function toArray()
+    {
+    $array = parent::toArray();
+    $array['issuerSignature'] = $this->getissuerSignatureBase64Attribute(); // Use base64 encoded version
+    return $array;
     }
 }

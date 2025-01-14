@@ -34,8 +34,10 @@ class certifications extends Model
         }
     
         // Define the relationship with UserInfo
-        public function user()
+        
+        public function userinfo()
         {
             return $this->belongsTo(user_info::class, 'userID');
         }    
+        
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\certifications;
 
 class user_info extends Model
 {
@@ -43,4 +44,11 @@ class user_info extends Model
         'birthDate' => 'date',
         'sex' => 'boolean',
     ];
+
+    public function certifications()
+{
+    return $this->hasMany(Certifications::class, 'userID');
+}
+
+
 }
