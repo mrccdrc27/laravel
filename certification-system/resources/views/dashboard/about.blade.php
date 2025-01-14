@@ -1,1 +1,1 @@
-@extends('layout.full')
+@extends('layout.layout')

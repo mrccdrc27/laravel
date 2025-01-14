@@ -23,3 +23,21 @@ Route::get('about', function () {
 Route::get('search', function () {
     return view('dashboard.search');
 })->name('search');
+
+Route::get('certificate/user', function () {
+    return view('dashboard.cert.user');
+})->name('certificate/user');
+
+Route::get('certificate/issuer', function () {
+    return view('dashboard.cert.issuer');
+})->name('certificate/issuer');
+
+Route::get('certificate/org', function () {
+    return view('dashboard.cert.org');
+})->name('certificate/org');
+
+Route::get('certificate/create', function () {
+    return view('dashboard.cert.create');
+})->name('certificate/create');
+
+

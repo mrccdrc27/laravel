@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Search</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -22,7 +22,7 @@
             top: 56px; /* To ensure it starts below the navbar */
             left: 0;
             height: calc(100% - 56px); /* Adjust the height of the sidebar */
-            background-color: #343a40;
+            background-color: #b90019;
         }
 
         #page-content-wrapper {
@@ -32,7 +32,7 @@
         }
 
         .list-group-item-action:hover {
-            background-color: #343a40;
+            background-color: #3c98f5;
         }
     </style>
 </head>
@@ -41,14 +41,14 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="{{ route('home') }}">MyApp</a>
+            <a class="navbar-brand fw-bold" href="{{ route('home') }}">Certification System</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" href="home">Home</a>
+                        <a class="nav-link text-dark" href="{{ route('home') }}">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="{{ route('certificate') }}">Certificate</a>
@@ -72,10 +72,10 @@
                 <h3>Panel Title</h3>
             </div>
             <div class="list-group list-group-flush">
-                <a href="#" class="list-group-item list-group-item-action bg-dark text-white">Home</a>
-                <a href="#" class="list-group-item list-group-item-action bg-dark text-white">About</a>
-                <a href="#" class="list-group-item list-group-item-action bg-dark text-white">Services</a>
-                <a href="#" class="list-group-item list-group-item-action bg-dark text-white">Contact</a>
+                <a href="{{ route('certificate/user') }}" class="list-group-item list-group-item-action bg-dark text-white">User</a>
+                <a href="{{ route('certificate/issuer') }}" class="list-group-item list-group-item-action bg-dark text-white">Issuer</a>
+                <a href="{{ route('certificate/org') }}" class="list-group-item list-group-item-action bg-dark text-white">Organization</a>
+                <a href="{{ route('certificate/create') }}" class="list-group-item list-group-item-action bg-dark text-white">Contact</a>
             </div>
         </div>
 

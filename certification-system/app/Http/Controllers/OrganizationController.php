@@ -15,7 +15,34 @@ class OrganizationController extends Controller
      */
     public function index()
     {
-        //
+        // Fetch all organizations from the database
+        $organizations = organization::all();
+
+        // Initialize an array to hold the formatted data
+        $data = [];
+
+        // Iterate over the organizations to encode the logos to Base64
+        foreach ($organizations as $organization) {
+            $logoData = $organization->logo; // Binary logo data
+            
+            // Convert the binary data to a base64 string
+            $base64Logo = base64_encode($logoData);
+
+            // Add the organization's data along with the Base64 logo
+            $data[] = [
+                'organizationID' => $organization->organizationID,
+                'name' => $organization->name,
+                'logo' => $base64Logo,  // Base64-encoded logo
+                'created_at' => $organization->created_at,
+                'updated_at' => $organization->updated_at,
+            ];
+        }
+
+        // Return the organizations data as JSON
+        return response()->json([
+            'success' => true,
+            'data' => $data,
+        ]);
     }
 
     /**

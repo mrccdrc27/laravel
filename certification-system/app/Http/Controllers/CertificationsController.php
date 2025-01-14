@@ -15,7 +15,7 @@ class CertificationsController extends Controller
      */
     public function index()
     {
-        //
+        return certifications::all();
     }
 
     /**

@@ -15,7 +15,38 @@ class IssuerInformationController extends Controller
      */
     public function index()
     {
-        return issuer_information::all();
+        
+        // Fetch all issuer information from the database
+        $issuers = issuer_information::all();
+
+        // Initialize an array to hold the formatted data
+        $data = [];
+
+        // Iterate over the issuers to encode the signature to Base64
+        foreach ($issuers as $issuer) {
+            $signatureData = $issuer->issuerSignature; // Binary signature data
+            
+            // Convert the binary signature data to a base64 string
+            $base64Signature = base64_encode($signatureData);
+
+            // Add the issuer's data along with the Base64 signature
+            $data[] = [
+                'issuerID' => $issuer->issuerID,
+                'firstName' => $issuer->firstName,
+                'middleName' => $issuer->middleName,
+                'lastName' => $issuer->lastName,
+                'issuerSignature' => $base64Signature,  // Base64-encoded signature
+                'organizationID' => $issuer->organizationID,
+                'created_at' => $issuer->created_at,
+                'updated_at' => $issuer->updated_at,
+            ];
+        }
+
+        // Return the issuer information data as JSON
+        return response()->json([
+            'success' => true,
+            'data' => $data,
+        ]);
     }
 
     /**
