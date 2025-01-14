@@ -2,15 +2,20 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\CertificationController;
+use App\Http\Controllers\display;
 
 
 Route::get('certificate', function () {
     return view('dashboard.certificate');
 })->name('certificate');
 
-Route::get('home', function () {
-    return view('dashboard.home');
-})->name('home');
+// Route::get('home', function () {
+//     return view('dashboard.home');
+// })->name('home');
+// Route::get('home', function () {
+//     return view('dashboard.home');
+// });
+Route::get('home', [display::class, 'index'])->name('home');
 
 Route::get('/', function () {
     return redirect()->route('home');

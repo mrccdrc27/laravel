@@ -7,10 +7,12 @@
             <h3>Panel Title</h3>
         </div>
         <div class="list-group list-group-flush">
-            <a href="#" class="list-group-item list-group-item-action bg-dark text-white">Home</a>
-            <a href="#" class="list-group-item list-group-item-action bg-dark text-white">About</a>
-            <a href="#" class="list-group-item list-group-item-action bg-dark text-white">Services</a>
-            <a href="#" class="list-group-item list-group-item-action bg-dark text-white">Contact</a>
+            <div class="list-group list-group-flush">
+                <a href="{{ route('certificate/user') }}" class="list-group-item list-group-item-action bg-dark text-white">User</a>
+                <a href="{{ route('certificate/issuer') }}" class="list-group-item list-group-item-action bg-dark text-white">Issuer</a>
+                <a href="{{ route('certificate/org') }}" class="list-group-item list-group-item-action bg-dark text-white">Organization</a>
+                <a href="{{ route('certificate/create') }}" class="list-group-item list-group-item-action bg-dark text-white">Create</a>
+            </div>
         </div>
     </div>
     

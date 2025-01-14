@@ -75,7 +75,7 @@
                 <a href="{{ route('certificate/user') }}" class="list-group-item list-group-item-action bg-dark text-white">User</a>
                 <a href="{{ route('certificate/issuer') }}" class="list-group-item list-group-item-action bg-dark text-white">Issuer</a>
                 <a href="{{ route('certificate/org') }}" class="list-group-item list-group-item-action bg-dark text-white">Organization</a>
-                <a href="{{ route('certificate/create') }}" class="list-group-item list-group-item-action bg-dark text-white">Contact</a>
+                <a href="{{ route('certificate/create') }}" class="list-group-item list-group-item-action bg-dark text-white">Create</a>
             </div>
         </div>
 

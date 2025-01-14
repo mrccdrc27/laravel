@@ -33,4 +33,8 @@ class issuer_information extends Model
     {
         return $this->belongsTo(Organization::class, 'organizationID');
     }
+    public function getissuerSignatureBase64Attribute()
+    {
+        return base64_encode($this->issuerSignature);
+    }
 }

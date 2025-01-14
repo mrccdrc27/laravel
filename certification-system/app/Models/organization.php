@@ -23,4 +23,8 @@ class organization extends Model
     // ];
 
     public $timestamps = true; // Timestamps are enabled by default
+    public function getLogoBase64Attribute()
+    {
+        return base64_encode($this->logo);
+    }
 }
