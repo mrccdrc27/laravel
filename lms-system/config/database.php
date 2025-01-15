@@ -111,7 +111,7 @@ return [
             'trust_server_certificate' => true,
         ],
         
-        'sqlsrv_cs' => [  // Note: Changed from sqlsrv-cs to sqlsrv_cs for consistency
+        'sqlsrv_cs' => [  
             'driver' => 'sqlsrv',
             'url' => env('CS_DB_URL'),
             'host' => env('CS_DB_HOST', '127.0.0.1'),
