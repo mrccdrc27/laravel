@@ -14,6 +14,7 @@ class certifications extends Model
 
         // Table associated with the model
         protected $table = 'certifications';
+        protected $primaryKey = 'certificationID';
 
         // The attributes that are mass assignable
         protected $fillable = [
@@ -30,7 +31,7 @@ class certifications extends Model
         // Define the relationship with IssuerInformation
         public function issuer()
         {
-            return $this->belongsTo(issuer_information::class, 'issuerID');
+            return $this->belongsTo(issuer_information::class, 'issuerID', 'issuerID');
         }
     
         // Define the relationship with UserInfo
@@ -39,5 +40,10 @@ class certifications extends Model
         {
             return $this->belongsTo(user_info::class, 'userID');
         }    
+
+        public function course()
+        {
+            return $this->belongsTo(Course::class, 'courseID', 'courseID')->on('sqlsrv_lms');
+        }
         
 }
