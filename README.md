@@ -10,27 +10,23 @@ This project integrates a Learning Management System (LMS) and a Certification S
 - [Codes](./code-explanation.md)
   
 ## Setup Instructions
-1. Clone the repositories for both `lms-system` and `certification-system`.
-2. Install dependencies:
-   ```bash
-   composer install
-3. Configure .env of each project folders to your own system ***(Don't forget to use 'cd' to the folder you want to use)***
+1. composer install
+2. npm run
+3. cp .env.example .env
+4. php artisan key:generate
+5. php artisan migrate
+6. php artisan serve
+7. npm run dev [for vite]
 
-### _Example_:
-  ```php
-   APP_NAME=Certification-System
-   APP_URL=http://localhost
-   DB_CONNECTION=sqlsrv
-   DB_HOST=DESKTOP-2QRCQSL
-   DB_PORT=1433
-   DB_DATABASE=test
-   DB_USERNAME=
-   DB_PASSWORD=
-````
-4. Type ``php artisan serve`` to run the laravel servers (optionally specify port number: `php artisan serve --port=8000`)
-   
-5. ``php artisan serve --host=0.0.0.0 --port=8000``  for hosting on the local network
-   _(host=0.0.0.0 to bind server to all available network interface, otherwise assign your local IP address)_
+
+## Setup the database environment 
+ex (for sql server):
+DB_CONNECTION=sqlsrv
+DB_HOST=127.0.0.1
+DB_PORT=1433 
+DB_DATABASE=CS
+DB_USERNAME=
+DB_PASSWORD=
 
 ## For problems with dependencies
 
@@ -79,8 +75,3 @@ composer install
    4.4 Leave TCP Dynamic Ports as Blank (for IPAII) **_(IPAII represents all settings that apply to all IP addresses)_**
    
      Leave TCP Dynamic Ports blank to make SQL Server listen to a specific port (1433 for defalt instances)
-
-
-   ## Setup Instructions
-1. Clone the repositories for both `lms-system` and `certification-system`.
-2. Install dependencies:
