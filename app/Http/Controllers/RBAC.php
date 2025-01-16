@@ -18,6 +18,12 @@ class RBAC extends Controller
             if($role == 'admin'){
                 return view ('dashboard.admin');
             }
+            if($role == 'root'){
+                return view ('dashboard.admin');
+            }
+            if($role == 'faculty'){
+                return view ('dashboard.faculty');
+            }
         }
         
     }

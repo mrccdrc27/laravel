@@ -11,11 +11,15 @@
                 </div>
 
                 <!-- Navigation Links -->
+
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
                         {{ __('Home') }}
                     </x-nav-link>
                 </div>
+
+                {{-- STUDENT NAVBAR --}}
+                @if (Auth::user()->hasRole('student'))
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
                         {{ __('Submission') }}
@@ -26,6 +30,42 @@
                         {{ __('Courses') }}
                     </x-nav-link>
                 </div>
+
+                {{-- FACULTY NAVBAR --}}
+                @elseif (Auth::user()->hasRole('faculty'))
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
+                        {{ __('Review') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
+                        {{ __('Courses') }}
+                    </x-nav-link>
+                </div>
+                {{-- ADMIN NAVBAR --}}
+                @elseif (Auth::user()->hasRole('admin'))
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link href="{{ route('managefaculty') }}" :active="request()->routeIs('managefaculty')">
+                        {{ __('Manage Faculty') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link href="{{ route('core') }}" :active="request()->routeIs('core')">
+                        {{ __('case') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link href="{{ route('core') }}" :active="request()->routeIs('core')">
+                        {{ __('cine') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link href="{{ route('core') }}" :active="request()->routeIs('core')">
+                        {{ __('cure') }}
+                    </x-nav-link>
+                </div>
+                @endif
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">

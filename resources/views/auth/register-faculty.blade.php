@@ -6,15 +6,16 @@
 
         <x-validation-errors class="mb-4" />
         <div class="flex items-center justify-center mt-4">
-            <h1>Student Registration</h1>
+            <h1>Faculty Registration</h1>
         </div>
 
         <form method="POST" action="{{ route('register') }}">
             @csrf
 
             <div>
-                <x-input id="role" type="hidden" name="role" value="student" />
+                <x-input id="role" type="hidden" name="role" value="faculty" />
             </div>
+            
             
             <!-- first name -->
             <div>
@@ -107,16 +108,15 @@
                     {{ __('Register') }}
                 </x-button>
             </div>
-            
+
             <div class="flex items-center justify-center mt-4">
                 <br>
                 <br>
                 <br>
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('register-faculty') }}">
-                    {{ __('register for faculty?') }}
+                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('register') }}">
+                    {{ __('register for student?') }}
                 </a>
              </div>
-            
         </form>
     </x-authentication-card>
 </x-guest-layout>

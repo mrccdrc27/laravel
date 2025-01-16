@@ -23,6 +23,14 @@ class RoleMiddleware
 
         $user = Auth::user();
 
+        // Check if the user is a 'root', and bypass all further checks
+        if ($user->role === 'root') {
+            return $next($request);
+        }
+
+
+        $user = Auth::user();
+
         // Check if user has the required role(s)
         $roles = is_array($roles) ? $roles : explode('|', $roles);
         if (!in_array($user->role, $roles)) {

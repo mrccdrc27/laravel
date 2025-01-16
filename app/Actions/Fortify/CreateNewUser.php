@@ -33,6 +33,7 @@ class CreateNewUser implements CreatesNewUsers
         $user = User::create([
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
+            'role' => $input['role'],
         ]);
 
         // Save informations in the users_info table
@@ -46,6 +47,7 @@ class CreateNewUser implements CreatesNewUsers
             'BirthPlace'=> $input['BirthPlace'],
             'Sex' => $input['Sex'],
             //'Role' => $input[role ?? 'student'],
+            // cannot create role here because userinfo do not have column Role
             ]);
         
             // Assign a default role
