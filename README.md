@@ -1,86 +1,66 @@
-# LMS and Certification System Integration
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-## Project Overview
-This project integrates a Learning Management System (LMS) and a Certification System (CS) using two separate Laravel projects.
+<p align="center">
+<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 
-## Required Libraries/Packages
-- [Prerequisites](./Prerequisites.md)
+## About Laravel
 
-## Code Guide
-- [Codes](./code-explanation.md)
-  
-## Setup Instructions
-1. Clone the repositories for both `lms-system` and `certification-system`.
-2. Install dependencies:
-   ```bash
-   composer install
-3. Configure .env of each project folders to your own system ***(Don't forget to use 'cd' to the folder you want to use)***
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-### _Example_:
-  ```php
-   APP_NAME=Certification-System
-   APP_URL=http://localhost
-   DB_CONNECTION=sqlsrv
-   DB_HOST=DESKTOP-2QRCQSL
-   DB_PORT=1433
-   DB_DATABASE=test
-   DB_USERNAME=
-   DB_PASSWORD=
-````
-4. Type ``php artisan serve`` to run the laravel servers (optionally specify port number: `php artisan serve --port=8000`)
-   
-5. ``php artisan serve --host=0.0.0.0 --port=8000``  for hosting on the local network
-   _(host=0.0.0.0 to bind server to all available network interface, otherwise assign your local IP address)_
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-## For problems with dependencies
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-1. For specific packages:
-``composer require simplesoftwareio/simple-qrcode``
-or
-```bash
-composer install
-```
-3. Then clear cached configuration and regenerate autoloader:
-``php artisan config:cache 
-  composer dump-autoload``
+## Learning Laravel
 
-## Artisan Serve/Hosting Problems
-### Check firewall settings on your computer, ensure the port is open and accessible
-1. Open *Windows Defender -> Firewall -> Advanced Settings -> Inbound Rules
-2.  Modify existing rule for port or... Add new rule for port
-      2.1 For adding rules:
-    
-      2.2 Set rule type to Port
-   
-      2.3 Set as TCP and specify port number
-  
-     2.4 Allow connection & set to apply to all profiles
-  
-4. Check if your device's connection is set to Private/Public by going to *Settings->'name of connection'->Network Profile (Private/Public)
-    _(Network profiles can have certain restrictions)_
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-## Database Connection Problems
-### SQL Server Configuration Manager
-1. Run **SQL Server Configuration Manager**
-2. Right click on **SQL Server** (MSSQLSERVER) and set to start
+You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
 
-### SQL Server TCP/IP Connections
-1. Open **SQL Server Configuration Manager**
-2. Navigate to *SQL Server Network Configuration* -> Protocols for MSSQLSERVER
-3. Ensure TCP/IP is enabled
-4. To allow SQL server to listen on a specific TCP port
-   
-   4.1 Open **SQL Server Configuration Manager**
-   
-   4.2 Under **Protocols** for MSSQLSERVER, double-click **TCP/IP**
-   
-   4.3 Enable and activate IP1 and IP2, ensure the same port number **_(IP1 is the first IP address SQL Server binds to)_**
-   
-   4.4 Leave TCP Dynamic Ports as Blank (for IPAII) **_(IPAII represents all settings that apply to all IP addresses)_**
-   
-     Leave TCP Dynamic Ports blank to make SQL Server listen to a specific port (1433 for defalt instances)
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
+## Laravel Sponsors
 
-   ## Setup Instructions
-1. Clone the repositories for both `lms-system` and `certification-system`.
-2. Install dependencies:
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+
+### Premium Partners
+
+- **[Vehikl](https://vehikl.com/)**
+- **[Tighten Co.](https://tighten.co)**
+- **[WebReinvent](https://webreinvent.com/)**
+- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+- **[64 Robots](https://64robots.com)**
+- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
+- **[Cyber-Duck](https://cyber-duck.co.uk)**
+- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
+- **[Jump24](https://jump24.co.uk)**
+- **[Redberry](https://redberry.international/laravel/)**
+- **[Active Logic](https://activelogic.com)**
+- **[byte5](https://byte5.de)**
+- **[OP.GG](https://op.gg)**
+
+## Contributing
+
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+
+## Code of Conduct
+
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+
+## Security Vulnerabilities
+
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+
+## License
+
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
