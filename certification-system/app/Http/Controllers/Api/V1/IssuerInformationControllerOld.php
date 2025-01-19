@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use RateLimiter;
 
-class IssuerInformationController extends Controller
+class IssuerInformationControllerOld extends Controller
 {
 
     

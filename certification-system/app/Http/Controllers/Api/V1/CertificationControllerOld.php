@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\DB;
 use RateLimiter;
-class CertificationController extends Controller
+class CertificationControllerOld extends Controller
 {
 
     
