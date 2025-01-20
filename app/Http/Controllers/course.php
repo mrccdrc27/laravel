@@ -100,36 +100,4 @@ class course extends Controller
         return response()->json(['message' => 'Course deleted successfully']);
     }
 
-    public function createCourse(Request $request)
-    {
-        // Validate the input
-        $request->validate([
-            'title' => 'required|string|max:100',
-            'description' => 'required|string',
-        ]);
-
-        try {
-            // Call the stored procedure
-            DB::statement('EXEC CreateCourse ?, ?, ?', [
-                auth()->user()->id,          // User ID
-                $request->input('title'),     // Course name
-                $request->input('description') // Course description
-            ]);
-
-            return redirect()->back()->with('success', 'Course created successfully.');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
-        }
-    }
-
-            public function showCreateCourseForm()
-        {
-            // Check if the user has the 'faculty' role
-            if (auth()->user()->role !== 'faculty') {
-                return redirect('/')->with('error', 'Access denied. Only faculty can create courses.');
-            }
-
-            // Return the view for the course creation form
-            return view('components.createCourse');
-        }
 }
