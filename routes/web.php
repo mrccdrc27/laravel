@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\Course;
+use App\Http\Controllers\course;
+use App\Http\Controllers\module;
 use App\Http\Controllers\RBAC;
 use Illuminate\Support\Facades\Route;
 
@@ -52,5 +53,10 @@ Route::middleware([
         Route::get('/courses/create/', function () {
             return view('dashboard.faculty.createcourse');
         })->name('coursescreate');
+
+        //Routes for creating modules
+        Route::get('/courses/{courseId}/modules', [module::class, 'index'])->name('modules.index');
+        Route::get('/courses/{courseId}/components/createModule', [module::class, 'showCreateModuleForm'])->name('components.CreateModuleForm');
+        Route::post('/courses/{courseId}/components/createModule', [module::class, 'createModule'])->name('components.createModule');
     });
 });

@@ -27,7 +27,12 @@
                     Create Post
                 </button>
             </div>
-            
+             <!-- Add Module Button -->
+                <div class="mt-6">
+                    <a href="{{ route('components.createModule', $course->courseID) }}">
+                        <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Add Module</button>
+                    </a>
+                </div>
         
             <!-- Upcoming (medium tall cell) -->
         </div>
