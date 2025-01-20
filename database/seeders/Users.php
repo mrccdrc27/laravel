@@ -9,7 +9,7 @@ use App\Models\UserInfo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class AdminSeeder extends Seeder
+class Users extends Seeder
 {
     /**
      * Run the database seeds.
@@ -18,11 +18,11 @@ class AdminSeeder extends Seeder
     {
         // Create or find the admin user
         $admin = User::updateOrCreate(
-            ['email' => 'admin@example.com'], // Search criteria
+            ['email' => 'student@example.com'], // Search criteria
             [
-                'role' => 'faculty', // Set the role column to 'admin'
+                'role' => 'student', // Set the role column to 'admin'
                 'email_verified_at' => now(),
-                'password' => bcrypt('adminpassword'), // Hash the password
+                'password' => bcrypt('password'), // Hash the password
                 'remember_token' => Str::random(10),
             ]
         );
@@ -31,17 +31,17 @@ class AdminSeeder extends Seeder
         DB::table('users_info')->updateOrInsert(
             ['userID' => $admin->id], // Foreign key to the users table
             [
-                'firstName' => 'John', // Example fields
-                'lastName' => 'The Admin',
+                'firstName' => 'core', // Example fields
+                'lastName' => 'The student',
                 'birthPlace' => 'Test',
                 'nationality' => 'Only',
-                'birthDate' => '1990-01-01',
+                'birthDate' => '2000-01-01',
                 'sex' => true,
                 'createdAt' => now(),
                 'updatedAt' => now(),
             ]
-         );
- 
-         $this->command->info('Admin account and userinfo created or updated.');
+        );
+
+        //$this->command->info('Admin account and userinfo created or updated.');
     }
 }
