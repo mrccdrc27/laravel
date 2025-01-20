@@ -10,20 +10,31 @@ use App\Models\user_info;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+// Route::get('/user', function (Request $request) {
+//     return $request->user();
+// })->middleware('auth:sanctum');
 
 // Route::get('/', function(){
 // return 'API';
 // });
 
-Route::apiResource('user_info', UserInfoController::class);
-Route::apiResource('issuer', IssuerInformationController::class);
-Route::apiResource('org', OrganizationController::class);
-Route::apiResource('cert', CertificationsController::class);
-    Route::get('search/cert', [CertificationsController::class, 'showname']);
+
+// Public routes
+Route::get('search/cert', [CertificationsController::class, 'showname']);
+
+// Protected routes
+Route::middleware(['auth:sanctum', 'integrated.systems'])->group(function () {
+    // User routes
+    Route::apiResource('user_info', UserInfoController::class);
     
+    // Certification System routes
+    Route::prefix('certification')->group(function () {
+        Route::apiResource('issuer', IssuerInformationController::class);
+        Route::apiResource('org', OrganizationController::class);
+        Route::apiResource('cert', CertificationsController::class);
+    });
+});
+
 
 // use App\Http\Controllers\Api\V1\CertificationController;
 // use App\Http\Controllers\Api\V1\IssuerInformationController;
