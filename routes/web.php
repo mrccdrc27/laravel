@@ -1,11 +1,8 @@
 <?php
 
-<<<<<<< Updated upstream
+
 use App\Http\Controllers\course;
 use App\Http\Controllers\module;
-=======
-use App\Http\Controllers\Course;
->>>>>>> Stashed changes
 use App\Http\Controllers\RBAC;
 use Illuminate\Support\Facades\Route;
 
