@@ -17,8 +17,7 @@ return new class extends Migration
             CREATE PROCEDURE createModule
                 @CourseID INT,
                 @ModuleTitle NVARCHAR(100),
-                @ModuleContent NVARCHAR(MAX),
-                @FileData VARBINARY(MAX) = NULL -- Optional file data
+                @ModuleContent NVARCHAR(MAX)
             AS
             BEGIN
                 SET NOCOUNT ON;
@@ -28,8 +27,8 @@ return new class extends Migration
                     --THROW 50000, "The specified course does not exist.", 1;
                 --END
 
-                INSERT INTO Modules (title, content, courseID, fileData, createdAt)
-                VALUES (@ModuleTitle, @ModuleContent, @CourseID, @FileData, GETDATE());
+                INSERT INTO Modules (title, content, courseID, createdAt)
+                VALUES (@ModuleTitle, @ModuleContent, @CourseID, GETDATE());
             END;
         ');
     }
