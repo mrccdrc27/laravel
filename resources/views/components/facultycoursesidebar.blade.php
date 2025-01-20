@@ -1,4 +1,9 @@
 <div class="w-64 bg-gray-800 text-white p-4 space-y-6 min-h-screen">
+    <a href="{{ route('coursescreate') }}">
+        <button class="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 transition duration-200 ease-in-out">
+            Create Course
+        </button>
+    </a>
   <h1 class="text-2xl font-semibold">Sidebar</h1>
   <ul id="course-list" class="space-y-4">
       {{-- Courses will be dynamically added here via JavaScript --}}
