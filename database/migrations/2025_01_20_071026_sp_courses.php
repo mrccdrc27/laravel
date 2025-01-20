@@ -12,6 +12,8 @@ return new class extends Migration
      */
     public function up(): void
     {
+
+        // createCourse, insert course data
         DB::unprepared('DROP PROCEDURE IF EXISTS createCourse');
         DB::unprepared('
             CREATE PROCEDURE createCourse
@@ -42,6 +44,35 @@ return new class extends Migration
                     -- Raise an error if the user is not a faculty
                     THROW 50000, \'access invalid, only faculty can create course\', 1;
                 END
+            END;
+        ');
+        
+        // createCourse, retrieves course name and ID
+        DB::unprepared('DROP PROCEDURE IF EXISTS GetCoursesByFaculty');
+        DB::unprepared('
+            CREATE PROCEDURE GetCoursesByFaculty
+                @FacultyID BIGINT
+            AS
+            BEGIN
+                -- Select courseID and title for the given facultyID
+                SELECT courseID, title
+                FROM courses
+                WHERE facultyID = @FacultyID;
+            END;
+        ');
+
+        // GetCourseByCourseID, retrieves course
+        DB::unprepared('DROP PROCEDURE IF EXISTS GetCourseByCourseID');
+        DB::unprepared('
+            CREATE PROCEDURE GetCourseByCourseID
+                @CourseID BIGINT
+            AS
+            BEGIN
+                SET NOCOUNT ON;
+
+                SELECT * from courses
+                WHERE 
+                    courseID = @CourseID;
             END;
         ');
     }

@@ -5,3 +5,13 @@
 [x-cloak] {
     display: none;
 }
+
+/* Add light mode styles */
+.light-mode {
+    background-color: #ffffff; /* White background */
+    color: #000000; /* Black text */
+}
+
+.red {
+    background-color: #c9adb0;
+}

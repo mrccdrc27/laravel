@@ -11,10 +11,19 @@ export default {
         './resources/views/**/*.blade.php',
     ],
 
+    darkMode: 'class', // Enable dark mode via class (allows switching)
+
     theme: {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+            },
+            colors: {
+                // Light and dark background colors
+                lightBackground: '#ffffff', // Light theme background
+                lightText: '#000000', // Light theme text color
+                darkBackground: '#1a202c', // Dark theme background
+                darkText: '#e2e8f0', // Dark theme text color (light grey)
             },
         },
     },

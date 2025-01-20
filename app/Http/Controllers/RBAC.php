@@ -27,4 +27,17 @@ class RBAC extends Controller
         }
         
     }
+
+    public function Courses()
+    {
+        if(Auth::id()){
+            $role = Auth::user()->role;
+            if($role == 'student'){
+                return view ('dashboard.student.courses');
+            }
+            if($role == 'faculty'){
+                return view ('dashboard.faculty.courses');
+            }
+        }
+    }
 }

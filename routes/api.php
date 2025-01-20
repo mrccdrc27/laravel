@@ -1,8 +1,19 @@
 <?php
 
+use App\Http\Controllers\coursecontroller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+
+route::apiResource('course', coursecontroller::class);
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+    'role:admin|student|faculty',
+])->group(function () {
+    route::apiResource('course', coursecontroller::class);
+});
+
+
