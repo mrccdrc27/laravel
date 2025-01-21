@@ -64,7 +64,6 @@ class course extends Controller
             'title' => 'required|string|max:100',
             'description' => 'required|string',
         ]);
-
         try {
             // Call the stored procedure
             DB::statement('EXEC CreateCourse ?, ?, ?', [

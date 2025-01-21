@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Course;
+use App\Http\Controllers\modules;
 use App\Http\Controllers\RBAC;
 use Illuminate\Support\Facades\Route;
 
@@ -52,5 +53,20 @@ Route::middleware([
         Route::get('/courses/create/', function () {
             return view('dashboard.faculty.createcourse');
         })->name('coursescreate');
+
+        
+
+        //Module Routes
+            // store
+        Route::post('/modules', [modules::class, 'store']);
     });
 });
+Route::get('/courses/module', function () {
+    return view('dashboard.faculty.modulepost');
+})->name('createmodule');
+
+
+
+Route::get('/testing', function () {
+    return view('dashboard.faculty.modulepost');
+})->name('testing');
