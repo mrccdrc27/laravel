@@ -21,6 +21,7 @@
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                     placeholder="Enter the course ID">
             </div> --}}
+            <h1>{{$course->courseID}}</h1>
             <input type="hidden" name="course_id" value="{{$course->courseID}}">
 
             <!-- Title -->
