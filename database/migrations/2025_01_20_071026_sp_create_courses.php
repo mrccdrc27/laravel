@@ -12,7 +12,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-
         // createCourse, insert course data
         DB::unprepared('DROP PROCEDURE IF EXISTS createCourse');
         DB::unprepared('

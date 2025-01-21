@@ -34,8 +34,8 @@
                 {{-- FACULTY NAVBAR --}}
                 @elseif (Auth::user()->hasRole('faculty'))
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
-                        {{ __('Review') }}
+                    <x-nav-link href="{{ route('certificate') }}" :active="request()->routeIs('certificate')">
+                        {{ __('Certificate') }}
                     </x-nav-link>
                 </div>
 

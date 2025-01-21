@@ -1,24 +1,16 @@
 <div class="w-64 bg-gray-800 text-white p-4 space-y-6 min-h-screen">
-    @if (Auth::user()->hasRole('faculty'))
-    <a href="{{ route('coursescreate') }}">
-        <button class="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 transition duration-200 ease-in-out">
-            Create Course
-        </button>
-    </a>
-    @elseif (Auth::user()->hasRole('student'))
     <a href="{{ route('courses.join') }}">
         <button class="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 transition duration-200 ease-in-out">
             join course
         </button>
     </a>
-    @endif
   <h1 class="text-2xl font-semibold">Sidebar</h1>
   <ul id="course-list" class="space-y-4">
       {{-- Courses will be dynamically added here via JavaScript --}}
   </ul>
 </div>
 
-<script>
+{{-- <script>
   document.addEventListener('DOMContentLoaded', async () => {
       try {
           // Use Blade to generate the base URL and user ID
@@ -45,4 +37,4 @@
           console.error('Error fetching courses:', error);
       }
   });
-</script>
+</script> --}}

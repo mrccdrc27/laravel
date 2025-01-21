@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Course;
+use App\Http\Controllers\enrollment;
 use App\Http\Controllers\modules;
 use App\Http\Controllers\RBAC;
 use Illuminate\Support\Facades\Route;
@@ -25,7 +26,7 @@ Route::middleware([
 ])->group(function () {
 
     // Routes for admin role only
-    Route::middleware('role:admin')->group(function () {
+    Route::middleware('role:admin|faculty')->group(function () {
         Route::get('/core', function () {
             return view('dashboard.student.submission');
         })->name('core');
@@ -33,6 +34,10 @@ Route::middleware([
         Route::get('/managefaculty', function () {
             return view('dashboard.admin.CreateFaculty');
         })->name('managefaculty');
+
+        // Route::get('/certificate', function () {
+        //     return view('dashboard.faculty.createcert');
+        // })->name('managefaculty');
     });
 
     // Routes for admin, student, or faculty roles
@@ -68,6 +73,14 @@ Route::middleware([
         //Module Routes
             // store
         Route::post('/modules', [modules::class, 'store']);
+
+        Route::post('/enroll', [enrollment::class, 'create'])->name('enroll.create');
+
+        // student join
+        Route::get('/courses/join', function () {
+            return view('dashboard.student.coursesjoin');
+        })->name('courses.join');
+        
     });
 });
 Route::get('/courses/module', function () {
@@ -77,5 +90,5 @@ Route::get('/courses/module', function () {
 
 
 Route::get('/testing', function () {
-    return view('dashboard.faculty.modulepost');
+    return view('dashboard.student.courseview');
 })->name('testing');
