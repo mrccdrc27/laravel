@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::unprepared('DROP PROCEDURE IF EXISTS InsertEnrollment');
+        DB::unprepared('DROP PROCEDURE IF EXISTS insertEnrollment');
         DB::unprepared('
             CREATE PROCEDURE InsertEnrollment
                 @CourseID BIGINT,
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::unprepared('DROP PROCEDURE IF EXISTS InsertEnrollment');
+        DB::unprepared('DROP PROCEDURE IF EXISTS createEnrollment');
     }
 };

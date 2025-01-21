@@ -88,4 +88,15 @@ class course extends Controller
     // Return the view for the course creation form
     return view('components.createCourse');
 }
+
+        public function deleteCourse(Request $request)
+    {
+        $courseId = $request->input('courseID'); // Get the Course ID from the request
+
+        // Call the stored procedure
+        \DB::statement('EXEC DeleteCourse ?', [$courseId]);
+
+        return response()->json(['message' => 'Course deleted successfully']);
+    }
+
 }

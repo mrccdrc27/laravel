@@ -54,6 +54,15 @@ Route::middleware([
             return view('dashboard.faculty.createcourse');
         })->name('coursescreate');
 
+        //Routes for creating modules
+        Route::get('/courses/{courseId}/modules', [module::class, 'index'])->name('modules.index');
+        Route::get('/courses/{courseId}/components/createModule', [module::class, 'showCreateModuleForm'])->name('components.CreateModuleForm');
+        Route::post('/courses/{courseId}/components/createModule', [module::class, 'createModule'])->name('components.createModule');
+    
+
+        // Routes to delete course
+        Route::post('/delete-course', [course::class, 'deleteCourse']);
+
         
 
         //Module Routes
