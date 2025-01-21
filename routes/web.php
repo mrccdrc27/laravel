@@ -61,7 +61,7 @@ Route::middleware([
     
 
         // Routes to delete course
-        Route::post('/delete-course', [course::class, 'deleteCourse']);
+        Route::delete('/faculty/courses/{courseID}', [course::class, 'deleteCourse'])->name('faculty.courses');
 
         
 

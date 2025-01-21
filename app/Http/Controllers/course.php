@@ -89,14 +89,14 @@ class course extends Controller
     return view('components.createCourse');
 }
 
-        public function deleteCourse(Request $request)
+        public function deleteCourse($courseID)
     {
-        $courseId = $request->input('courseID'); // Get the Course ID from the request
-
-        // Call the stored procedure
-        \DB::statement('EXEC DeleteCourse ?', [$courseId]);
-
-        return response()->json(['message' => 'Course deleted successfully']);
-    }
-
+       
+            // Execute the DeleteCourse stored procedure
+            DB::connection('sqlsrv')->statement('EXEC DeleteCourse ?', [$courseID]);
+            //return redirect()->route('faculty.courses');
+            //return redirect('faculty.courses')->with('success', 'course deleted successfully');
+            return view('dashboard.faculty.courses');
+        
+    }    
 }
