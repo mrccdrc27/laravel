@@ -8,4 +8,10 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    server: {
+        hmr: {
+            host:'mollusk-neutral-partially.ngrok-free.app', // Change to your host if needed
+            protocol: 'wss', // Can be 'wss' for secure WebSocket connections
+        },
+    },
 });

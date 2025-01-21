@@ -10,15 +10,14 @@
  *  - FirstName (string): The first name of the certificate recipient.
  *  - LastName (string): The last name of the certificate recipient.
  *  - IssuedAt (string): The issue date of the certification.
- *  - CertificationPath (string): The publicly accessible path to the QR code image for this certification.
- *  
+ *  - CertificationID (string): The unique ID of the certification.
  */
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Certification QR Code TEST</title>
+    <title>Certification QR Code</title>
 </head>
 <body>
     <div style="text-align: center; margin-top: 50px;">
@@ -29,15 +28,17 @@
             <p>Certificate Number: {{ $certification->CertificationNumber }}</p>
             <p>Name: {{ $certification->FirstName }} {{ $certification->LastName }}</p>
             <p>Issue Date: {{ $certification->IssuedAt }}</p>
+            <p>Certification ID: {{ $certification->CertificationID }}</p>
         </div>
 
         <div style="margin: 20px;">
             <h3>QR Code:</h3>
-            <img src="{{ $certification->CertificationPath }}" alt="QR Code to this Certification">
+            {{-- Generate the QR Code dynamically with the correct link --}}
+            {!! QrCode::size(200)->generate(url("certifications/{$certification->CertificationID}/qr-code")) !!}
+            <p>Link: <a href="{{ url("certifications/{$certification->CertificationID}/qr-code") }}">
+                {{ url("certifications/{$certification->CertificationID}/qr-code") }}
+            </a></p>
         </div>
-            <p> {{$certification->CertificationPath}} </p>
-
-        
     </div>
 </body>
 </html>
