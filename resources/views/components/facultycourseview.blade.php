@@ -19,7 +19,13 @@
     @endif
     
     <div class="col-span-1 row-span-1">
-        
+        <form action="{{ route('faculty.courses', $course->courseID) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this course?');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+
+
         {{-- div for showing the cells --}}
         <div class="grid grid-cols-8 gap-6 w-full p-6">
             <!-- Course Code (small wide cell) -->
