@@ -6,6 +6,9 @@
     </x-slot>
     <div class="flex h-screen">
         <x-facultycoursesidebar/>
+        <x-facultycourseview :course="$course"/>
         <!-- Access user data in Blade view -->
     </div>
+
+        
 </x-app-layout>

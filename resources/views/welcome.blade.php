@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Landing</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>LMS Landing</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
             height: 100vh;
@@ -17,31 +17,39 @@
         }
     </style>
 </head>
-<body>
-    @if (Route::has('login'))
-        <div class="text-center">
-            @auth
-                <a href="{{ url('/dashboard') }}" class="btn btn-primary mb-3">
-                    Dashboard
-                </a>
-            @else
-                <div>
-                    <a href="{{ route('login') }}" class="btn btn-outline-primary mb-3">
-                        Log in
-                    </a>
-                </div>
-                @if (Route::has('register'))
-                    <div>
-                        <a href="{{ route('register') }}" class="btn btn-outline-success">
-                            Register
-                        </a>
-                    </div>
-                @endif
-            @endauth
-        </div>
-    @endif
+<body class="bg-gray-100">
 
-    <!-- Bootstrap Bundle JS (includes Popper) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    @if (Route::has('login'))
+    <div class="flex justify-center items-center min-h-screen bg-gray-100">
+        <div class="bg-white p-10 rounded-lg shadow-lg max-w-lg w-full">
+
+            <div class="text-center space-y-6">
+                @auth
+                    <a href="{{ url('/home') }}" class="btn btn-primary px-8 py-4 text-white bg-blue-600 rounded-md shadow-md hover:bg-blue-700 transition duration-300 text-xl">
+                        Dashboard
+                    </a>
+                @else
+                    <div>
+                        <a href="{{ route('login') }}" class="btn btn-outline-primary px-8 py-4 text-blue-600 border border-blue-600 rounded-md shadow-md hover:bg-blue-100 transition duration-300 text-xl">
+                            Log in
+                        </a>
+                        <br>
+                        <br>
+                    </div>
+                    @if (Route::has('register'))
+                        <div>
+                            <a href="{{ route('register') }}" class="btn btn-outline-success px-8 py-4 text-green-600 border border-green-600 rounded-md shadow-md hover:bg-green-100 transition duration-300 text-xl">
+                                Register
+                            </a>
+                        </div>
+                    @endif
+                @endauth
+            </div>
+        </div>
+    </div>
+@endif
+
+
+
 </body>
 </html>

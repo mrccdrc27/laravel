@@ -12,21 +12,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::unprepared('DROP PROCEDURE IF EXISTS insertEnrollment');
+        DB::unprepared('DROP PROCEDURE IF EXISTS CreateEnrollment');
         DB::unprepared('
-            CREATE PROCEDURE InsertEnrollment
-                @CourseID BIGINT,
-                @StudentID BIGINT,
-                @IsActive BIT = 1  -- Default value is true (active)
-            AS
-            BEGIN
-                -- Insert a new record into the enrollments table
-                INSERT INTO enrollment (courseID, studentID, enrolledAt, isActive)
-                VALUES (@CourseID, @StudentID, GETDATE(), @IsActive);
-                            
-                -- Optional: Return the enrollmentID (if needed)
-                SELECT SCOPE_IDENTITY() AS EnrollmentID;
-            END;
+                        CREATE PROCEDURE CreateEnrollment
+                        @CourseID BIGINT,
+                        @StudentID BIGINT
+                    AS
+                    BEGIN
+                        -- Insert a new enrollment record
+                        INSERT INTO enrollment (courseID, studentID, enrolledAt, isActive)
+                        VALUES (@CourseID, @StudentID, GETDATE(), 1);
+
+                        -- Optional: You can return the enrollment ID if needed
+                        SELECT SCOPE_IDENTITY() AS EnrollmentID;
+                    END
         ');
     }
 
@@ -35,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::unprepared('DROP PROCEDURE IF EXISTS createEnrollment');
+        DB::unprepared('DROP PROCEDURE IF EXISTS CreateEnrollment');
     }
 };

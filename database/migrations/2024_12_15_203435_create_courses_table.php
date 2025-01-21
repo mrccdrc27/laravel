@@ -17,9 +17,6 @@ return new class extends Migration {
         $table->text('description')->nullable(); 
         $table->unsignedBigInteger('facultyID')->nullable();  // Nullable Foreign Key
         $table->boolean('isPublic')->default(false);
-        $table->string('fileName', 255)->nullable(true);
-        $table->string('fileType', 50)->nullable(true);
-        $table->binary('fileData')->nullable(true); 
         $table->timestamp('createdAt')->useCurrent();
 
         // Foreign keys with NO ACTION to avoid multiple cascade paths
