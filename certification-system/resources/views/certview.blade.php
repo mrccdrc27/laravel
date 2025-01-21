@@ -1,152 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Certificate of Completion</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta.15/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tabler@latest/dist/css/tabler.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f4f7f6;
-            font-family: 'Roboto', sans-serif;
-            color: #333;
+            background-color: #f8f9fa;
             margin: 0;
             padding: 0;
-        }
-
-        .certificate-container {
-            margin: 50px auto;
-            padding: 50px;
-            max-width: 1200px;
-            background-color: #ffffff;
-            border-radius: 15px;
-            box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.1);
-            line-height: 1.7;
-            border: 1px solid #e1e8f0;
             display: flex;
-            flex-direction: row; /* Adjusted to make horizontal layout */
-            justify-content: space-between;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-
-        .certificate-left, .certificate-right {
-            width: 48%; /* Each section takes up 48% of the container */
-        }
-
-        .certificate-header {
-            font-size: 3rem;
-            font-weight: 600;
-            color: #007bff;
-            text-align: center;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-
-        .certificate-subheading {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: #007bff;
-        }
-
-        .certificate-details p {
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-        }
-
-        .certificate-details strong {
-            color: #555;
-        }
-
-        .certificate-logo {
-            display: block;
-            margin: 20px auto;
-            width: 120px;
-            height: auto;
-            border-radius: 50%;
+        .certificate-container {
+            width: 80%;
+            max-width: 1100px;
+            background-color: #ffffff;
             border: 2px solid #007bff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            box-sizing: border-box;
         }
-
-        .signature-section {
-            margin-top: 30px;
+        .certificate-title {
+            color: #007bff;
+            font-size: 2.5rem;
+            font-weight: bold;
             text-align: center;
-        }
-
-        .signature-line {
-            border-top: 2px solid #007bff;
-            width: 250px;
-            margin: 20px auto;
-        }
-
-        .signature-name {
-            font-size: 1.2rem;
-            margin-top: 5px;
-            font-weight: 600;
-        }
-
-        .issuer-logo {
-            display: block;
-            width: 100px;
-            height: auto;
-            margin-top: 20px;
             margin-bottom: 20px;
-            border-radius: 8px;
+        }
+        .certificate-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin-bottom: 80px;
+        }
+        .certificate-column {
+            width: 48%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .section-title {
+            color: #007bff;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            font-size: 1rem;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #495057;
+        }
+        .info-value {
+            color: #343a40;
+        }
+        .certificate-description {
+            color: #495057;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+        .footer-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .qr-section {
+            width: 45%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .qr-section img {
+            max-height: 100px;
+        }
+        .issuer-signature-section {
+            width: 45%;
+            display: flex;
+            align-items: center;
+            justify-content: center; 
+            margin-left: auto; 
+        }
+        .issuer-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            flex-shrink: 0;
+            margin-right: 20px;
+        }
+        .issuer-details {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            width: 100%;
+        }
+        .issuer-signature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .signature-placeholder {
+            margin-bottom: 10px; 
+        }
+        .signature-line {
+            width: 200px;
+            height: 2px;
+            background-color: #007bff;
+            margin-bottom: 5px;
+        }
+        .signature-text {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #343a40;
+        }
+        .issuer-info {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #495057;
+            text-align: left;
+        }
+        .footer-text {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 50px;
         }
     </style>
 </head>
-
 <body>
-    <div class="certificate-container">
-        <!-- Left Side: Certificate Information -->
-        <div class="certificate-left">
-            <div class="certificate-header">
-                Certificate of Completion
-            </div>
 
-            <div class="certificate-subheading">Certification Information</div>
-            <div class="certificate-details">
-                <p><strong>Title:</strong> {{ $certificate->title }}</p>
-                <p><strong>Certification Number:</strong> {{ $certificate->certificationNumber }}</p>
-                <p><strong>Course ID:</strong> {{ $certificate->courseID }}</p>
-                <p><strong>Issued At:</strong> {{ $certificate->issuedAt }}</p>
-                <p><strong>Expiry Date:</strong> {{ $certificate->expiryDate }}</p>
-            </div>
+<div class="certificate-container">
+    <div class="certificate-title">CERTIFICATE OF COMPLETION</div>
 
-            <div class="certificate-subheading">Student Information</div>
-            <div class="certificate-details">
-                <p><strong>Name:</strong> {{ $certificate->userinfo->firstName }} {{ $certificate->userinfo->middleName }} {{ $certificate->userinfo->lastName }}</p>
-                <p><strong>Student ID:</strong> {{ $certificate->userinfo->studentID }}</p>
-                <p><strong>Email:</strong> {{ $certificate->userinfo->email }}</p>
-                <p><strong>Nationality:</strong> {{ $certificate->userinfo->nationality }}</p>
-                <p><strong>Birth Date:</strong> {{ $certificate->userinfo->birthDate }}</p>
-                <p><strong>Sex:</strong> {{ $certificate->userinfo->sex ? 'Male' : 'Female' }}</p>
-                <p><strong>Birth Place:</strong> {{ $certificate->userinfo->birthPlace }}</p>
+    <!-- Main Certificate Content -->
+    <div class="certificate-content">
+        <!-- Left Column (Certification Info) -->
+        <div class="certificate-column">
+            <div class="section-title">Certification Information</div>
+            <div class="info-row">
+                <span class="info-label">Title:</span>
+                <span class="info-value">{{ $certificate->title }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Certification Number:</span>
+                <span class="info-value">{{ $certificate->certificationNumber }}</span>
+            </div>
+            <!-- Certificate Description -->
+            <div class="certificate-description">
+                This certificate is awarded to recognize the completion of a comprehensive course that builds skills in a specialized field.
+            </div>
+            <div class="info-row">
+                <span class="info-label">Course ID:</span>
+                <span class="info-value">{{ $certificate->courseID }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Issued At:</span>
+                <span class="info-value">{{ $certificate->issuedAt }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Expiry Date:</span>
+                <span class="info-value">{{ $certificate->expiryDate }}</span>
             </div>
         </div>
 
-        <!-- Right Side: Issuer Information and Signature -->
-        <div class="certificate-right">
-            <div class="certificate-subheading">Issuer Information</div>
-            <div class="certificate-details">
-                <p><strong>Issuer:</strong> {{ $certificate->issuer->firstName }} {{ $certificate->issuer->lastName }}</p>
-                <p><strong>Organization:</strong> {{ $certificate->issuer->organization->name }}</p>
-                @if($certificate->issuer->organization->logo_base64)
-                    <img src="data:image/png;base64,{{ $certificate->issuer->organization->logo_base64 }}" class="issuer-logo" alt="Issuer Logo">
-                @endif
+        <!-- Right Column (Student Info) -->
+        <div class="certificate-column">
+            <div class="section-title">Student Information</div>
+            <div class="info-row">
+                <span class="info-label">Name:</span>
+                <span class="info-value">{{ $certificate->userinfo->firstName }} {{ $certificate->userinfo->middleName }} {{ $certificate->userinfo->lastName }}</span>
             </div>
-
-            <div class="signature-section">
-                <div class="signature-line"></div>
-                <div class="signature-name">Issuer's Signature</div>
-                @if($certificate->issuer->issuerSignature)
-                    <img src="data:image/png;base64,{{ $certificate->issuer->issuerSignature_base64 }}" class="certificate-logo" alt="Signature">
-                @endif
+            <div class="info-row">
+                <span class="info-label">Student ID:</span>
+                <span class="info-value">{{ $certificate->userinfo->studentID }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Email:</span>
+                <span class="info-value">{{ $certificate->userinfo->email }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Nationality:</span>
+                <span class="info-value">{{ $certificate->userinfo->nationality }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Birth Date:</span>
+                <span class="info-value"> {{ $certificate->userinfo->birthDate }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Sex:</span>
+                <span class="info-value">{{ $certificate->userinfo->sex ? 'Male' : 'Female' }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Birth Place:</span>
+                <span class="info-value"> {{ $certificate->userinfo->birthPlace }}</span>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta.15/dist/js/tabler.min.js"></script>
-</body>
+    <!-- QR Code and Signature Row -->
+    <div class="footer-section">
+        <!-- Issuer Signature Section -->
+        <div class="issuer-signature-section">
+            <!-- Organization Logo -->
+                @if($certificate->issuer->organization->logo_base64)
+                    <img class="issuer-logo" src="data:image/png;base64,{{ $certificate->issuer->organization->logo_base64 }}" class="issuer-logo" alt="Organization Logo">
+                @endif
+            <!-- <img class="issuer-logo" src="https://placehold.co/100x100" alt="Organization Logo"> -->
+            
+            <!-- Issuer Details -->
+            <div class="issuer-details">
+                    @if($certificate->issuer->issuerSignature)
+                    <img 
+                        class="issuer-logo" 
+                        style="signature-line max-width: 100px; max-height: 50px;" 
+                        src="data:image/png;base64,{{ $certificate->issuer->issuerSignature_base64 }}" 
+                        alt="Signature"
+                    />
+                    @endif
 
+                <div class="issuer-info">
+                    <div><b>Issuer:</b> {{ $certificate->issuer->firstName }} {{ $certificate->issuer->lastName }}</div>
+                    <div><b>Organization:</b> {{ $certificate->issuer->organization->name }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QR Code Section -->
+        <div class="qr-section">
+        {!! QrCode::size(100)->generate(url()->current()) !!}
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-text">
+        This certificate is digitally verified. Scan the QR code for validation.
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/tabler@latest/dist/js/tabler.min.js"></script>
+</body>
 </html>
