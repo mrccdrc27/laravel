@@ -17,9 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('courseID');
             
             $table->string('title', 100)->nullable(false);
-            $table->string('fileName', 255)->nullable(false);
-            $table->string('fileType', 50)->nullable(false);
-            $table->binary('fileData')->nullable(false); // VARBINARY(MAX)
+            $table->string('filePath')->nullable(true); // VARBINARY(MAX)
             $table->text('instructions')->nullable();
             $table->timestamp('dueDate')->nullable();
             $table->timestamp('createdAt')->useCurrent();

@@ -17,10 +17,10 @@ return new class extends Migration
             $table->unsignedBigInteger('assignmentID')->nullable();
             
             $table->unsignedBigInteger('studentID');
-            $table->text('content')->nullable();
-            $table->string('fileName', 255)->nullable(false);
-            $table->string('fileType', 50)->nullable(false);
-            $table->binary('fileData')->nullable(false); 
+            $table->string('content')->nullable();
+            // $table->string('fileName', 255)->nullable(false);
+            // $table->string('fileType', 50)->nullable(false);
+            $table->string('filePath')->nullable(false); 
             $table->timestamp('submittedAt')->useCurrent();
             $table->float('grade')->nullable();
         

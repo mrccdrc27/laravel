@@ -15,11 +15,8 @@ return new class extends Migration {
             
             $table->unsignedBigInteger('courseID');
             $table->string('title', 100)->nullable(false);
-            $table->text('content')->nullable();
-            // disabled files
-            //$table->string('fileName', 255)->nullable(false);
-            //$table->string('fileType', 50)->nullable(false);
-            $table->string('filepath')->nullable(false); 
+            $table->string('content')->nullable();
+            $table->string('filePath')->nullable(false); 
             $table->timestamp('createdAt')->useCurrent();
             // Foreign keys
             $table->foreign('courseID')->references('courseID')->on('courses')->onDelete('cascade');
