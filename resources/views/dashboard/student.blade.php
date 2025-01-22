@@ -5,14 +5,6 @@
         </h2>
     </x-slot>
 
-<<<<<<< HEAD
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-            </div>
-        </div>
-    </div>
-=======
       <!-- Main Content -->
   <div class="max-w-7xl mx-auto px-4 py-6">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -74,5 +66,4 @@
     </div>
   </div>
 
->>>>>>> b0216354796e7af736c3223e4bce440a571e8527
 </x-app-layout>

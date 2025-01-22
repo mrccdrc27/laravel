@@ -5,11 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<<<<<<< HEAD
         <title>{{ config('app.name', 'LMS') }}</title>
-=======
-        <title>{{ config('app.name', 'Laravel') }}</title>
->>>>>>> b0216354796e7af736c3223e4bce440a571e8527
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

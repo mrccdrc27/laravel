@@ -1,15 +1,10 @@
 <div class="w-64 bg-gray-800 text-white p-4 space-y-6 min-h-screen">
-<<<<<<< HEAD
-=======
     @if (Auth::user()->hasRole('faculty'))
->>>>>>> b0216354796e7af736c3223e4bce440a571e8527
     <a href="{{ route('coursescreate') }}">
         <button class="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 transition duration-200 ease-in-out">
             Create Course
         </button>
     </a>
-<<<<<<< HEAD
-=======
     @elseif (Auth::user()->hasRole('student'))
     <a href="{{ route('courses.join') }}">
         <button class="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 transition duration-200 ease-in-out">
@@ -17,7 +12,6 @@
         </button>
     </a>
     @endif
->>>>>>> b0216354796e7af736c3223e4bce440a571e8527
   <h1 class="text-2xl font-semibold">Sidebar</h1>
   <ul id="course-list" class="space-y-4">
       {{-- Courses will be dynamically added here via JavaScript --}}

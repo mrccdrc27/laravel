@@ -80,3 +80,53 @@ Route::get('/courses/module', function () {
 Route::get('/testing', function () {
     return view('dashboard.faculty.modulepost');
 })->name('testing');
+
+
+
+// finalized routes
+
+Route::middleware('role:admin|student|faculty')->group(function () {
+
+    Route::post('/faculty/courses/create', function () { return 'faculty.courses.create'; })->name('faculty.courses.create');
+
+    Route::post('/faculty/modules/insert', function () { return 'faculty.modules.insert'; })->name('faculty.modules.insert');
+    
+    Route::get('/modules/read', function () { return 'modules.read'; })->name('modules.read');
+    
+    Route::post('/faculty/modules/update', function () { return 'faculty.modules.update'; })->name('faculty.modules.update');
+    
+    Route::post('/faculty/modules/delete', function () { return 'faculty.modules.delete'; })->name('faculty.modules.delete');
+    
+    Route::post('/faculty/assignment/insert', function () { return 'faculty.assignment.insert'; })->name('faculty.assignment.insert');
+    
+    Route::get('/assignment/read', function () { return 'assignment.read'; })->name('assignment.read');
+    
+    Route::post('/faculty/assignment/update', function () { return 'faculty.assignment.update'; })->name('faculty.assignment.update');
+    
+    Route::post('/faculty/assignment/delete', function () { return 'faculty.assignment.delete'; })->name('faculty.assignment.delete');
+    
+    Route::post('/enrollment/delete', function () { return 'enrollment.delete'; })->name('enrollment.delete');
+    
+    Route::get('/faculty/enrollment/read', function () { return 'faculty.enrollment.read'; })->name('faculty.enrollment.read');
+    
+    Route::post('/faculty/enrollment/delete', function () { return 'faculty.enrollment.delete'; })->name('faculty.enrollment.delete');
+    
+    Route::post('/course/insert', function () { return 'course.insert'; })->name('course.insert');
+    
+    Route::get('/course/read', function () { return 'course.read'; })->name('course.read');
+    
+    Route::post('/faculty/course/update', function () { return 'faculty.course.update'; })->name('faculty.course.update');
+    
+    Route::post('/faculty/course/delete', function () { return 'faculty.course.delete'; })->name('faculty.course.delete');
+    
+});
+
+
+
+// temp routes
+
+Route::middleware('role:admin|student|faculty')->group(function () {
+
+    Route::get('courses/join', function () { return 'courses'; })->name('courses.join');
+
+});
