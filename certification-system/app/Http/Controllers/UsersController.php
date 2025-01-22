@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\user_info;
+use App\Models\User;
 use App\Http\Requests\Updateuser_infoRequest;
 use Illuminate\Http\Request;
 
-class UserInfoController extends Controller
+class UsersController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return user_info::all();
+        return User::all();
     }
 
     /**
@@ -37,7 +37,7 @@ class UserInfoController extends Controller
         ]);
         // Try to create a new user information record
         try {
-            $user = user_info::create([
+            $user = User::create([
                 'studentID' => $validatedData['studentID'],
                 'firstName' => $validatedData['firstName'],
                 'middleName' => $validatedData['middleName'] ?? null,
@@ -67,7 +67,7 @@ class UserInfoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(user_info $user_info)
+    public function show(User $user_info)
     {
         //
     }
@@ -75,7 +75,7 @@ class UserInfoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Updateuser_infoRequest $request, user_info $user_info)
+    public function update(Updateuser_infoRequest $request, User  $user_info)
     {
         //
     }
@@ -83,7 +83,7 @@ class UserInfoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(user_info $user_info)
+    public function destroy(User $user_info)
     {
         //
     }

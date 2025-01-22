@@ -1,11 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\CertificationController;
-use App\Http\Controllers\display;
-use App\Http\Controllers\Api\V1\IssuerInformationController;
+use App\Http\Controllers\Api\V1\CertificationsController;
+use App\Http\Controllers\DisplaysController;
+use App\Http\Controllers\Api\V1\IssuersController;
 
-
+Route::get('home', [DisplaysController::class, 'count'])->name('home');
+Route::get('/', function () {
+    return redirect()->route('home');
+});
 
 Route::get('certificate', function () {
     return view('dashboard.certificate');
@@ -17,10 +20,6 @@ Route::get('certificate', function () {
 // Route::get('home', function () {
 //     return view('dashboard.home');
 // });
-Route::get('home', [display::class, 'count'])->name('home');
-Route::get('/', function () {
-    return redirect()->route('home');
-});
 
 
 Route::get('about', function () {

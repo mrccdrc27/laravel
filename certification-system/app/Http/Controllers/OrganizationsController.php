@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\organization;
+use App\Models\Organization;
 use App\Http\Requests\StoreorganizationRequest;
 use App\Http\Requests\UpdateorganizationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class OrganizationController extends Controller
+class OrganizationsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class OrganizationController extends Controller
     public function index()
     {
         // Fetch all organizations from the database
-        $organizations = organization::all();
+        $organizations = Organization::all();
 
         // Initialize an array to hold the formatted data
         $data = [];
@@ -74,7 +74,7 @@ class OrganizationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(organization $organization)
+    public function show(Organization $organization)
     {
         //
     }
@@ -90,7 +90,7 @@ class OrganizationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(organization $organization)
+    public function destroy(Organization $organization)
     {
         //
     }

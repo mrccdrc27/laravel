@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\certifications;
-use App\Models\issuer_information;
-use App\Models\organization;
-use App\Models\user_info;
+use App\Models\Certification;
+use App\Models\Issuer;
+use App\Models\Organization;
+use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
-class display extends Controller
+class DisplaysController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,9 +18,9 @@ class display extends Controller
     public function index()
     {
     $org = Organization::all();
-    $userinfo = user_info::all();
-    $cert = certifications::all();
-    $issuer = issuer_information::all();
+    $userinfo = User::all();
+    $cert = Certification::all();
+    $issuer = Issuer::all();
 
     // Return the data to the view with the compacted variables
     return view('dashboard.home', compact(
@@ -36,9 +36,9 @@ class display extends Controller
 {
     $data = [
         'orgCount' => Organization::count(),
-        'userinfoCount' => user_info::count(),
-        'certCount' => certifications::count(),
-        'issuerCount' => issuer_information::count(),
+        'userinfoCount' => User::count(),
+        'certCount' => Certification::count(),
+        'issuerCount' => Issuer::count(),
     ];
 
     // Return the counts to the view with the compacted variable

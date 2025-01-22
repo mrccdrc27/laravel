@@ -2,11 +2,11 @@
 
 
 use App\Http\Controllers\CertificationsController;
-use App\Http\Controllers\IssuerInformationController;
-use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\IssuersController;
+use App\Http\Controllers\OrganizationsController;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\UserInfoController;
-use App\Models\user_info;
+use App\Http\Controllers\UsersController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,9 +18,9 @@ Route::get('/user', function (Request $request) {
 // return 'API';
 // });
 
-Route::apiResource('user_info', UserInfoController::class);
-Route::apiResource('issuer', IssuerInformationController::class);
-Route::apiResource('org', OrganizationController::class);
+Route::apiResource('user_info', UsersController::class);
+Route::apiResource('issuer', IssuersController::class);
+Route::apiResource('org', OrganizationsController::class);
 Route::apiResource('cert', CertificationsController::class);
     Route::get('search/cert', [CertificationsController::class, 'showname']);
     

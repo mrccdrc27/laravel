@@ -16,7 +16,7 @@
         <div class="col-md-3">
             <div class="card">
                 <div class="card-header bg-success text-white">
-                    <h5>User Info</h5>
+                    <h5>Users</h5>
                 </div>
                 <div class="card-body">
                     <h3 class="card-title">{{ $data['userinfoCount'] }}</h3>

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\issuer_information;
+use App\Models\Issuer;
 use App\Http\Requests\Storeissuer_informationRequest;
 use App\Http\Requests\Updateissuer_informationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class IssuerInformationController extends Controller
+class IssuersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +17,7 @@ class IssuerInformationController extends Controller
     {
         
         // Fetch all issuer information from the database
-        $issuers = issuer_information::all();
+        $issuers = Issuer::all();
 
         // Initialize an array to hold the formatted data
         $data = [];
@@ -69,7 +69,7 @@ class IssuerInformationController extends Controller
         $signatureData = '0x' . $signatureData['hex']; // Prefix with '0x' to indicate binary data
 
         // Create the new issuer information record
-        $issuerInformation = issuer_information::create([
+        $issuerInformation = Issuer::create([
             'firstName' => $request->firstName,
             'middleName' => $request->middleName,
             'lastName' => $request->lastName,
@@ -84,7 +84,7 @@ class IssuerInformationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(issuer_information $issuer_information)
+    public function show(Issuer $issuer_information)
     {
         //
     }
@@ -92,7 +92,7 @@ class IssuerInformationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Updateissuer_informationRequest $request, issuer_information $issuer_information)
+    public function update(Updateissuer_informationRequest $request, Issuer $issuer_information)
     {
         //
     }
@@ -100,7 +100,7 @@ class IssuerInformationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(issuer_information $issuer_information)
+    public function destroy(Issuer $issuer_information)
     {
         //
     }

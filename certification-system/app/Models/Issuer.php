@@ -4,13 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\organization;
-use App\Models\certifications;
+use App\Models\Organization;
+use App\Models\Certification;
 
 
-class issuer_information extends Model
+class Issuer extends Model
 {
-    /** @use HasFactory<\Database\Factories\IssuerInformationFactory> */
+    /** @use HasFactory<\Database\Factories\IssuerFactory> */
     use HasFactory;
 
     // Table associated with the model
@@ -43,7 +43,7 @@ class issuer_information extends Model
 
     public function certifications()
     {
-        return $this->belongsTo(Certifications::class, 'issuerID');
+        return $this->belongsTo(Certification::class, 'issuerID');
     }
     public function getissuerSignatureBase64Attribute()
     {

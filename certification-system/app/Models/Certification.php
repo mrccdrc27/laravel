@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\issuer_information;
-use App\Models\user_info;
+use App\Models\Issuer;
+use App\Models\User;
 
-class certifications extends Model
+class Certification extends Model
 {
-    /** @use HasFactory<\Database\Factories\CertificationsFactory> */
+    /** @use HasFactory<\Database\Factories\CertificationFactory> */
     use HasFactory;
 
         // Table associated with the model
@@ -31,14 +31,14 @@ class certifications extends Model
         // Define the relationship with IssuerInformation
         public function issuer()
         {
-            return $this->belongsTo(issuer_information::class, 'issuerID', 'issuerID');
+            return $this->belongsTo(Issuer::class, 'issuerID', 'issuerID');
         }
     
         // Define the relationship with UserInfo
         
         public function userinfo()
         {
-            return $this->belongsTo(user_info::class, 'userID');
+            return $this->belongsTo(User::class, 'userID');
         }    
 
         public function course()

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\certifications;
-use App\Http\Requests\StorecertificationsRequest;
-use App\Http\Requests\UpdatecertificationsRequest;
+use App\Models\Certification;
+use App\Http\Requests\StoreCertificationRequest;
+use App\Http\Requests\UpdateCertificationRequest;
 use Illuminate\Http\Request;
 
 
@@ -15,7 +15,7 @@ class CertificationsController extends Controller
      */
     public function index()
     {
-        //return certifications::all();
+        //return Certification::all();
         //return view('dashboard.search');
         //return redirect()->route('');
     }
@@ -27,7 +27,7 @@ class CertificationsController extends Controller
     {
                 // Validate the incoming request
                 $request->validate([
-                    'certificationNumber' => 'required|string|max:100|unique:certifications',
+                    'certificationNumber' => 'required|string|max:100|unique:Certification',
                     'courseID' => 'required|integer',
                     'title' => 'required|string|max:100',
                     'description' => 'required|string',
@@ -38,7 +38,7 @@ class CertificationsController extends Controller
                 ]);
         
                 // Create the new certification record
-                $certification = certifications::create([
+                $certification = Certification::create([
                     'certificationNumber' => $request->certificationNumber,
                     'courseID' => $request->courseID,
                     'title' => $request->title,
@@ -59,7 +59,7 @@ class CertificationsController extends Controller
     public function show($id)
     {
         // Find the certification by its ID or return 404 if not found
-        $certificate = certifications::where('certificationID', $id)
+        $certificate = Certification::where('certificationID', $id)
         ->with(['userinfo', 'issuer','issuer.organization'])  // Eager load all relationships
         ->first();
     
@@ -83,8 +83,8 @@ class CertificationsController extends Controller
             return response()->json(['error' => 'Name parameter is required'], 400);
         }
 
-        // Search for certifications where userinfo has matching name fields
-        $certifications = certifications::whereHas('userinfo', function ($query) use ($name) {
+        // Search for Certification where userinfo has matching name fields
+        $Certification = Certification::whereHas('userinfo', function ($query) use ($name) {
             $query->where('firstName', 'like', "$name%")
                 ->orWhere('middleName', 'like', "$name%")
                 ->orWhere('lastName', 'like', "$name%");
@@ -93,13 +93,13 @@ class CertificationsController extends Controller
         ->get();
 
         // Return the results as JSON
-        return response()->json($certifications);
+        return response()->json($Certification);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatecertificationsRequest $request, certifications $certifications)
+    public function update(UpdateCertificationRequest $request, Certification $Certification)
     {
         //
     }
@@ -107,7 +107,7 @@ class CertificationsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(certifications $certifications)
+    public function destroy(Certification $Certification)
     {
         //
     }

@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\certifications;
+use App\Models\Certification;
 
-class user_info extends Model
+class User extends Model
 {
     /** @use HasFactory<\Database\Factories\UserInfoFactory> */
     use HasFactory;
@@ -47,7 +47,7 @@ class user_info extends Model
 
     public function certifications()
 {
-    return $this->hasMany(Certifications::class, 'userID');
+    return $this->hasMany(Certification::class, 'userID');
 }
 
 

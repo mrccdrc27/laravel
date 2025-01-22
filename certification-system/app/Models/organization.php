@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-class organization extends Model
+class Organization extends Model
 {
     /** @use HasFactory<\Database\Factories\OrganizationFactory> */
     use HasFactory;
@@ -40,7 +40,7 @@ class organization extends Model
 
     public function issuers()
     {
-        return $this->hasMany(issuer_information::class, 'organizationID');  // Assuming organizationID is the foreign key in Issuer table
+        return $this->hasMany(Issuer::class, 'organizationID');  // Assuming organizationID is the foreign key in Issuer table
     }
 
 
