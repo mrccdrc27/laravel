@@ -18,7 +18,7 @@ class AdminSeeder extends Seeder
     {
         // Create or find the admin user
         $admin = User::updateOrCreate(
-            ['email' => 'admin@example.com'], // Search criteria
+            ['email' => 'admin@lms.com'], // Search criteria
             [
                 'role' => 'faculty', // Set the role column to 'admin'
                 'email_verified_at' => now(),
@@ -32,9 +32,9 @@ class AdminSeeder extends Seeder
             ['userID' => $admin->id], // Foreign key to the users table
             [
                 'firstName' => 'John', // Example fields
-                'lastName' => 'The Admin',
-                'birthPlace' => 'Test',
-                'nationality' => 'Only',
+                'lastName' => 'doe',
+                'birthPlace' => 'Las Vegas',
+                'nationality' => 'American',
                 'birthDate' => '1990-01-01',
                 'sex' => true,
                 'createdAt' => now(),

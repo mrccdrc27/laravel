@@ -38,6 +38,8 @@ class UserInfo extends Model
  // Disables automatic timestamp columns because it find timestamp column in users_info if not disabled
  public $timestamps = false; 
 
+ 
+
  public function user()
  {
      return $this->belongsTo(User::class);

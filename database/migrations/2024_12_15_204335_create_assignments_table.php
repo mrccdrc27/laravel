@@ -18,7 +18,7 @@ return new class extends Migration
             
             $table->string('title', 100)->nullable(false);
             $table->string('filePath')->nullable(true); // VARBINARY(MAX)
-            $table->text('instructions')->nullable();
+            $table->string('instructions')->nullable();
             $table->timestamp('dueDate')->nullable();
             $table->timestamp('createdAt')->useCurrent();
         
