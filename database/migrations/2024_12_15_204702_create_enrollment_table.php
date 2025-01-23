@@ -13,8 +13,8 @@ return new class extends Migration {
         Schema::create('enrollment', function (Blueprint $table) {
             $table->id('enrollmentID'); // Primary key
             
-            $table->unsignedBigInteger('courseID');
-            $table->unsignedBigInteger('studentID');
+            $table->unsignedBigInteger('courseID')->nullable(false);
+            $table->unsignedBigInteger('studentID')->nullable(false);
             $table->timestamp('enrolledAt')->useCurrent();
             $table->boolean('isActive')->default(true);
 

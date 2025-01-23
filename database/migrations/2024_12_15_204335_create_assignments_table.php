@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('assignments', function (Blueprint $table) {
             $table->id('assignmentID'); // Primary key
             
-            $table->unsignedBigInteger('courseID');
+            $table->unsignedBigInteger('courseID')->nullable(false);
             
             $table->string('title', 100)->nullable(false);
             $table->string('filePath')->nullable(true); // VARBINARY(MAX)

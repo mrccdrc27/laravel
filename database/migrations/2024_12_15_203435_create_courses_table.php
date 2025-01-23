@@ -15,7 +15,7 @@ return new class extends Migration {
         
         $table->string('title', 100)->nullable(false);
         $table->text('description')->nullable(false); 
-        $table->unsignedBigInteger('facultyID')->nullable(false);  // Nullable Foreign Key
+        $table->unsignedBigInteger('facultyID')->nullable(false);  
         $table->boolean('isPublic')->default(false);
         // disabled, no function yet
         // $table->string('filePath')->nullable(true); 

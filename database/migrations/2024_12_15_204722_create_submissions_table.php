@@ -14,20 +14,20 @@ return new class extends Migration
         Schema::create('submissions', function (Blueprint $table) {
             $table->id('submissionID'); // Primary key
             
-            $table->unsignedBigInteger('assignmentID')->nullable();
+            $table->unsignedBigInteger('assignmentID')->nullable(false);
             
-            $table->unsignedBigInteger('studentID');
+            $table->unsignedBigInteger('studentID')->nullable(false);
             $table->string('content')->nullable();
             // $table->string('fileName', 255)->nullable(false);
             // $table->string('fileType', 50)->nullable(false);
-            $table->string('filePath')->nullable(false); 
+            $table->string('filePath')->nullable(); 
             $table->timestamp('submittedAt')->useCurrent();
             $table->float('grade')->nullable();
         
             // Foreign keys
-            $table->foreign('assignmentID')->references('assignmentID')->on('assignments')->onDelete('no action');
+            $table->foreign('assignmentID')->references('assignmentID')->on('assignments')->onDelete('cascade');
         
-        $table->foreign('studentID')->references('id')->on('users')->onDelete('no action');
+        $table->foreign('studentID')->references('id')->on('users')->onDelete('cascade');
         });
         
     }
