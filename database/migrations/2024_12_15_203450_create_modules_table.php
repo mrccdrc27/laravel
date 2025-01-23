@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('modules', function (Blueprint $table) {
             $table->id('moduleID'); // Primary key
             
-            $table->unsignedBigInteger('courseID');
+            $table->unsignedBigInteger('courseID')->nullable(false);
             $table->string('title', 100)->nullable(false);
             $table->string('content')->nullable();
             $table->string('filePath')->nullable(); 
