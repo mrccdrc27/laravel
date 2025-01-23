@@ -25,7 +25,7 @@ public function run()
 
         // assigns random courses to random users
         $courses = Course::factory()
-            ->count(5)
+            ->count(30)
             ->create() // Create courses and save to the database
             ->each(function ($course) use ($users) {
                 // Assign a random facultyID from the existing users

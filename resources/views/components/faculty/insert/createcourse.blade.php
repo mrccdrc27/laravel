@@ -1,4 +1,4 @@
-<div class="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
+{{-- <div class="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg"> --}}
     <form action="{{ route('home') }}" method="POST" class="space-y-4">
         @csrf
 
@@ -78,10 +78,10 @@
         <div>
             <button 
                 type="submit" 
-                class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                class="lmsred3 w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
                 Save Course
             </button>
         </div>
     </form>
-</div>
+{{-- </div> --}}

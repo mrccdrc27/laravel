@@ -1,4 +1,5 @@
-<div class="grid-cols-10 gap-3 w-full pb-12 overflow-y-auto relative">
+{{-- <div class="grid-cols-10 gap-3 w-full pb-12 overflow-y-auto relative"> --}}
+<div class="flex justify-center items-center ">
     @if (session('success'))
     <div class="flex items-center justify-between bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded-md mb-6 shadow">
         <div class="flex items-center space-x-2">
@@ -19,11 +20,11 @@
     @endif
     
     <div class="col-span-1 row-span-1">
-        <form action="{{ route('faculty.courses', $course->courseID) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this course?');">
+        {{-- <form action="{{ route('faculty.courses', $course->courseID) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this course?');">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
+            </form> --}}
 
 
         {{-- div for showing the cells --}}
@@ -78,6 +79,8 @@
                 <x-createmodule :course="$course"/>
             </div>
         </div>
+        {{-- <x-faculty.classcode :course="$course"/> --}}
+
     </div>
 </div>
 

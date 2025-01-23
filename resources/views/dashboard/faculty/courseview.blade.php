@@ -4,21 +4,28 @@
             {{ __('Courses') }}
         </h2>        
     </x-slot>
-    <div class="flex h-screen">
-        <x-facultycoursesidebar/>
-        <div class="grid-cols-1 overflow-y-auto relative">
-            <!-- Faculty Course View Section -->
-            <div class="col-span-1">
-                <x-facultycourseview :course="$course" />
-            </div>
-            <!-- Modules Section -->
-            <div class="col-span-1">
-                <x-modules :modules="$modules" />
-            </div>
-        </div>
 
-        <!-- Access user data in Blade view -->
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <div class="">
+            <x-faculty.facultycoursesidebar />
+        </div>
+        <!-- Main Content -->
+        <div class="flex-1">
+            <x-faculty.facultycourseview2 :course="$course" />
+        </div>
     </div>
+    
+
+    {{-- <x-faculty.facultycourseview2 :course="$course" />
+    <x-faculty.facultycoursesidebar/> --}}
+
+
+    {{-- <div class="flex h-screen">
+
+
+    </div> --}}
+
 
         
 </x-app-layout>

@@ -41,7 +41,7 @@ Route::middleware([
         Route::get('/Courses', [RBAC::class, 'Courses'])->name('Courses');
 
         // Route for courses by faculty
-        Route::get('courses/faculty/{facultyID}', [Course::class, 'getCoursesByFaculty']);
+        Route::get('courses/get/{facultyID}', [Course::class, 'getCoursesByFaculty']);
 
         // Route for courses by course ID
         Route::get('/courses/id/{courseID}', [Course::class, 'getCourseByCourseID']);
@@ -78,9 +78,14 @@ Route::get('/courses/module', function () {
 
 
 Route::get('/testing', function () {
-    return view('dashboard.faculty.modulepost');
+    return view('test');
 })->name('testing');
 
+
+// Data routes:
+
+    // Route for courses by faculty
+    Route::get('courses/get/{facultyID}', [Course::class, 'getCoursesByFaculty']);
 
 
 // Form Routes
