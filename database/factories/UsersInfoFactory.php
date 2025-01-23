@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class UsersInfoFactory extends Factory
 {
     protected $model = \App\Models\UserInfo::class; // Replace with the correct namespace of your UserInfo model
-
+    
     public function definition()
     {
         return [

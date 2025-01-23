@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('instructions')->nullable();
             $table->timestamp('dueDate')->nullable();
             $table->timestamp('createdAt')->useCurrent();
-        
+            $table->timestamp('updatedAt')->useCurrent();
             // Foreign keys
             $table->foreign('courseID')->references('courseID')->on('courses')->onDelete('cascade');
             

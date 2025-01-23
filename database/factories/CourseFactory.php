@@ -18,6 +18,7 @@ class CourseFactory extends Factory
             'facultyID' => User::inRandomOrder()->first()->id, // Create a related user and use its ID
             'isPublic' => $this->faker->boolean, // Random true/false value
             'createdAt' => now(), // Current timestamp
+            'updatedAt' => now(), // Current timestamp
         ];
     }
 }

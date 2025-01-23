@@ -20,6 +20,7 @@ return new class extends Migration {
         // disabled, no function yet
         // $table->string('filePath')->nullable(true); 
         $table->timestamp('createdAt')->useCurrent();
+        $table->timestamp('updatedAt')->useCurrent();
 
         // Foreign keys with NO ACTION to avoid multiple cascade paths
         $table->foreign('facultyID')->references('id')->on('users')->onDelete('no action');

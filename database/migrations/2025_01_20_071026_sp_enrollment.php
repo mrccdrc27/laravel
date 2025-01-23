@@ -27,6 +27,18 @@ return new class extends Migration
                 SELECT SCOPE_IDENTITY() AS EnrollmentID;
             END
         ');
+
+        //Deletes an assignment
+        DB::unprepared('DROP PROCEDURE IF EXISTS DeleteEnrollment');
+        DB::unprepared('
+            CREATE PROCEDURE DeleteEnrollment
+            @enrollmentID INT
+            AS
+            BEGIN
+                DELETE FROM enrollment
+                WHERE enrollmentID = @enrollmentID;
+            END;
+        ');
     }
 
     /**
@@ -34,6 +46,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::unprepared('DROP PROCEDURE IF EXISTS CreateEnrollment');
+        
     }
 };

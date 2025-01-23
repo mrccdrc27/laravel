@@ -18,6 +18,7 @@ class ModuleFactory extends Factory
             'content' => $this->faker->paragraph(), // Random paragraph
             'filePath' => $this->faker->filePath(), // Random file path
             'createdAt' => now(), // Current timestamp
+            'updatedAt' => now(), // Current timestamp
         ];
     }
 }

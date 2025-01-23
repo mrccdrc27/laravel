@@ -21,31 +21,43 @@ return new class extends Migration
                 @CourseDescription NVARCHAR(MAX)
             AS
             BEGIN
+
+                -- Suppresses the "rows affected" messages
                 SET NOCOUNT ON;
 
-                -- Declare a variable to store the user role
-                DECLARE @UserRole NVARCHAR(50);
-
-                -- Retrieve the user role from the users table
-                SELECT @UserRole = role
-                FROM users
-                WHERE id = @UserId;
-
-                -- Check if the user is a faculty
-                IF @UserRole = \'faculty\'
-                BEGIN
-                    -- Insert the course into the courses table
-                    INSERT INTO courses (title, description, facultyID, createdAt)
-                    VALUES (@CourseName, @CourseDescription, @UserId, GETDATE());
-                END
-                ELSE
-                BEGIN
-                    -- Raise an error if the user is not a faculty
-                    THROW 50000, \'access invalid, only faculty can create course\', 1;
-                END
+               
+                -- Insert the course into the courses table
+                INSERT INTO courses (title, description, facultyID, createdAt)
+                VALUES (@CourseName, @CourseDescription, @UserId, GETDATE());
+                
             END;
         ');
         
+        //edit or updates a course
+        DB::unprepared('DROP PROCEDURE IF EXISTS updateCourse');
+        DB::unprepared('
+            CREATE PROCEDURE updateCourse
+                @CourseId INT,
+                @UserId INT,
+                @CourseName NVARCHAR(100),
+                @CourseDescription NVARCHAR(MAX)
+            AS
+            BEGIN
+                -- Suppresses the "rows affected" messages
+                SET NOCOUNT ON;
+
+                -- Update the course in the courses table
+                UPDATE courses
+                SET 
+                    title = @CourseName,
+                    description = @CourseDescription,
+                    facultyID = @UserId,
+                    updatedAt = GETDATE()
+                WHERE courseID = @CourseId;
+            END;
+        ');
+
+
         // createCourse, retrieves course name and ID
         DB::unprepared('DROP PROCEDURE IF EXISTS GetCoursesByFaculty');
         DB::unprepared('
@@ -74,13 +86,27 @@ return new class extends Migration
                     courseID = @CourseID;
             END;
         ');
+
+
+        //Deletes a course
+        DB::unprepared('DROP PROCEDURE IF EXISTS DeleteCourse');
+        DB::unprepared('
+            CREATE PROCEDURE DeleteCourse
+            @CourseID INT
+            AS
+            BEGIN
+                DELETE FROM courses
+                WHERE courseID = @CourseID;
+            END;
+        ');
     }
 
+       
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        DB::unprepared('DROP PROCEDURE IF EXISTS createCourse');
+        
     }
 };

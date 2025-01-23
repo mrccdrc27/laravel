@@ -20,6 +20,7 @@ class AssignmentFactory extends Factory
             'instructions' => $this->faker->sentence(4), // Random 4-word title
             'dueDate' => $this->faker->dateTimeBetween('+1 week', '+1 month'), // Random future date
             'createdAt' => now(), // Current timestamp
+            'updatedAt' => now(), // Current timestamp
         ];
     }
 
