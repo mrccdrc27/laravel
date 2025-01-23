@@ -80,11 +80,11 @@ return new class extends Migration {
         DB::unprepared('
         CREATE PROCEDURE sp_certification_update
             @certificationID BIGINT,
-            @certificationNumber NVARCHAR(100),
-            @courseID INT,
-            @title NVARCHAR(100),
-            @description NVARCHAR(MAX),
-            @issuedAt DATETIME,
+            @certificationNumber NVARCHAR(100) = NULL,
+            @courseID INT = NULL,
+            @title NVARCHAR(100) = NULL,
+            @description NVARCHAR(MAX) = NULL,
+            @issuedAt DATETIME = NULL,
             @expiryDate DATE = NULL,
             @issuerID BIGINT = NULL,
             @userID BIGINT = NULL
@@ -93,14 +93,14 @@ return new class extends Migration {
             SET NOCOUNT ON;
 
             UPDATE certifications
-            SET certificationNumber = @certificationNumber,
-                courseID = @courseID,
-                title = @title,
-                description = @description,
-                issuedAt = @issuedAt,
-                expiryDate = @expiryDate,
-                issuerID = @issuerID,
-                userID = @userID,
+            SET certificationNumber = COALESCE(@certificationNumber, certificationNumber),
+                courseID = COALESCE(@courseID, courseID),
+                title = COALESCE(@title, title),
+                description = COALESCE(@description, description),
+                issuedAt = COALESCE(@issuedAt, issuedAt),
+                expiryDate = COALESCE(@expiryDate, expiryDate),
+                issuerID = COALESCE(@issuerID, issuerID),
+                userID = COALESCE(@userID, userID),
                 updated_at = GETDATE()
             WHERE certificationID = @certificationID;
         END

@@ -1,7 +1,7 @@
 <?php
 
 
-use App\Http\Controllers\CertificationsController;
+use App\Http\Controllers\Api\CertificationsController;
 use App\Http\Controllers\IssuersController;
 use App\Http\Controllers\OrganizationsController;
 use App\Http\Controllers\PostController;
