@@ -21,11 +21,11 @@ public function run()
     {
 
         // Step 1: Create a fixed number of Users
-        $users = UserInfo::factory()->count(10)->create(); // Generate 10 users
+        $users = UserInfo::factory()->count(5)->create(); // Generate 10 users
 
         // assigns random courses to random users
         $courses = Course::factory()
-            ->count(5)
+            ->count(30)
             ->create() // Create courses and save to the database
             ->each(function ($course) use ($users) {
                 // Assign a random facultyID from the existing users

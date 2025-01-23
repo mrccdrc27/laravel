@@ -12,6 +12,41 @@
     color: #000000; /* Black text */
 }
 
+.shadow-right {
+    box-shadow: 2px 0 5px -2px rgba(0, 0, 0, 0.3);
+}
+
+
 .red {
     background-color: #c9adb0;
+}
+
+.off {
+    background-color: #8b3039;
+}
+
+.lmsred {
+    background-color: #80000d;
+}
+.lmsred2 {
+    background-color: #ffedee;
+}
+.lmsred3 {
+    background-color: #ff1129;
+}
+
+.lmsbar{
+    background-color: rgb(168, 168, 168);
+}
+
+.course {
+    background-color: #f2f3f5;
+}
+
+.lmswhite {
+    color: #ffffff;
+}
+
+.lmsoff {
+    color: #cecece;
 }

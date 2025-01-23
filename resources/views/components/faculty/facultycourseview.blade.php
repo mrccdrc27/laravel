@@ -1,12 +1,5 @@
-<div class="grid-cols-10 gap-3 w-full pb-12 overflow-y-auto relative">
-<<<<<<< HEAD
-    {{-- success message --}}
-    <x-success-message/>
-
-
-    <div class="col-span-1 row-span-1">
-        
-=======
+{{-- <div class="grid-cols-10 gap-3 w-full pb-12 overflow-y-auto relative"> --}}
+<div class="flex justify-center items-center ">
     @if (session('success'))
     <div class="flex items-center justify-between bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded-md mb-6 shadow">
         <div class="flex items-center space-x-2">
@@ -27,14 +20,13 @@
     @endif
     
     <div class="col-span-1 row-span-1">
-        <form action="{{ route('faculty.courses', $course->courseID) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this course?');">
+        {{-- <form action="{{ route('faculty.courses', $course->courseID) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this course?');">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
+            </form> --}}
 
 
->>>>>>> b0216354796e7af736c3223e4bce440a571e8527
         {{-- div for showing the cells --}}
         <div class="grid grid-cols-8 gap-6 w-full p-6">
             <!-- Course Code (small wide cell) -->
@@ -87,14 +79,9 @@
                 <x-createmodule :course="$course"/>
             </div>
         </div>
-    </div>
-<<<<<<< HEAD
+        {{-- <x-faculty.classcode :course="$course"/> --}}
 
-    <div class="container">
-        {{-- <x-modules :modules="$modules"/> --}}
     </div>
-=======
->>>>>>> b0216354796e7af736c3223e4bce440a571e8527
 </div>
 
 <script>

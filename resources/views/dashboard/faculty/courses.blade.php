@@ -5,7 +5,7 @@
         </h2>        
     </x-slot>
     <div class="flex h-screen">
-        <x-facultycoursesidebar/>
+        <x-faculty.facultycoursesidebar/>
         <!-- Access user data in Blade view -->
     </div>
 </x-app-layout>
