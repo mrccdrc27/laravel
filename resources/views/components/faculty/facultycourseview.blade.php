@@ -1,25 +1,9 @@
 {{-- <div class="grid-cols-10 gap-3 w-full pb-12 overflow-y-auto relative"> --}}
-<div class="flex justify-center items-center ">
-    @if (session('success'))
-    <div class="flex items-center justify-between bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded-md mb-6 shadow">
-        <div class="flex items-center space-x-2">
-            <!-- Icon -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
-            </svg>
-            <!-- Message -->
-            <span class="font-medium text-sm">{{ session('success') }}</span>
-        </div>
-        <!-- Close Button -->
-        <button onclick="this.parentElement.remove()" class="text-green-600 hover:text-green-800 focus:outline-none">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-        </button>
-    </div>
-    @endif
+<div class="flex justify-center">
     
-    <div class="col-span-1 row-span-1">
+    <div class="col-span-1 row-span-1 container">
+        <br>
+        <x-success-message/>
         {{-- <form action="{{ route('faculty.courses', $course->courseID) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this course?');">
                 @csrf
                 @method('DELETE')
@@ -38,7 +22,7 @@
             <!-- Class Title Card (big wide cell) -->
             <div class="col-span-6 row-span-6 bg-white p-6 rounded-lg shadow-md">
                 <h2 class="text-xl font-semibold mb-2">{{$course->title}}</h2>
-                <p class="text-gray-600">Details about the class.</p>
+                <p class="text-gray-600">{{$course->description}}</p>
             </div>
 
             <!-- Upcoming (medium tall cell) -->
@@ -59,6 +43,28 @@
                 >
                     Create Post
                 </button>
+            </div>
+
+            <div class="col-span-8 row-span-8 bg-white p-4 rounded-lg shadow-md">
+                <br><br><br><br><br>
+            </div>
+            <div class="col-span-8 row-span-8 bg-white p-4 rounded-lg shadow-md">
+                <br><br><br><br><br>
+            </div>
+            <div class="col-span-8 row-span-8 bg-white p-4 rounded-lg shadow-md">
+                <br><br><br><br><br>
+            </div>
+            <div class="col-span-8 row-span-8 bg-white p-4 rounded-lg shadow-md">
+                <br><br><br><br><br>
+            </div>
+            <div class="col-span-8 row-span-8 bg-white p-4 rounded-lg shadow-md">
+                <br><br><br><br><br>
+            </div>
+            <div class="col-span-8 row-span-8 bg-white p-4 rounded-lg shadow-md">
+                <br><br><br><br><br>
+            </div>
+            <div class="col-span-8 row-span-8 bg-white p-4 rounded-lg shadow-md">
+                <br><br><br><br><br>
             </div>
         </div>
 

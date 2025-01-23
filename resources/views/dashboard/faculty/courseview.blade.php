@@ -5,14 +5,14 @@
         </h2>        
     </x-slot>
 
-    <div class="flex min-h-screen">
+    <div class="flex min-h-screen over">
         <!-- Sidebar -->
-        <div class="">
+        <div class="min-h-screen overflow-y-auto">
             <x-faculty.facultycoursesidebar />
         </div>
         <!-- Main Content -->
         <div class="flex-1">
-            <x-faculty.facultycourseview2 :course="$course" />
+            <x-faculty.facultycourseview :course="$course" />
         </div>
     </div>
     

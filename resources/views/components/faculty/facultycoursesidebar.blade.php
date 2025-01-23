@@ -1,3 +1,4 @@
+{{-- <div class="w-64 course text-white py-2 space-y-6 min-h-screen shadow-right"> --}}
 <div class="w-64 course text-white py-2 space-y-6 min-h-screen shadow-right">
     @if (Auth::user()->hasRole('faculty'))
     {{-- <a href="{{ route('coursescreate') }}">
@@ -11,6 +12,8 @@
             Create Course
         </button>
     </div>
+
+
 
     @elseif (Auth::user()->hasRole('student'))
     <a href="{{ route('courses.join') }}">
