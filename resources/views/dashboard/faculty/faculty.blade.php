@@ -4,5 +4,15 @@
             {{ __('Testing') }}
         </h2>        
     </x-slot>
+    {{-- <x-student.insert.createenrollment/> --}}
+    <x-student.insert.createsubmission/>
+    {{-- <br>
     <x-faculty.insert.createcourse/>
+    <br>
+    <x-faculty.update.updatecourse/>
+    <br>
+    <x-faculty.insert.createmodule/>
+    <br>
+    <x-faculty.insert.createassignment/>
+    <br> --}}
 </x-app-layout>
