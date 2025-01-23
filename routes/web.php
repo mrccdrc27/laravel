@@ -83,11 +83,16 @@ Route::get('/testing', function () {
 
 
 
-// finalized routes
+// Form Routes
 
 Route::middleware('role:admin|student|faculty')->group(function () {
 
-    Route::post('/faculty/courses/create', function () { return 'faculty.courses.create'; })->name('faculty.courses.create');
+    // Create Courses
+    Route::get('/faculty/courses/create', function () { return view('dashboard.faculty.faculty');})
+    ->name('faculty.courses.create');
+    // Update Course
+    Route::get('/faculty/courses/update', function () { return view('dashboard.faculty.faculty');})
+    ->name('faculty.courses.update');
 
     Route::post('/faculty/modules/insert', function () { return 'faculty.modules.insert'; })->name('faculty.modules.insert');
     
@@ -121,12 +126,13 @@ Route::middleware('role:admin|student|faculty')->group(function () {
     
 });
 
+// data routes
 
 
 // temp routes
 
 Route::middleware('role:admin|student|faculty')->group(function () {
-
-    Route::get('courses/join', function () { return 'courses'; })->name('courses.join');
+    Route::get('faculty/courses', function () { return 'faculty.courses'; })->name('faculty.courses');    
+    Route::get('courses/join', function () { return 'courses'; })->name('courses.join');    
 
 });

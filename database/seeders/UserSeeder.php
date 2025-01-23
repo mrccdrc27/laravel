@@ -21,7 +21,7 @@ public function run()
     {
 
         // Step 1: Create a fixed number of Users
-        $users = UserInfo::factory()->count(10)->create(); // Generate 10 users
+        $users = UserInfo::factory()->count(5)->create(); // Generate 10 users
 
         // assigns random courses to random users
         $courses = Course::factory()
