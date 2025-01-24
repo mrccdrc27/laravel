@@ -125,22 +125,39 @@ class course extends Controller
         return view('components.createCourse');
     }
 
-
-
-
-
-        public function deleteCourse(Request $request)
+    public function updatecourse(Request $request)
     {
         $request->validate([
             'courseID' => 'required|integer|exists:courses,courseID',
         ]);
 
         // Call the stored procedure
-        DB::statement('EXEC DeleteCourse ?', [
-            $request->input('courseID')
+        DB::statement('EXEC updateCourse ?,?,?', [
+            $request->input('courseID'),
+            $request->input('title'), 
+            $request->input('description')
         ]);
-
-        return response()->json(['message' => 'Course deleted successfully']);
+        return redirect()->back()->with('success', 'course updated successfully');
     }
+
+
+
+
+
+    public function deleteCourse(Request $request)
+        {
+            $request->validate([
+                'courseID' => 'required|integer|exists:courses,courseID',
+            ]);
+        
+            // Call the stored procedure
+            DB::statement('EXEC DeleteCourse ?', [
+                $request->input('courseID')
+            ]);
+        
+            // Redirect to a specific route (e.g., course list page)
+            return redirect()->route('Courses')->with('success', 'Course deleted successfully');
+        }
+        
 
 }

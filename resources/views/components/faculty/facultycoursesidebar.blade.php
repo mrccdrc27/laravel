@@ -7,12 +7,13 @@
         </button>
     </a> --}}
 
-    <div class="flex justify-center items-center">
-        <button class="off text-white px-6 py-3 rounded-md hover:bg-red-600 transition duration-200 ease-in-out"    onclick="showPopup()">
+    <div class="flex justify-center items-center py-6">
+        <button class="off text-white px-6 py-5 rounded-md hover:bg-red-600 transition duration-200 ease-in-out"
+            onclick="showPopup()">
+            <i class="fas fa-plus mr-2"></i>
             Create Course
         </button>
     </div>
-
 
 
     @elseif (Auth::user()->hasRole('student'))
@@ -64,7 +65,8 @@
               const listItem = document.createElement('li');
               listItem.innerHTML = `
                   <a href="{{ url('/courses/id/') }}/${course.courseID}" 
-                     class="text-black block py-2 px-4 hover:bg-red-700 rounded border border-grey-400">
+                     class="text-black block py-3 px-4 hover:bg-red-900 hover:text-white rounded border border-grey-400 text-lg">
+                       <i class="fas fa-book mr-2 lmstext hover:text-white"></i>
                       ${course.title}
                   </a>`;
               courseList.appendChild(listItem);

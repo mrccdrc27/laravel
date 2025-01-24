@@ -12,16 +12,17 @@
         <div class="flex justify-end space-x-4">
             <!-- Cancel Button -->
             <button 
-                onclick="closedeletecourse({{$course->courseID}})" 
+                onclick="toggledeletecourse({{ $course->courseID }})" 
                 class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition">
                 Cancel
             </button>
+                
             
             
             <!-- Delete Button -->
             <form action="{{ route('course.delete') }}" method="POST" onsubmit="return confirmDeletion()">
                 @csrf <!-- This is for Laravel, include CSRF token if using Laravel -->
-                <input type="hidden" name="moduleID" value="{{$course->courseID}}">
+                <input type="hidden" name="courseID" value="{{$course->courseID}}">
                 <button 
                     type="submit" 
                     class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition">

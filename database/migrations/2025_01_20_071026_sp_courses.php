@@ -38,7 +38,7 @@ return new class extends Migration
         DB::unprepared('
             CREATE PROCEDURE updateCourse
                 @CourseId INT,
-                @UserId INT,
+                --@UserId INT,
                 @CourseName NVARCHAR(100),
                 @CourseDescription NVARCHAR(MAX)
             AS
@@ -51,7 +51,7 @@ return new class extends Migration
                 SET 
                     title = @CourseName,
                     description = @CourseDescription,
-                    facultyID = @UserId,
+                    --facultyID = @UserId,
                     updatedAt = GETDATE()
                 WHERE courseID = @CourseId;
             END;

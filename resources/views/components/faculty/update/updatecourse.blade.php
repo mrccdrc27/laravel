@@ -1,4 +1,4 @@
-<form action="{{ route('home') }}" method="POST" class="space-y-4">
+<form action="{{ route('course.update') }}" method="POST" class="space-y-4">
     @csrf
 
     <!-- Title -->
@@ -35,13 +35,14 @@
             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
         @enderror
     </div>
+    <input type="hidden", name='courseID', value='{{$course -> courseID}}'>
             <!-- Faculty ID -->
     {{--  --}}
 
-    <input type="hidden", name='facultyID', value='auth value for faculty'>
+    {{-- <input type="hidden", name='facultyID', value='auth value for faculty'> --}}
     
     <!-- Is Public -->
-    <div class="flex items-center">
+    {{-- <div class="flex items-center">
         <input 
             type="checkbox" 
             name="isPublic" 
@@ -51,7 +52,7 @@
             {{ old('isPublic') ? 'checked' : '' }}
         >
         <label for="isPublic" class="ml-2 block text-sm text-gray-700">Make Public</label>
-    </div>
+    </div> --}}
 
     <!-- Submit Button -->
     <div>

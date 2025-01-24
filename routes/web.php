@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 // Public routes
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Route::get('/register-faculty', function () {
@@ -100,6 +100,8 @@ Route::get('/testing', function () {
     // Route::post('modules/{courseId}', [module::class, 'createModule'])->name('module.post');
     Route::post('modules/delete', [modules::class, 'delete'])->name('module.delete');
     Route::post('course/delete', [Course::class, 'deleteCourse'])->name('course.delete');
+    Route::post('course/update', [Course::class, 'updatecourse'])->name('course.update');
+
     
     
 
