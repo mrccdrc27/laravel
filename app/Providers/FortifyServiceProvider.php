@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
+use Illuminate\Validation\Rules\Password;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -33,6 +34,16 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
+        // Customize the default password validation rules
+        Password::defaults(function () {
+            return Password::min(12) // Require at least 12 characters
+                ->mixedCase() // Require uppercase and lowercase letters
+                ->letters() // Require at least one letter
+                ->numbers() // Require at least one number
+                ->symbols() // Require at least one symbol
+                ->uncompromised(); // Check against known compromised passwords
+        });
+                
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
 
