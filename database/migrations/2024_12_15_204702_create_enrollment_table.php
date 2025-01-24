@@ -21,6 +21,10 @@ return new class extends Migration {
             // Foreign keys
             $table->foreign('courseID')->references('courseID')->on('courses')->onDelete('cascade');
             $table->foreign('studentID')->references('id')->on('users')->onDelete('cascade');
+
+            // Unique constraint on studentID and courseID pair
+            // activate on production
+            // $table->unique(['courseID', 'studentID']);
         });
 
     }

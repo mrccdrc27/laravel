@@ -43,14 +43,7 @@ public function run()
             });
 
         // Step 4: Create Submissions linked to Assignments and Users
-        Submission::factory()
-            ->count(30)
-            ->make() // Create instances without saving
-            ->each(function ($submission) use ($assignments, $users) {
-                $submission->assignmentID = $assignments->random()->assignmentID; // Random assignment
-                $submission->studentID = $users->random()->id; // Random user
-                $submission->save(); // Save to DB
-            });
+
             
         Enrollment::factory()
         ->count(30)

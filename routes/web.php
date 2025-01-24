@@ -87,15 +87,20 @@ Route::get('/testing', function () {
 
     // Route for individual courses by course ID 
     // Faculty View
-    Route::get('/courses/id/{courseID}', [Course::class, 'getCourseByCourseID']);
+    Route::get('/courses/id/{courseID}', [Course::class, 'getCourseByCourseID'])->name('course.course');
+    Route::get('/courses/classwork/id/{courseID}', [Course::class, 'classwork'])->name('course.classwork');
+    Route::get('/courses/submissions/id/{courseID}', [Course::class, 'submission'])->name('course.submission');
+    Route::get('/courses/settings/id/{courseID}', [Course::class, 'settings'])->name('course.settings');
 
 // Data routes
     // Route for courses by faculty
     Route::get('courses/get/{facultyID}', [Course::class, 'getCoursesByFaculty']);
     Route::post('modules/post', [modules::class, 'store'])->name('module');
     Route::post('modules/update', [modules::class, 'update'])->name('module.update');;
-    Route::post('modules/{courseId}', [module::class, 'createModule'])->name('module.post');
-
+    // Route::post('modules/{courseId}', [module::class, 'createModule'])->name('module.post');
+    Route::post('modules/delete', [modules::class, 'delete'])->name('module.delete');
+    Route::post('course/delete', [Course::class, 'deleteCourse'])->name('course.delete');
+    
     
 
 

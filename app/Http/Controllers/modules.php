@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Validate;
+use Illuminate\Validation\ValidationException;
 
 class modules extends Controller
 {
@@ -13,7 +14,7 @@ class modules extends Controller
      * Store a new module.
      *
      * @param  \Illuminate\Http\Request  $request
-     */
+     */ 
     public function store(Request $request)
     {
          // Validate incoming request
@@ -40,13 +41,7 @@ class modules extends Controller
             $request->input('content'),
             $filePath,
         ]);
-        return redirect()->back()->with('success', 'Course created successfully.');
-
-        // Return success response
-        // return response()->json([
-        //     'message' => 'Module created successfully.',
-        //     'file_path' => $filePath, // This will return null if no file was uploaded
-        // ]);
+        return redirect()->back()->with('success', 'Module created successfully.');
     }
 
     public function update(Request $request)
@@ -86,12 +81,23 @@ class modules extends Controller
             $filePath,
 
         ]);
-        return redirect()->back()->with('success', 'Course updated successfully.');
+        return redirect()->back()->with('success', 'Module updated successfully.');
+    }
 
-        // Return success response
-        // return response()->json([
-        //     'message' => 'Module created successfully.',
-        //     'file_path' => $filePath, // This will return null if no file was uploaded
-        // ]);
+    public function delete(Request $request){
+        $request->validate([
+            'moduleID' => 'required|integer|exists:modules,moduleID'
+        ]);
+        
+        try {
+            DB::statement('EXEC DeleteModule ?', [
+                $request->input('moduleID'),
+            ]);
+            return redirect()->back()->with('success', 'Module deleted successfully.');
+
+        } catch (ValidationException $e) {
+            // Return unsuccessful error if validation fails
+            return redirect()->back()->with('failure', 'Invalid Procedure');
+        }
     }
 }

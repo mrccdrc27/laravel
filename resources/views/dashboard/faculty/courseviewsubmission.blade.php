@@ -12,7 +12,7 @@
         </div>
         <!-- Main Content -->
         <div class="flex-1">
-            <x-faculty.facultycourseview :course="$course" :modules="$modules" />
+            <x-faculty.facultycoursesubmission :course="$course" :assignment="$assignment"/>
         </div>
     </div>        
 </x-app-layout>

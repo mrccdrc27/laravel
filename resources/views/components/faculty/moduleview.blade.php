@@ -24,6 +24,7 @@
                 <a
                     href="#"
                     class="block px-4 py-2 text-gray-700 hover:bg-red-900 hover:text-white"
+                    onclick="opendeletemodule({{$module->moduleID}})"
                 >
                     Delete Module
                 </a>
@@ -51,7 +52,7 @@
         @endif
     </div>
 </div>
-
+{{-- Popup for edit module --}}
 <div 
     id="modulecontent-{{$module->moduleID}}"
     class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50"
@@ -67,6 +68,23 @@
         <x-faculty.update.updatemodule :module="$module" :course="$course"/>
     </div>
 </div>
+
+{{-- Popup for delete module --}}
+<div 
+    id="moduledelete-{{$module->moduleID}}"
+    class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50"
+>           <x-faculty.delete.deletemodule :module="$module"/>
+    {{-- <div class="relative bg-white p-6 rounded-lg shadow-lg w-1/2">
+        <button 
+            class="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
+            onclick='closedeletemodule({{$module->moduleID}})'
+        >
+            &times;
+        </button>
+
+    </div> --}}
+</div>
+
 
 <script>
     function toggleDropdown(event, moduleID) {
@@ -90,5 +108,14 @@
 
     function hideitmodule(moduleID) {
         document.getElementById(`modulecontent-${moduleID}`).classList.add('hidden');
+    }
+
+
+    function opendeletemodule(moduleID) {
+        document.getElementById(`moduledelete-${moduleID}`).classList.remove('hidden');
+    }
+
+    function closedeletemodule(moduleID) {
+        document.getElementById(`moduledelete-${moduleID}`).classList.add('hidden');
     }
 </script>

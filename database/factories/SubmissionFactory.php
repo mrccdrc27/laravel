@@ -14,8 +14,8 @@ class SubmissionFactory extends Factory
     public function definition()
     {
         return [
-            // 'assignmentID' => Assignment::factory(), // Generates a related Assignment or null
-            // 'studentID' => User::factory(), // Generates a related User
+            'assignmentID' => Assignment::inRandomOrder()->first()->id, // Generates a related Assignment or null
+            'studentID' => User::inRandomOrder()->first()->id, // Generates a related User
             'content' => $this->faker->text(200), // Random content up to 200 characters
             'filePath' => $this->faker->filePath(), // Random file path
             'submittedAt' => now(), // Current timestamp

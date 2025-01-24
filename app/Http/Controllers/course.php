@@ -23,6 +23,8 @@ class course extends Controller
         return response()->json($courses);
     }
 
+    // View Courses
+
     public function getCourseByCourseID($courseID)
     {
         // call instance of modules controller
@@ -39,17 +41,9 @@ class course extends Controller
                     'message' => 'Course not found',
                 ], 404);
             }
-            // Return the course data as json
-            // return response()->json([
-            //     'success' => true,
-            //     'data' => $course[0],
-            // ]);
-            // // Return the course data as view
             $course = $course[0]; // Now $course is an object
             return view('dashboard.faculty.courseview',compact('course','modules'));
             
-
-
         } catch (\Exception $e) {
             // Handle exceptions
             return response()->json([
@@ -59,6 +53,45 @@ class course extends Controller
             ], 500);
         }
     }
+    public function classwork (Request $request){
+        // Ensure $courseID is cast to a BIGINT (integer in PHP)
+        $courseID = $request->courseID;
+
+        // Execute the stored procedure with the courseID parameter
+        $course = DB::select('EXEC GetCourseByCourseID @CourseID = ?', [$courseID]);
+        $assignment = DB::select('EXEC GetCourseAssignments @CourseID = ?', [$courseID]);
+
+        // Return the view with the course data
+        $course = $course[0]; 
+        return view('dashboard.faculty.courseviewclasswork', compact('course','assignment')); 
+    }
+    public function submission(Request $request)
+    {
+        // Ensure $courseID is cast to a BIGINT (integer in PHP)
+        $courseID = $request->courseID;
+
+        // Execute the stored procedure with the courseID parameter
+        $course = DB::select('EXEC GetCourseByCourseID @CourseID = ?', [$courseID]);
+        $assignment = DB::select('EXEC GetStudentAssignmentsByCourse @CourseID = ?', [$courseID]);
+
+        // Return the view with the course data
+        $course = $course[0]; 
+        return view('dashboard.faculty.courseviewsubmission', compact('course', 'assignment'));
+    }
+    public function settings (Request $request){
+        // Ensure $courseID is cast to a BIGINT (integer in PHP)
+        $courseID = $request->courseID;
+
+        // Execute the stored procedure with the courseID parameter
+        $course = DB::select('EXEC GetCourseByCourseID @CourseID = ?', [$courseID]);
+
+        // Return the view with the course data
+        $course = $course[0]; 
+        return view('dashboard.faculty.courseviewsettings', compact('course'));
+    }
+
+
+    // End of View Courses
 
     public function createCourse(Request $request)
     {
@@ -92,12 +125,20 @@ class course extends Controller
         return view('components.createCourse');
     }
 
+
+
+
+
         public function deleteCourse(Request $request)
     {
-        $courseId = $request->input('courseID'); // Get the Course ID from the request
+        $request->validate([
+            'courseID' => 'required|integer|exists:courses,courseID',
+        ]);
 
         // Call the stored procedure
-        \DB::statement('EXEC DeleteCourse ?', [$courseId]);
+        DB::statement('EXEC DeleteCourse ?', [
+            $request->input('courseID')
+        ]);
 
         return response()->json(['message' => 'Course deleted successfully']);
     }
