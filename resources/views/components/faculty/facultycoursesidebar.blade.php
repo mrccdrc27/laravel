@@ -30,7 +30,7 @@
 {{-- Popup Component --}}
 
 <div 
-    id="popup"
+    id="popupcourse"
     class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50"
 >
     <div class="relative bg-white p-6 rounded-lg shadow-lg w-1/2">
@@ -111,10 +111,10 @@
     // });
 
     function showPopup() {
-        document.getElementById('popup').classList.remove('hidden');
+        document.getElementById('popupcourse').classList.remove('hidden');
     }
 
     function hidePopup() {
-        document.getElementById('popup').classList.add('hidden');
+        document.getElementById('popupcourse').classList.add('hidden');
     }
 </script>

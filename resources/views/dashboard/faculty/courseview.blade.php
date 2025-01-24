@@ -12,7 +12,7 @@
         </div>
         <!-- Main Content -->
         <div class="flex-1">
-            <x-faculty.facultycourseview :course="$course" />
+            <x-faculty.facultycourseview :course="$course" :modules="$modules" />
         </div>
     </div>
     

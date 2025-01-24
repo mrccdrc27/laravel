@@ -39,45 +39,48 @@
                 {{-- Button to trigger pop-up --}}
                 <button 
                     class="bg-blue-500 text-white px-5 py-2 rounded-md hover:bg-blue-600 transition duration-200 ease-in-out"
-                    onclick="showPopup()"
+                    onclick="showPopupmodule()"
                 >
                     Create Post
                 </button>
             </div>
+            <div class="container col-span-8 bg-white p-4 rounded-lg shadow-md">
+                <h1 class="text-2xl font-bold flex items-center">
+                    <i class="fas fa-filter text-sm mr-2"></i> <!-- Filter icon -->
+                    <p class="text-lg">filter</p>
+                    <span class="ml-auto flex items-center">
+                        <i class="fas fa-search text-sm mr-2 cursor-pointer"></i> <!-- Search icon -->
+                        <i class="fas fa-sort text-sm mr-2 cursor-pointer"></i> <!-- Sort icon -->
+                        <i class="fas fa-sliders-h text-sm cursor-pointer"></i> <!-- Settings/Sliders icon -->
+                    </span>
+                </h1>
+            </div>
+            <br>
 
-            <div class="col-span-8 row-span-8 bg-white p-4 rounded-lg shadow-md">
-                <br><br><br><br><br>
-            </div>
-            <div class="col-span-8 row-span-8 bg-white p-4 rounded-lg shadow-md">
-                <br><br><br><br><br>
-            </div>
-            <div class="col-span-8 row-span-8 bg-white p-4 rounded-lg shadow-md">
-                <br><br><br><br><br>
-            </div>
-            <div class="col-span-8 row-span-8 bg-white p-4 rounded-lg shadow-md">
-                <br><br><br><br><br>
-            </div>
-            <div class="col-span-8 row-span-8 bg-white p-4 rounded-lg shadow-md">
-                <br><br><br><br><br>
-            </div>
-            <div class="col-span-8 row-span-8 bg-white p-4 rounded-lg shadow-md">
-                <br><br><br><br><br>
-            </div>
-            <div class="col-span-8 row-span-8 bg-white p-4 rounded-lg shadow-md">
-                <br><br><br><br><br>
+            <div class="container col-span-8">
+                @foreach ($modules as $module)
+                    <x-faculty.moduleview :module="$module" :course="$course"/>
+                    <br>
+                @endforeach
+
             </div>
         </div>
+
+        
+        
+
+        
 
 
         {{-- Popup Component --}}
         <div 
-            id="popup"
+            id="module"
             class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50"
         >
             <div class="relative bg-white p-6 rounded-lg shadow-lg w-1/2">
                 <button 
                     class="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
-                    onclick="hidePopup()"
+                    onclick="hidePopupmodule()"
                 >
                     &times;
                 </button>
@@ -91,11 +94,11 @@
 </div>
 
 <script>
-    function showPopup() {
-        document.getElementById('popup').classList.remove('hidden');
+    function showPopupmodule() {
+        document.getElementById('module').classList.remove('hidden');
     }
-
-    function hidePopup() {
-        document.getElementById('popup').classList.add('hidden');
+    function hidePopupmodule() {
+        document.getElementById('module').classList.add('hidden');
     }
+    
 </script>

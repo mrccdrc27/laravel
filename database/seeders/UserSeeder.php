@@ -62,7 +62,7 @@ public function run()
         });
 
         Module::factory()
-            ->count(10) // Adjust the number as needed
+            ->count(50) // Adjust the number as needed
             ->make() // Create instances without saving
             ->each(function ($module) use ($courses) {
                 $module->courseID = $courses->random()->courseID; // Assign random course

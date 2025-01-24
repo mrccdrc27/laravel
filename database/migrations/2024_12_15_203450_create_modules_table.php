@@ -15,7 +15,7 @@ return new class extends Migration {
             
             $table->unsignedBigInteger('courseID')->nullable(false);
             $table->string('title', 100)->nullable(false);
-            $table->string('content')->nullable();
+            $table->string('content', 4000)->nullable();
             $table->string('filePath')->nullable(); 
             $table->timestamp('createdAt')->useCurrent();
             $table->timestamp('updatedAt')->useCurrent();

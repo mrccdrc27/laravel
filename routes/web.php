@@ -3,6 +3,7 @@
 use App\Http\Controllers\Course;
 
 use App\Http\Controllers\module;
+use App\Http\Controllers\modules;
 use App\Http\Controllers\RBAC;
 use Illuminate\Support\Facades\Route;
 
@@ -43,8 +44,7 @@ Route::middleware([
         // Route for courses by faculty
         Route::get('courses/get/{facultyID}', [Course::class, 'getCoursesByFaculty']);
 
-        // Route for courses by course ID
-        Route::get('/courses/id/{courseID}', [Course::class, 'getCourseByCourseID']);
+
 
         // Routes for faculty to create courses
         Route::get('/faculty/createCourse', [Course::class, 'showCreateCourseForm'])->name('components.CreateCourseForm');
@@ -68,7 +68,7 @@ Route::middleware([
 
         //Module Routes
             // store
-        // Route::post('/modules', [modules::class, 'store']);
+        Route::post('/modules', [module::class, 'store']);
     });
 });
 Route::get('/courses/module', function () {
@@ -82,10 +82,21 @@ Route::get('/testing', function () {
 })->name('testing');
 
 
-// Data routes:
 
+// View routes
+
+    // Route for individual courses by course ID 
+    // Faculty View
+    Route::get('/courses/id/{courseID}', [Course::class, 'getCourseByCourseID']);
+
+// Data routes
     // Route for courses by faculty
     Route::get('courses/get/{facultyID}', [Course::class, 'getCoursesByFaculty']);
+    Route::post('modules/post', [modules::class, 'store'])->name('module');
+    Route::post('modules/update', [modules::class, 'update'])->name('module.update');;
+    Route::post('modules/{courseId}', [module::class, 'createModule'])->name('module.post');
+
+    
 
 
 // Form Routes

@@ -25,7 +25,7 @@ class UserFactory extends Factory
             'email' => $this->faker->unique()->safeEmail,
             'email_verified_at' => $this->faker->optional()->dateTimeBetween('-1 year', 'now'),
             'password' => bcrypt('password'), // Default password for testing
-            'role' => $this->faker->randomElement(['admin', 'student', 'faculty', 'root']),
+            'role' => $this->faker->randomElement(['student', 'faculty']),
             'remember_token' => Str::random(10),
             'created_at' => now(),
             'updated_at' => now(),

@@ -12,11 +12,11 @@ class module extends Controller
     public function createModule(Request $request, $courseId)
     {
     // Validate the input
-    $request->validate([
-        'title' => 'required|string|max:100',
-        'description' => 'nullable|string|max:1000',
-        'file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048', // Optional file validation
-    ]);
+    // $request->validate([
+    //     'title' => 'required|string|max:100',
+    //     'description' => 'nullable|string|max:1000',
+    //     'file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048', // Optional file validation
+    // ]);
 
     // Get file data as binary (BLOB)
     // $fileData = $request->hasFile('file') 
@@ -25,6 +25,12 @@ class module extends Controller
 
     try {
         // Call the stored procedure
+        // DB::statement('EXEC CreateModuleForCourse @Name = ?, @Description = ?, @CourseID = ?', [
+        //     $request->input('title'),
+        //     $request->input('description'),
+        //     $courseId,
+        // ]);
+
         DB::statement('EXEC CreateModuleForCourse @Name = ?, @Description = ?, @CourseID = ?', [
             $request->input('title'),
             $request->input('description'),
@@ -37,19 +43,20 @@ class module extends Controller
         }
     }
 
-    public function showCreateModuleForm($courseId)
-    {
-        // Check if the course exists and the current user is the creator
-        $course = DB::table('Courses')->where('courseID', $courseId)
-            ->where('facultyID', Auth::id())
-            ->first();
 
-        if (!$course) {
-            return redirect()->route('dashboard')->withErrors('You are not authorized to add modules to this course.');
-        }
+    // public function showCreateModuleForm($courseId)
+    // {
+    //     // Check if the course exists and the current user is the creator
+    //     $course = DB::table('Courses')->where('courseID', $courseId)
+    //         ->where('facultyID', Auth::id())
+    //         ->first();
 
-        return view('components.createModule', ['course' => $course]);
-    }
+    //     if (!$course) {
+    //         return redirect()->route('dashboard')->withErrors('You are not authorized to add modules to this course.');
+    //     }
+
+    //     return view('components.createModule', ['course' => $course]);
+    // }
 
 
 
