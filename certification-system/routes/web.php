@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\CertificationsController;
+use App\Http\Controllers\Api\CertificationsController;
 use App\Http\Controllers\DisplaysController;
 use App\Http\Controllers\Api\V1\IssuersController;
 
@@ -21,6 +21,7 @@ Route::get('certificate', function () {
 //     return view('dashboard.home');
 // });
 
+Route::get('cert/details/{id}', [CertificationsController::class, 'getByID']);
 
 Route::get('about', function () {
     return view('dashboard.about');

@@ -117,7 +117,7 @@ return [
             'host' => env('LMS_DB_HOST', '127.0.0.1'),
             'port' => env('LMS_DB_PORT', '1433'),
             'database' => env('LMS_DB_DATABASE', 'LMS-System'),
-            'username' => env('LMS_DB_USERNAME', 'root'),
+            'username' => env('LMS_DB_USERNAME', ''),
             'password' => env('LMS_DB_PASSWORD', ''),
             'charset' => 'utf8',
             'prefix' => '',

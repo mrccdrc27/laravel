@@ -22,8 +22,9 @@ Route::apiResource('user_info', UsersController::class);
 Route::apiResource('issuer', IssuersController::class);
 Route::apiResource('org', OrganizationsController::class);
 Route::apiResource('cert', CertificationsController::class);
-    Route::get('search/cert', [CertificationsController::class, 'showname']);
-    
+Route::get('search/cert', [CertificationsController::class, 'showname']);
+// Route::get('cert/details/{id}', [CertificationsController::class, 'getByID']);
+
 
 // use App\Http\Controllers\Api\V1\CertificationController;
 // use App\Http\Controllers\Api\V1\IssuerInformationController;

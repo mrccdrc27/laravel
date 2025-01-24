@@ -8,7 +8,7 @@ use App\Http\Requests\UpdateCertificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Log;
 class CertificationsController extends Controller
 {
     /**
@@ -27,7 +27,20 @@ class CertificationsController extends Controller
     {
         $validatedData = $request->validate([
             'certificationNumber' => 'required|string|max:100|unique:certifications',
-            'courseID' => 'required|integer',
+            'courseID' => [
+                'required',
+                'integer',
+                function ($attribute, $value, $fail) {
+                    $courseExists = DB::connection('sqlsrv_lms')
+                        ->table('courses')
+                        ->where('courseID', $value)
+                        ->exists();
+
+                    if (!$courseExists) {
+                        $fail("The selected course does not exist.");
+                    }
+                }
+            ],
             // 'courseID' => 'required|integer|exists:courseID,course',
             'title' => 'required|string|max:100',
             'description' => 'required|string',
@@ -110,14 +123,86 @@ class CertificationsController extends Controller
     public function getByID($id)
     {
         try {
-            $certificate = DB::select('EXEC sp_certification_get_by_id ?', [$id]);
+            // Fetch certificate data
+            $certificate = DB::connection('sqlsrv')
+                ->select('EXEC sp_certification_get_by_id ?', [$id]);
 
             if (empty($certificate)) {
+                Log::warning("No certificate found with ID: $id");
                 return abort(404);
             }
 
-            return view('certview', ['certificate' => $certificate[0]]);
+            $certificateData = (object) $certificate[0];
+
+            // Transform user info
+            $certificateData->userInfo = (object) array_merge(
+                [
+                    'firstName' => '',
+                    'middleName' => '',
+                    'lastName' => '',
+                    'studentID' => '',
+                    'email' => '',
+                    'nationality' => '',
+                    'birthDate' => '',
+                    'sex' => null,
+                    'birthPlace' => ''
+                ],
+                (array) $certificateData
+            );
+
+            // Transform issuer info
+            $certificateData->issuer = (object) [
+                'firstName' => $certificateData->issuerFirstName ?? '',
+                'lastName' => $certificateData->issuerLastName ?? '',
+                'issuerSignature' => property_exists($certificateData, 'issuerSignature')
+                    ? $certificateData->issuerSignature
+                    : null,
+                'issuerSignature_base64' => (property_exists($certificateData, 'issuerSignature')
+                    && $certificateData->issuerSignature
+                    && $certificateData->issuerSignature !== '0x')
+                    ? base64_encode($certificateData->issuerSignature)
+                    : null,
+                // Add the organization information
+                'organization' => (object) [
+                    'name' => $certificateData->organizationName ?? '',
+                    'logo_base64' => ($certificateData->organizationLogo && $certificateData->organizationLogo !== '0x')
+                        ? base64_encode($certificateData->organizationLogo)
+                        : null,
+                ]
+            ];
+
+            // Fetch course information using raw SQL
+            $course = DB::connection('sqlsrv_lms')
+                ->select('SELECT title, description FROM courses WHERE courseID = ?', [$certificateData->courseID]);
+
+            // Add course information to the certificate data
+            if ($course) {
+                $certificateData->courseName = $course[0]->title;
+                $certificateData->courseDescription = $course[0]->description;
+            } else {
+                // Handle case where course is not found, if necessary
+                $certificateData->courseName = null;
+                $certificateData->courseDescription = null;
+            }
+
+            // // Fetch course information
+            // $course = DB::connection('sqlsrv_lms')
+            //     ->table('courses')
+            //     ->where('courseID', $certificateData->courseID)
+            //     ->first();
+
+
+            // // Add course information to the certificate data
+            // $certificateData->courseName = optional($course)->title;
+            // $certificateData->courseDescription = optional($course)->description;
+
+            return view('certview', compact('certificateData'));
         } catch (\Exception $e) {
+            Log::error('Certification fetch error: ' . $e->getMessage());
+            Log::error('Details: ' . json_encode([
+                'id' => $id,
+                'trace' => $e->getTraceAsString()
+            ]));
             return abort(500);
         }
     }
