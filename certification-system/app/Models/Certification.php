@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Course;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Issuer;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class Certification extends Model
 {
@@ -43,7 +45,17 @@ class Certification extends Model
 
         public function course()
         {
-            return $this->belongsTo(Course::class, 'courseID', 'courseID')->on('sqlsrv_lms');
+            return $this->belongsTo(Course::class, 'courseID', 'courseID')
+                ->on('sqlsrv_lms')
+                ->join('sqlsrv_lms.dbo.courses', 'courses.courseID', '=', 'certifications.courseID');
         }
+
+        public function getCourseDetails()
+    {
+        return DB::connection('sqlsrv_lms')
+            ->table('courses')
+            ->where('courseID', $this->courseID)
+            ->first();
+    }
         
 }
