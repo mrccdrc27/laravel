@@ -11,7 +11,6 @@
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
     <!-- Course ID -->
-    <h1>{{$course->courseID}}</h1>
     <input type="hidden" name="course_id" value="{{$course->courseID}}">
 
     <!-- Title -->
@@ -20,7 +19,7 @@
         <input 
             type="text" 
             name="title" 
-            id="title" 
+            id="title2" 
             maxlength="100" 
             required 
             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
@@ -33,7 +32,7 @@
         <label for="content" class="block text-sm font-medium text-gray-700">Content</label>
         <textarea 
             name="content" 
-            id="content" 
+            id="content2" 
             rows="4" 
             maxlength="4000"
             required
@@ -66,9 +65,9 @@
 {{-- Count Character for title and content --}}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const titleInput = document.getElementById('title');
+        const titleInput = document.getElementById('title2');
         const titleCharCount = document.getElementById('title-char-count');
-        const contentTextarea = document.getElementById('content');
+        const contentTextarea = document.getElementById('content2');
         const contentCharCount = document.getElementById('content-char-count');
 
         // Update title character count

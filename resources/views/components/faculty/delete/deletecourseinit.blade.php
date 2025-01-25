@@ -17,15 +17,26 @@
 </div>
 
 <!-- Delete Confirmation Popup -->
-<div id="deletecourse-{{ $course->courseID }}" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+<div id="deletecourse-{{ $course->courseID }}" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50 transition-opacity duration-300 opacity-0 scale-90">
     <x-faculty.delete.deletecourse :course="$course"/>
-
 </div>
 
 <script>
     function toggledeletecourse(courseID) {
         const popup = document.getElementById(`deletecourse-${courseID}`);
+        
+        // Toggle the hidden class and trigger animation
         popup.classList.toggle('hidden');
+        
+        if (!popup.classList.contains('hidden')) {
+            // Show the popup with a smooth fade-in and scale-up effect
+            popup.classList.remove('opacity-0', 'scale-90');
+            popup.classList.add('opacity-100', 'scale-100');
+        } else {
+            // Hide the popup with a fade-out and scale-down effect
+            popup.classList.remove('opacity-100', 'scale-100');
+            popup.classList.add('opacity-0', 'scale-90');
+        }
     }
 
     // Close dropdowns when clicking outside

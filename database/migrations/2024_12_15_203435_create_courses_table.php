@@ -12,6 +12,8 @@ return new class extends Migration {
 {
     Schema::create('courses', function (Blueprint $table) {
         $table->id('courseID'); // Primary key
+        // $table->bigInteger('courseID')->primary()->default(DB::raw('ABS(CHECKSUM(NEWID())) % 900000 + 100000'));
+
         
         $table->string('title', 100)->nullable(false);
         $table->text('description')->nullable(false); 

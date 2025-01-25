@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\assignment;
 use App\Http\Controllers\Course;
 
 use App\Http\Controllers\module;
@@ -101,6 +102,9 @@ Route::get('/testing', function () {
     Route::post('modules/delete', [modules::class, 'delete'])->name('module.delete');
     Route::post('course/delete', [Course::class, 'deleteCourse'])->name('course.delete');
     Route::post('course/update', [Course::class, 'updatecourse'])->name('course.update');
+
+    // assignments
+    Route::post('assignment/post', [assignment::class, 'store'])->name('assignment.post');
 
     
     

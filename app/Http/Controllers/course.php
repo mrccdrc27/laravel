@@ -139,11 +139,6 @@ class course extends Controller
         ]);
         return redirect()->back()->with('success', 'course updated successfully');
     }
-
-
-
-
-
     public function deleteCourse(Request $request)
         {
             $request->validate([
