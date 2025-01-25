@@ -10,7 +10,6 @@ use App\Models\Certification;
 
 class Issuer extends Model
 {
-    /** @use HasFactory<\Database\Factories\IssuerFactory> */
     use HasFactory;
 
     // Table associated with the model
@@ -26,14 +25,15 @@ class Issuer extends Model
         'organizationID',
     ];
 
-    // In your issuer_information model
+    // Hidden attributes (optional, for security)
+    protected $hidden = [
+        'issuerSignature',
+    ];
 
-
-
-    // Cast the binary fields
-    // protected $casts = [
-    //     'issuerSignature' => 'binary', // Automatically handle conversion of issuerSignature to binary
-    // ];
+    // Append custom attributes
+    protected $appends = [
+        'issuerSignatureBase64'
+    ];
 
     // Define the relationship with Organization
     public function organization()
@@ -43,16 +43,30 @@ class Issuer extends Model
 
     public function certifications()
     {
-        return $this->belongsTo(Certification::class, 'issuerID');
+        return $this->hasMany(Certification::class, 'issuerID');
     }
-    public function getissuerSignatureBase64Attribute()
+
+    // Accessor for base64 encoded signature
+    public function getIssuerSignatureBase64Attribute()
     {
-        return base64_encode($this->issuerSignature);
+        return $this->issuerSignature
+            ? base64_encode($this->issuerSignature)
+            : null;
     }
-    public function toArray()
+
+    // Mutator for signature
+    public function setIssuerSignatureAttribute($value)
     {
-    $array = parent::toArray();
-    $array['issuerSignature'] = $this->getissuerSignatureBase64Attribute(); // Use base64 encoded version
-    return $array;
+        // If the value is an uploaded file
+        if ($value instanceof \Illuminate\Http\UploadedFile) {
+            // Read file contents
+            $this->attributes['issuerSignature'] = file_get_contents($value->getRealPath());
+        } elseif (is_string($value)) {
+            // For base64 encoded string
+            $this->attributes['issuerSignature'] = base64_decode($value);
+        } else {
+            // For other cases, set as is
+            $this->attributes['issuerSignature'] = $value;
+        }
     }
 }
