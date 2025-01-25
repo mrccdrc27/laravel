@@ -58,14 +58,20 @@
     </div>
 </div>
 
+
+
 <!-- Popups -->
 <div id="assignmentcontent-{{$assignment->assignmentID}}" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-    <div class="relative bg-white p-6 rounded-lg shadow-lg w-1/2 max-w-md">
+    <div class="relative bg-white p-6 rounded-lg shadow-lg w-1/2 sm:w-3/4 lg:w-1/2">
         <button class="absolute top-2 right-2 text-gray-600 hover:text-gray-800" onclick='hideitassignment({{$assignment->assignmentID}})'>&times;</button>
+        <x-faculty.update.updateassignment :assign="$assignment"/>
     </div>
 </div>
 
-<div id="assignmentdelete-{{$assignment->assignmentID}}" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50"></div>
+<div id="assignmentdelete-{{$assignment->assignmentID}}" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+    <x-faculty.delete.deleteassignment :assign="$assignment"/>
+    
+</div>
 
 <script>
     function toggleDropdown(event, assignmentID) {

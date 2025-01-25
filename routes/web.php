@@ -4,8 +4,11 @@ use App\Http\Controllers\assignment;
 use App\Http\Controllers\Course;
 
 use App\Http\Controllers\module;
+
 use App\Http\Controllers\modules;
 use App\Http\Controllers\RBAC;
+use App\Http\Controllers\submissions;
+use App\Models\Submission;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
@@ -105,6 +108,12 @@ Route::get('/testing', function () {
 
     // assignments
     Route::post('assignment/post', [assignment::class, 'store'])->name('assignment.post');
+    Route::post('assignment/update', [assignment::class, 'update'])->name('assignment.update');
+    Route::post('assignment/delete', [assignment::class, 'delete'])->name('assignment.delete');
+
+    // submission - Faculty
+    Route::post('submission/grade', [submissions::class, 'grade'])->name('submission.grade');
+
 
     
     

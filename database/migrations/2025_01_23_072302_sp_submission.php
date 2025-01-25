@@ -72,7 +72,30 @@ return new class extends Migration
             END;
         ');
 
+        // updateSubmissionGrade
+        DB::unprepared('DROP PROCEDURE IF EXISTS updateSubmissionGrade');
+        DB::unprepared('
+            CREATE PROCEDURE updateSubmissionGrade
+                @SubmissionID BIGINT,
+                @Grade FLOAT
+            AS
+            BEGIN
+                -- Suppresses the "rows affected" messages
+                SET NOCOUNT ON;
+
+                -- Update only the grade in the submissions table
+                UPDATE submissions
+                SET 
+                    grade = @Grade,
+                    submittedAt = GETDATE() -- Updates the timestamp to reflect grade modification
+                WHERE submissionID = @SubmissionID;
+            END;
+        ');
+
+
     }
+
+    
 
     /**
      * Reverse the migrations.

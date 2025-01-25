@@ -54,7 +54,8 @@ return new class extends Migration
                                 S.grade,
                                 S.content,
                                 S.filePath,
-                                S.submittedAt
+                                S.submittedAt,
+                                A.dueDate
                             from users_info as UI
                             inner join users as U
                             on UI.userID = U.id

@@ -34,7 +34,7 @@ return new class extends Migration
 DB::unprepared('
     CREATE PROCEDURE updateAssignment
         @AssignmentID BIGINT,
-        @CourseID BIGINT,
+        --@CourseID BIGINT,
         @Title NVARCHAR(100),
         @FilePath NVARCHAR(MAX),
         @Instructions NVARCHAR(MAX),
@@ -47,7 +47,7 @@ DB::unprepared('
         -- Update the assignment in the assignments table
         UPDATE assignments
         SET 
-            courseID = @CourseID,
+            --courseID = @CourseID,
             title = @Title,
             filePath = @FilePath,
             instructions = @Instructions,
