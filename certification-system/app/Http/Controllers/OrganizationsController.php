@@ -10,9 +10,34 @@ use Illuminate\Support\Facades\DB;
 
 class OrganizationsController extends Controller
 {
+
+
+    public function createTestOrganization()
+    {
+        try {
+            
+            $organization = Organization::createTestOrganization();
+
+            // Return success response with the organization data
+            return response()->json([
+                'success' => true,
+                'message' => 'Test organization created successfully!',
+                'data' => $organization,
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+
+
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
         // Fetch all organizations from the database
@@ -24,7 +49,7 @@ class OrganizationsController extends Controller
         // Iterate over the organizations to encode the logos to Base64
         foreach ($organizations as $organization) {
             $logoData = $organization->logo; // Binary logo data
-            
+
             // Convert the binary data to a base64 string
             $base64Logo = base64_encode($logoData);
 
@@ -50,8 +75,8 @@ class OrganizationsController extends Controller
      */
     public function store(Request $request)
     {
-         // Validate the incoming request
-         $request->validate([
+        // Validate the incoming request
+        $request->validate([
             'OrganizationName' => 'required|string|max:50',
             'Logo' => 'required|file|mimes:png,jpg,jpeg|max:5120',
         ]);

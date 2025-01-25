@@ -1,54 +1,33 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Certification;
 
 class User extends Model
 {
-    /** @use HasFactory<\Database\Factories\UserInfoFactory> */
     use HasFactory;
-    
-    // Define the table associated with the model
+
+    // Define the table if it's different from the default (in this case, user_info table)
     protected $table = 'user_info';
 
-    // Specify the primary key if it's not 'id'
     protected $primaryKey = 'userID';
 
-    // Indicate if the IDs are auto-incrementing
-    public $incrementing = true;
+    // Define fillable attributes (for mass assignment)
+    protected $fillable = [
+        'role',
+        'username',
+        'email',
+        'password',
+        'is_active',
+        'last_login_at',
+    ];
 
-    // Specify the primary key type
-    protected $keyType = 'int';
-
-    // Enable or disable timestamps
+    // If using timestamps for 'created_at' and 'updated_at'
     public $timestamps = true;
 
-    // Define the attributes that are mass assignable
-    protected $fillable = [
-        'studentID',
-        'firstName',
-        'middleName',
-        'lastName',
-        'email',
-        'birthDate',
-        'sex',
-        'nationality',
-        'birthPlace',
-    ];
-
-    // Define the attributes that should be cast to native types
-    protected $casts = [
-        'birthDate' => 'date',
-        'sex' => 'boolean',
-    ];
-
-    public function certifications()
-{
-    return $this->hasMany(Certification::class, 'userID');
-}
+    // If you're using soft deletes
+    protected $dates = ['deleted_at', 'last_login_at'];
 
 
 }

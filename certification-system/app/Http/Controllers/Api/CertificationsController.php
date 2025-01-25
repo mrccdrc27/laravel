@@ -17,7 +17,7 @@ class CertificationsController extends Controller
      */
     public function index(Request $request)
     {
-    // Example: GET /certifications?courseID=101&issuedAt=2024-01-01&expiryDate=2025-01-01
+        // Example: GET /certifications?courseID=101&issuedAt=2024-01-01&expiryDate=2025-01-01
         try {
             // Optional filtering parameters
             $courseID = $request->query('courseID');
@@ -138,43 +138,88 @@ class CertificationsController extends Controller
         try {
             DB::beginTransaction();
 
-            $certificationId = 0; // This variable will hold the generated certificationID after the stored procedure executes
-            DB::statement('EXEC sp_certification_insert 
-            @certificationNumber = ?, 
-            @courseID = ?, 
-            @title = ?, 
-            @description = ?, 
-            @issuedAt = ?, 
-            @expiryDate = ?, 
-            @issuerID = ?, 
-            @userID = ?, 
-            @certificationID = ? OUTPUT',
-                [
-                    $validatedData['certificationNumber'],
-                    $validatedData['courseID'],
-                    $validatedData['title'],
-                    $validatedData['description'],
-                    $validatedData['issuedAt'],
-                    $validatedData['expiryDate'] ?? null,
-                    $validatedData['issuerID'] ?? null,
-                    $validatedData['userID'] ?? null,
-                    &$certificationId // Pass by reference
-                ]
-            );
+            try {
+                // Declare the output parameter
+                $certificationId = 0;
 
-            DB::commit();
+                // Use DB::select to capture the result
+                $result = DB::connection('sqlsrv')->select('
+        DECLARE @certificationID BIGINT;
+        EXEC sp_certification_insert 
+            @certificationNumber = :certNumber, 
+            @courseID = :courseID, 
+            @title = :title, 
+            @description = :description, 
+            @issuedAt = :issuedAt, 
+            @expiryDate = :expiryDate, 
+            @issuerID = :issuerID, 
+            @userID = :userID, 
+            @certificationID = @certificationID OUTPUT;
+        SELECT @certificationID AS certificationID;
+    ', [
+                    'certNumber' => $validatedData['certificationNumber'],
+                    'courseID' => $validatedData['courseID'],
+                    'title' => $validatedData['title'],
+                    'description' => $validatedData['description'],
+                    'issuedAt' => $validatedData['issuedAt'],
+                    'expiryDate' => $validatedData['expiryDate'] ?? null,
+                    'issuerID' => $validatedData['issuerID'] ?? null,
+                    'userID' => $validatedData['userID'] ?? null
+                ]);
 
-            return response()->json([
-                'success' => true,
-                'certificationID' => $certificationId,
-                'certificationNumber' => $validatedData['certificationNumber']
-            ], 201);
+                // The result should contain the certificationID
+                $certificationId = $result[0]->certificationID;
+
+                DB::commit();
+
+                // Generates link to view the certificate
+                $certificateLink = route('cert.details', ['id' => $certificationId]);
+
+                return response()->json([
+                    'success' => true,
+                    'certificationID' => $certificationId,
+                    'certificationNumber' => $validatedData['certificationNumber'],
+                    'viewCertificateLink' => $certificateLink
+                ], 201);
+
+            } catch (\Exception $e) {
+                DB::rollBack();
+
+                // Log the full error for debugging
+                Log::error('Certification creation error: ' . $e->getMessage());
+                Log::error('Error details: ' . json_encode([
+                    'trace' => $e->getTraceAsString(),
+                    'data' => $validatedData
+                ]));
+
+                return response()->json([
+                    'success' => false,
+                    'error' => $e->getMessage(),
+                    'details' => $e->getTraceAsString()
+                ], 500);
+            }
+            /* Example response:
+            {
+                "success": true,
+                "certificationID": 123,
+                "certificationNumber": "CERT-2025-001",
+                "viewCertificateLink": "http://your-domain.com/cert/details/123"
+            }
+            */
         } catch (\Exception $e) {
             DB::rollBack();
 
+            // Log the full error for debugging
+            Log::error('Certification creation error: ' . $e->getMessage());
+            Log::error('Error details: ' . json_encode([
+                'trace' => $e->getTraceAsString(),
+                'data' => $validatedData
+            ]));
+
             return response()->json([
                 'success' => false,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'details' => $e->getTraceAsString()
             ], 500);
         }
     }
@@ -217,7 +262,8 @@ class CertificationsController extends Controller
 
             if (empty($certificate)) {
                 Log::warning("No certificate found with ID: $id");
-                return abort(404);
+                // Redirect to a custom "certificate not found" view or return a 404
+                return view('errors.error', ['certificateId' => $id]);
             }
 
             $certificateData = (object) $certificate[0];
@@ -261,19 +307,17 @@ class CertificationsController extends Controller
                 $userInfo ? (array) $userInfo[0] : []
             );
 
+
             // Transform issuer 
             $certificateData->issuer = (object) [
                 'firstName' => $certificateData->issuerFirstName ?? '',
                 'lastName' => $certificateData->issuerLastName ?? '',
-                'issuerSignature' => property_exists($certificateData, 'issuerSignature')
-                    ? $certificateData->issuerSignature
-                    : null,
+                'issuerSignature' => property_exists($certificateData, 'issuerSignature') ? $certificateData->issuerSignature : null,
                 'issuerSignature_base64' => (property_exists($certificateData, 'issuerSignature')
                     && $certificateData->issuerSignature
                     && $certificateData->issuerSignature !== '0x')
                     ? base64_encode($certificateData->issuerSignature)
                     : null,
-                // Add the organization information
                 'organization' => (object) [
                     'name' => $certificateData->organizationName ?? '',
                     'logo_base64' => ($certificateData->organizationLogo && $certificateData->organizationLogo !== '0x')
@@ -281,6 +325,11 @@ class CertificationsController extends Controller
                         : null,
                 ]
             ];
+
+
+            // Fetch course information using raw SQL
+            $course = DB::connection('sqlsrv_lms')
+                ->select('SELECT title, description FROM Courses WHERE courseID = ?', [$certificateData->courseID]);
 
             // Fetch course information using raw SQL
             $course = DB::connection('sqlsrv_lms')
@@ -303,7 +352,7 @@ class CertificationsController extends Controller
                 'id' => $id,
                 'trace' => $e->getTraceAsString()
             ]));
-            return abort(500);
+            return view('errors.generic_error');
         }
     }
 

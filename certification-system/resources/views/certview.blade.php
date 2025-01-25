@@ -16,6 +16,18 @@
             background-color: #ffffff;
         }
 
+        img,
+        svg {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            pointer-events: none;
+            drag: none;
+            -webkit-user-drag: none;
+        }
+
+
         .main-container {
             display: flex;
             width: 100%;
@@ -74,14 +86,16 @@
             font-size: 1.1rem;
             line-height: 1.5;
             color: #333;
-            margin-top: 30px;
+            margin-top: 5px;
         }
 
         .footer-section {
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            margin-top: 15px;
+            margin-top: 9px;
+            position: relative;
+            /* Add this */
         }
 
         .qr-section {
@@ -137,12 +151,20 @@
         }
 
         .issuer-section {
-            text-align: center;
+            position: relative;
+            margin-top: 80px;
+            padding-bottom: 100px;
+        }
+
+        .signature-image {
+            position: absolute;
+            right: 1rem;
+            bottom: 6.6rem;
         }
 
         .issuer-signature-line {
             border-top: 1px solid #000;
-            margin: 10px auto;
+            margin: 2px auto;
             width: 150px;
         }
 
@@ -150,7 +172,12 @@
             font-size: 1rem;
             font-weight: bold;
             color: #000;
-            margin-bottom: 15px;
+            margin-top: 2px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 5px;
+            white-space: nowrap;
         }
 
         .issuer-info {
@@ -159,10 +186,21 @@
             line-height: 1.6;
         }
 
-        .issuer-logo img {
+        .issuer-logo {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 20px;
             width: 80px;
             height: 80px;
-            margin-top: 20px;
+        }
+
+        .issuer-logo img {
+            width: 100%;
+            height: 100%;
+            margin-top: 0;
+            outline: #2c0808 solid 2px;
+            outline-style: outset;
         }
 
         .certificate-right {
@@ -220,46 +258,50 @@
                 {{ $certificateData->userInfo->lastName }}</div>
             <div class="recipient-line"></div>
             <div class="certificate-description">
-                This certificate is awarded to recognize the completion of {{ $certificateData->courseName }} <br>
-
+                @if ($certificateData->issuer->firstName || $certificateData->issuer->lastName)
+                    This signed certificate is awarded to recognize the completion of {{ $certificateData->courseName }}
+                @else
+                    This certificate is awarded to recognize the completion of {{ $certificateData->courseName }}
+                @endif
             </div>
             <div class="footer-section">
                 <div class="qr-section">
                     {!! QrCode::size(60)->generate(url()->current()) !!}
                 </div>
-                <div class="issuer-group">
-                    <div class="issuer-section">
-                        @if ($certificateData->issuer->issuerSignature_base64)
-                            <div class="signature-placeholder">
-                                <img src="data:image/png;base64,{{ $certificateData->issuer->issuerSignature_base64 }}"
-                                    alt="Signature">
-                            </div>
-                        @else
-                            <div class="signature-placeholder">
-                                <img src="https://placehold.co/100x50" alt="Signature">
-                            </div>
-                        @endif
-                        <div class="issuer-signature-line"></div>
-                        <div class="issuer-signature">{{ $certificateData->issuer->firstName }}
-                            {{ $certificateData->issuer->lastName }}</div>
-                        <div class="issuer-info">
 
-
-                        </div>
-                        <div class="issuer-logo">
+                @if (
+                    !empty($certificateData->issuer->firstName) ||
+                        !empty($certificateData->issuer->lastName) ||
+                        $certificateData->issuer->issuerSignature_base64 ||
+                        $certificateData->issuer->organization->logo_base64)
+                    <div class="issuer-group">
+                        <div class="issuer-section">
                             @if ($certificateData->issuer->issuerSignature_base64)
-                                <img class="issuer-logo" style="signature-line max-width: 80px; max-height: 80px;"
-                                    src="data:image/png;base64,{{ $certificateData->issuer->issuerSignature_base64 }}"
-                                    alt="Signature" />
-                            @else
-                                <div class="signature-placeholder">
-                                    <div class="signature-line"></div>
-                                    {{-- <div class="signature-text">Signature</div> --}}
+                                <div class="signature-image">
+                                    <img src="data:image/png;base64,{{ $certificateData->issuer->issuerSignature_base64 }}"
+                                        alt="Signature" style="max-width: 150px; max-height: 50px;">
+                                </div>
+                            @endif
+
+                            @if (!empty($certificateData->issuer->firstName) || !empty($certificateData->issuer->lastName))
+                                <div class="issuer-signature-line"></div>
+                                <div class="issuer-signature">
+                                    {{ $certificateData->issuer->firstName }}
+                                    {{ $certificateData->issuer->lastName }}
+                                </div>
+                            @endif
+
+                            @if ($certificateData->issuer->organization->logo_base64)
+                                <div class="issuer-logo">
+                                    <img class="issuer-logo" style="max-width: 80px; max-height: 80px;"
+                                        src="data:image/png;base64,{{ $certificateData->issuer->organization->logo_base64 }}"
+                                        alt="Organization Logo" />
                                 </div>
                             @endif
                         </div>
                     </div>
-                </div>
+                @endif
+
                 <div class="svg-icon-section">
                     <img src="https://res.cloudinary.com/dnvchm2cy/image/upload/v1737417397/award-reward-svgrepo-com_y2n4tn.svg"
                         alt="Award Badge">

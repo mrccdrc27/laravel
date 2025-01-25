@@ -4,9 +4,7 @@
 use App\Http\Controllers\Api\CertificationsController;
 use App\Http\Controllers\IssuersController;
 use App\Http\Controllers\OrganizationsController;
-use App\Http\Controllers\PostController;
 use App\Http\Controllers\UsersController;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,7 +21,8 @@ Route::apiResource('issuer', IssuersController::class);
 Route::apiResource('org', OrganizationsController::class);
 Route::apiResource('cert', CertificationsController::class);
 Route::get('search/cert', [CertificationsController::class, 'showname']);
-// Route::get('cert/details/{id}', [CertificationsController::class, 'getByID']);
+Route::get('cert/details/{id}', [CertificationsController::class, 'getByID'])->name('cert.details');
+
 
 
 // use App\Http\Controllers\Api\V1\CertificationController;

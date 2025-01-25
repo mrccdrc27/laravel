@@ -9,40 +9,37 @@ use Illuminate\Support\Str;
 
 class IssuerFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = Issuer::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
     public function definition()
     {
         // Ensure an organization exists
         $organization = Organization::first() ?? Organization::factory()->create();
 
-        // Generate a sample signature (you might want to create an actual image)
-        $signaturePath = storage_path('app/sample_signature.png');
+        // Generate a unique signature path
+        $signaturePath = storage_path('app/signatures/' . Str::uuid() . '.png');
 
-        // If the sample signature doesn't exist, create a placeholder
-        if (!file_exists($signaturePath)) {
-            $image = imagecreate(200, 100);
-            $background = imagecolorallocate($image, 255, 255, 255);
-            $textColor = imagecolorallocate($image, 0, 0, 0);
-            imagestring($image, 5, 10, 40, "Sample Signature", $textColor);
-            imagepng($image, $signaturePath);
-            imagedestroy($image);
+        // storage/app/signatures
+        if (!is_dir(dirname($signaturePath))) {
+            mkdir(dirname($signaturePath), 0755, true);
         }
 
+        // Create a unique signature image
+        $image = imagecreate(300, 150);
+        $background = imagecolorallocate($image, 255, 255, 255);
+        $textColor = imagecolorallocate($image, 0, 0, 0);
+
+        $firstName = $this->faker->firstName;
+        $lastName = $this->faker->lastName;
+
+        imagestring($image, 5, 10, 50, "$firstName $lastName", $textColor);
+        imagepng($image, $signaturePath);
+        imagedestroy($image);
+
         return [
-            'firstName' => $this->faker->firstName,
+            'firstName' => $firstName,
             'middleName' => $this->faker->boolean(30) ? $this->faker->lastName : null,
-            'lastName' => $this->faker->lastName,
+            'lastName' => $lastName,
             'issuerSignature' => file_get_contents($signaturePath),
             'organizationID' => $organization->organizationID,
         ];
