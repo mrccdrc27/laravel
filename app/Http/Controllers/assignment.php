@@ -9,6 +9,7 @@ class assignment extends Controller
 {
     public function store(Request $request)
 {
+    
     try {
         // Validate incoming request
         $request->validate([

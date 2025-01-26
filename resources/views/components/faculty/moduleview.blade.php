@@ -1,6 +1,9 @@
 <div class="col-span-8 row-span-8 p-4 relative module">
     <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200 hover:shadow-2xl transition-shadow duration-300 relative">
         <!-- Settings Icon -->
+
+        {{-- edit modules --}}
+        @if (Auth::user()->hasRole('faculty'))
         <div class="absolute top-4 right-4">
             <button
                 onclick="toggleDropdown(event, {{$module->moduleID}})"
@@ -10,27 +13,28 @@
                 <i class="fas fa-cog text-lg"></i> <!-- Settings icon -->
             </button>
             <!-- Dropdown Menu -->
-            <div
-                id="dropdown-{{$module->moduleID}}"
-                class="settings-dropdown hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10"
-            >
-                <a
-                    href="#"
-                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                    onclick="openeditmodule({{$module->moduleID}})"
+                
+                <div
+                    id="dropdown-{{$module->moduleID}}"
+                    class="settings-dropdown hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10"
                 >
-                    Edit Module
-                </a>
-                <a
-                    href="#"
-                    class="block px-4 py-2 text-gray-700 hover:bg-red-900 hover:text-white"
-                    onclick="opendeletemodule({{$module->moduleID}})"
-                >
-                    Delete Module
-                </a>
+                    <a
+                        href="#"
+                        class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                        onclick="openeditmodule({{$module->moduleID}})"
+                    >
+                        Edit Module
+                    </a>
+                    <a
+                        href="#"
+                        class="block px-4 py-2 text-gray-700 hover:bg-red-900 hover:text-white"
+                        onclick="opendeletemodule({{$module->moduleID}})"
+                    >
+                        Delete Module
+                    </a>
+                </div>
             </div>
-        </div>
-
+        @endif
         <p class="text-gray-500 text-sm">Created at: {{$module->createdAt}}</p>
         <h3 class="text-xl font-semibold mb-4 text-gray-900">{{$module->title}}</h3>
         <p class="text-gray-700 mb-6">{{$module->content}}</p>

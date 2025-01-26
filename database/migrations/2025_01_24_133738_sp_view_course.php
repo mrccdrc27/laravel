@@ -34,6 +34,26 @@ return new class extends Migration
                         WHERE C.courseID = @courseID;
                     END;;
         ');
+
+
+        // gets courses by studentID
+        DB::unprepared('DROP PROCEDURE IF EXISTS GetStudentCourses');
+        DB::unprepared("
+                        CREATE PROCEDURE GetStudentCourses
+                        @student_id INT
+                        AS
+                        BEGIN
+                            SELECT 
+                                E.enrollmentID,
+                                E.courseID
+                            FROM users AS U
+                            INNER JOIN enrollment AS E
+                                ON U.id = E.studentID
+                            WHERE U.role = 'student' AND U.id = @student_id;
+                        END;
+        ");
+
+        
         // faculty view submission
         DB::unprepared('DROP PROCEDURE IF EXISTS GetStudentAssignmentsByCourse');
         DB::unprepared("

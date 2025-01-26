@@ -8,10 +8,10 @@
             </div>         
             {{-- Content goes here --}}
             <div class="col-span-8 relative">
-                @foreach ($assignment as $assign)
-                    <x-faculty.views.submittedassignments :assignment="$assign"/>
-                    <br>
-                @endforeach
+                    @foreach ($assignment as $assign)
+                        <x-faculty.views.submittedassignments :assignment="$assign"/>
+                        <br>
+                    @endforeach
             </div>
         </div>
 

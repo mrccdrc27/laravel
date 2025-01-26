@@ -4,8 +4,15 @@
             {{ __('Courses') }}
         </h2>        
     </x-slot>
-    <div class="flex h-screen">
-        <x-facultycoursesidebar/>
-        <!-- Access user data in Blade view -->
-    </div>
+    <div class="flex min-h-screen over">
+        <!-- Sidebar -->
+        <div class="min-h-screen overflow-y-auto">
+            <x-faculty.facultycoursesidebar />
+        </div>
+        <!-- Main Content -->
+        <div class="flex-1">
+            <x-success-message/>
+            {{-- <x-faculty.coursescards/> --}}
+        </div>
+    </div>       
 </x-app-layout>

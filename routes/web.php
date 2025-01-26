@@ -3,11 +3,13 @@
 use App\Http\Controllers\assignment;
 use App\Http\Controllers\Course;
 
+use App\Http\Controllers\enrollments;
 use App\Http\Controllers\module;
 
 use App\Http\Controllers\modules;
 use App\Http\Controllers\RBAC;
 use App\Http\Controllers\submissions;
+use App\Models\Enrollment;
 use App\Models\Submission;
 use Illuminate\Support\Facades\Route;
 
@@ -95,6 +97,7 @@ Route::get('/testing', function () {
     Route::get('/courses/classwork/id/{courseID}', [Course::class, 'classwork'])->name('course.classwork');
     Route::get('/courses/submissions/id/{courseID}', [Course::class, 'submission'])->name('course.submission');
     Route::get('/courses/settings/id/{courseID}', [Course::class, 'settings'])->name('course.settings');
+    
 
 // Data routes
     // Route for courses by faculty
@@ -113,6 +116,12 @@ Route::get('/testing', function () {
 
     // submission - Faculty
     Route::post('submission/grade', [submissions::class, 'grade'])->name('submission.grade');
+    // submission - Student
+    Route::post('submission/post', [submissions::class, 'insert'])->name('submission.post');
+    // 
+
+    // enrollment 
+    Route::post('/enrollment', [enrollments::class, 'getCoursesByStudent'])->name('enrollment');
 
 
     

@@ -1,15 +1,19 @@
 <div class="col-span-8 row-span-8 relative module">
     <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200 hover:shadow-2xl transition-shadow duration-300 relative">
         <!-- Settings Icon -->
-        <div class="absolute top-4 right-4">
-            <button onclick="toggleDropdown(event, {{$assignment->assignmentID}})" class="text-gray-500 hover:text-gray-700 focus:outline-none relative" title="Settings">
-                <i class="fas fa-cog text-lg"></i>
-            </button>
-            <div id="dropdown-{{$assignment->assignmentID}}" class="settings-dropdown hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100" onclick="openeditassignment({{$assignment->assignmentID}})">Edit Assignment</a>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-red-900 hover:text-white" onclick="opendeleteassignment({{$assignment->assignmentID}})">Delete Assignment</a>
+        @if (Auth::user()->hasRole('faculty'))
+            <div class="absolute top-4 right-4">
+                <button onclick="toggleDropdown(event, {{$assignment->assignmentID}})" class="text-gray-500 hover:text-gray-700 focus:outline-none relative" title="Settings">
+                    <i class="fas fa-cog text-lg"></i>
+                </button>
+    
+                <div id="dropdown-{{$assignment->assignmentID}}" class="settings-dropdown hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100" onclick="openeditassignment({{$assignment->assignmentID}})">Edit Assignment</a>
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-red-900 hover:text-white" onclick="opendeleteassignment({{$assignment->assignmentID}})">Delete Assignment</a>
+                </div>
+
             </div>
-        </div>
+        @endif
 
         <!-- Assignment Information -->
         <div class="mb-6">
@@ -55,23 +59,50 @@
                 </div>
             </div>
         @endif
+
+        @if (Auth::user()->hasRole('student'))
+
+            {{-- if submitted, change color to green, change text to 
+            1. Update Submission, redirection--}}
+            <!-- Create Submission -->
+            <div class="py-4 flex justify-center">
+                <button 
+                type="submit" 
+                class="lmsred text-white px-6 py-3 rounded-md hover:bg-red-600 transition duration-200 ease-in-out"
+                onclick="openeditassignment({{$assignment->assignmentID}})" >
+                    Create Submission
+                </button>
+            </div>            
+        @endif
+        
     </div>
 </div>
 
+@if (Auth::user()->hasRole('student'))
+    <div id="assignmentcontent-{{$assignment->assignmentID}}" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+        <div class="relative bg-white p-6 rounded-lg shadow-lg w-1/2 sm:w-3/4 lg:w-1/2">
+            <button class="absolute top-2 right-2 text-gray-600 hover:text-gray-800" 
+            onclick='hideitassignment({{$assignment->assignmentID}})'>&times;</button>
+            <x-student.insert.createsubmission :assign="$assignment"/>
+        </div>
+    </div>
+@endif
 
 
 <!-- Popups -->
-<div id="assignmentcontent-{{$assignment->assignmentID}}" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-    <div class="relative bg-white p-6 rounded-lg shadow-lg w-1/2 sm:w-3/4 lg:w-1/2">
-        <button class="absolute top-2 right-2 text-gray-600 hover:text-gray-800" onclick='hideitassignment({{$assignment->assignmentID}})'>&times;</button>
-        <x-faculty.update.updateassignment :assign="$assignment"/>
+@if (Auth::user()->hasRole('faculty'))
+    <div id="assignmentcontent-{{$assignment->assignmentID}}" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+        <div class="relative bg-white p-6 rounded-lg shadow-lg w-1/2 sm:w-3/4 lg:w-1/2">
+            <button class="absolute top-2 right-2 text-gray-600 hover:text-gray-800" onclick='hideitassignment({{$assignment->assignmentID}})'>&times;</button>
+            <x-faculty.update.updateassignment :assign="$assignment"/>
+        </div>
     </div>
-</div>
 
-<div id="assignmentdelete-{{$assignment->assignmentID}}" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-    <x-faculty.delete.deleteassignment :assign="$assignment"/>
-    
-</div>
+    <div id="assignmentdelete-{{$assignment->assignmentID}}" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+        <x-faculty.delete.deleteassignment :assign="$assignment"/>
+        
+    </div>
+@endif
 
 <script>
     function toggleDropdown(event, assignmentID) {

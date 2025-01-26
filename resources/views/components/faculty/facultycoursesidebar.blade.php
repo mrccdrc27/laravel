@@ -1,122 +1,81 @@
-{{-- <div class="w-64 course text-white py-2 space-y-6 min-h-screen shadow-right"> --}}
-<div class="w-64 course text-white py-2 space-y-6 min-h-screen shadow-right">
-    @if (Auth::user()->hasRole('faculty'))
-    {{-- <a href="{{ route('coursescreate') }}">
-        <button class="off text-white px-6 py-3 rounded-md hover:bg-red-600 transition duration-200 ease-in-out">
-            Create Course
-        </button>
-    </a> --}}
+<?php
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
-    <div class="flex justify-center items-center py-6">
-        <button class="off text-white px-6 py-5 rounded-md hover:bg-red-600 transition duration-200 ease-in-out"
-            onclick="showPopup()">
-            <i class="fas fa-plus mr-2"></i>
-            Create Course
-        </button>
+// Fetch user ID and courses
+if (Auth::user()->hasRole('student')) {
+    $studentID = Auth::user()->id;
+    $courses = DB::select('EXEC GetStudentCourses @student_id = ?', [$studentID]);
+} elseif (Auth::user()->hasRole('faculty')) {
+    $facultyID = Auth::user()->id;
+    $courses = DB::select('EXEC GetCoursesByFaculty ?', [$facultyID]);
+}
+?>
+
+<div class="w-full md:w-64 course bg-gray-900 text-white py-4 space-y-6 min-h-screen shadow-right">
+    <div class="flex justify-center items-center py-4">
+        @if (Auth::user()->hasRole('faculty'))
+            <button class="off text-white px-6 py-3 rounded-md hover:bg-red-600 transition duration-200 ease-in-out"
+                onclick="showPopup()">
+                <i class="fas fa-plus mr-2"></i> Create Course
+            </button>
+        @elseif (Auth::user()->hasRole('student'))
+            <button class="off text-white px-6 py-3 rounded-md hover:bg-red-600 transition duration-200 ease-in-out"
+                onclick="showPopupenroll()">
+                <i class="fas fa-plus mr-2"></i> Join Course
+            </button>
+        @endif
     </div>
 
-
-    @elseif (Auth::user()->hasRole('student'))
-    <a href="{{ route('courses.join') }}">
-        <button class="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 transition duration-200 ease-in-out">
-            join course
-        </button>
-    </a>
-    @endif
-  <ul id="course-list" class="space-y-4">
-      {{-- Courses will be dynamically added here via JavaScript --}}
-  </ul>
+    <ul id="course-list" class="space-y-4 px-2">
+        <?php foreach ($courses as $course): ?>
+            <li class="w-full">
+                <a href="{{ url('/courses/id/' . $course->courseID) }}" 
+                   class="text-black block w-full py-3 px-4 hover:bg-red-900 hover:text-white rounded border border-gray-400 text-lg flex items-center transition duration-200 ease-in-out">
+                    <i class="fas fa-book mr-2"></i>
+                    <?= htmlspecialchars($course->title) ?>
+                </a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
 </div>
 
-{{-- Popup Component --}}
-
-<div 
-    id="popupcourse"
-    class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50"
->
-    <div class="relative bg-white p-6 rounded-lg shadow-lg w-1/2">
-        <button 
-            class="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
-            onclick="hidePopup()"
-        >
-            &times;
-        </button>
-        {{-- Include the Laravel Blade component --}}
-        {{-- <x-faculty.insert.createcourse/> --}}
-        <x-createcourse/>
+@if (Auth::user()->hasRole('faculty'))
+    <div id="popupcourse"
+        class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50 px-4">
+        <div class="relative bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
+            <button class="absolute top-2 right-2 text-gray-600 hover:text-gray-800" onclick="hidePopup()">
+                &times;
+            </button>
+            <x-createcourse />
+        </div>
     </div>
-</div>
+@elseif (Auth::user()->hasRole('student'))
+    <div id="popupenrollment"
+        class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50 px-4">
+        <div class="relative bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
+            <button class="absolute top-2 right-2 text-gray-600 hover:text-gray-800" onclick="hidePopupenroll()">
+                &times;
+            </button>
+            <x-student.insert.createenrollment :course="$courses" />
+        </div>
+    </div>
+@endif
 
 <script>
-  document.addEventListener('DOMContentLoaded', async () => {
-      try {
-          // Use Blade to generate the base URL and user ID
-
-          const userId = "{{ Auth::user()->id }}"; // Blade resolves this server-side
-          // Construct the URL dynamically in JavaScript
-          const response = await fetch(`{{ url('/courses/get') }}/${userId}`); // Use backticks for template literals
-          const courses = await response.json();
-
-          // Get the course list container
-          const courseList = document.getElementById('course-list');
-
-          // Populate the course list
-          courses.forEach(course => {
-              const listItem = document.createElement('li');
-              listItem.innerHTML = `
-                  <a href="{{ url('/courses/id/') }}/${course.courseID}" 
-                     class="text-black block py-3 px-4 hover:bg-red-900 hover:text-white rounded border border-grey-400 text-lg">
-                       <i class="fas fa-book mr-2 lmstext hover:text-white"></i>
-                      ${course.title}
-                  </a>`;
-              courseList.appendChild(listItem);
-          });
-      } catch (error) {
-          console.error('Error fetching courses:', error);
-      }
-  });
-
-    // document.addEventListener('DOMContentLoaded', async () => {
-    //     try {
-    //         const userId = "{{ Auth::user()->id }}"; // Blade resolves this server-side
-
-    //         // Check if the courses data is already in localStorage
-    //         let courses = JSON.parse(localStorage.getItem(`courses_${userId}`));
-
-    //         // If not, fetch the data from the server
-    //         if (!courses) {
-    //             const response = await fetch(`{{ url('/courses/get') }}/${userId}`);
-    //             courses = await response.json();
-
-    //             // Store the data in localStorage
-    //             localStorage.setItem(`courses_${userId}`, JSON.stringify(courses));
-    //         }
-
-    //         const courseList = document.getElementById('course-list');
-
-    //         // Clear the existing list items (if any)
-    //         courseList.innerHTML = '';
-
-    //         // Populate the course list
-    //         courses.forEach(course => {
-    //             const listItem = document.createElement('li');
-    //             listItem.innerHTML = `
-    //                 <a href="{{ url('/courses/id/') }}/${course.courseID}" 
-    //                     class="text-black block py-2 px-4 hover:bg-red-700 rounded border border-gray-400">
-    //                     ${course.title}
-    //                 </a>`;
-    //             courseList.appendChild(listItem);
-    //         });
-    //     } catch (error) {
-    //         console.error('Error fetching courses:', error);
-    //     }
-    // });
-
     function showPopup() {
         document.getElementById('popupcourse').classList.remove('hidden');
     }
 
     function hidePopup() {
         document.getElementById('popupcourse').classList.add('hidden');
+    }
+
+    function showPopupenroll() {
+        document.getElementById('popupenrollment').classList.remove('hidden');
+    }
+
+    function hidePopupenroll() {
+        document.getElementById('popupenrollment').classList.add('hidden');
     }
 </script>

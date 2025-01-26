@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 // use app\Http\Controllers\modules;
 
 class course extends Controller
@@ -21,6 +22,17 @@ class course extends Controller
 
         // Return the courses as a JSON response
         return response()->json($courses);
+    }
+
+    public function getCoursesByStudent(Request $request)
+    {
+        // Ensure $courseID is cast to a BIGINT (integer in PHP)
+        $studentID = $request->studentID;
+
+        // Execute the stored procedure with the courseID parameter
+        $course = DB::select('EXEC GetStudentCourses @student_id = ?', bindings: [$studentID]);
+
+        return view('dashboard.student.courses', compact('course')); 
     }
 
     // View Courses
@@ -72,8 +84,14 @@ class course extends Controller
 
         // Execute the stored procedure with the courseID parameter
         $course = DB::select('EXEC GetCourseByCourseID @CourseID = ?', [$courseID]);
-        $assignment = DB::select('EXEC GetStudentAssignmentsByCourse @CourseID = ?', [$courseID]);
 
+        if (Auth::user()->hasRole('student')) {
+            $studentID = Auth::user()->id;
+            $assignment = DB::select('EXEC GetStudentSubmissions @studentID = ?', [$studentID]);
+        } 
+        if (Auth::user()->hasRole('faculty')){
+            $assignment = DB::select('EXEC GetStudentAssignmentsByCourse @CourseID = ?', [$courseID]);
+        }
         // Return the view with the course data
         $course = $course[0]; 
         return view('dashboard.faculty.courseviewsubmission', compact('course', 'assignment'));

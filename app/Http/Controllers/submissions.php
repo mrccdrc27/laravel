@@ -30,4 +30,40 @@ class submissions extends Controller
             return redirect()->back()->with('failure', 'Invalid Procedure');
         }
     }
+
+    public function insert(Request $request)
+    {
+        // Validate incoming request
+        $request->validate([
+            'assignmentID' => 'required|integer|exists:assignments,assignmentID',
+            'content' => 'nullable|max:4000',
+            'file' => 'nullable|file|max:10240', // Optional file, adjust size if needed
+        ]);
+
+        $filePath = null;
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filePath = $file->store('submissions', 'public');
+        }
+        $grade = null;
+        if ($request->has('grade')){
+            $grade = $request->input('grade');
+        }
+        $content = null;
+        if ($request->has('content')){
+            $content = $request->input('content');
+        }
+                
+        // Call the stored procedure
+        DB::statement('EXEC createSubmission ?, ?, ?, ?, ?', [
+            $request->input('assignmentID'),
+            auth()->user()->id,  
+            $content,
+            $filePath,
+            $grade
+        ]);
+        return redirect()->back()->with('success', 'assignment submitted successfully.');
+    }
+
+    
 }

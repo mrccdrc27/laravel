@@ -10,11 +10,14 @@
                 <x-faculty.coursenavbar :course="$course"/>
             </div>
 
-            {{-- Course Code Card --}}
-            <div class="col-span-1 sm:col-span-2 lg:col-span-1 bg-white p-4 rounded-lg shadow-md transform hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-xl">
-                <h2 class="text-xl font-semibold mb-2">{{$course->courseID}}</h2>
-                <p class="text-gray-600">Your course code here</p>
-            </div>
+            {{-- Faculty: Class Code --}}
+            @if (Auth::user()->hasRole('faculty'))
+                {{-- Course Code Card --}}
+                <div class="col-span-1 sm:col-span-2 lg:col-span-1 bg-white p-4 rounded-lg shadow-md transform hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-xl">
+                    <h2 class="text-xl font-semibold mb-2">{{$course->courseID}}</h2>
+                    <p class="text-gray-600">Your course code here</p>
+                </div>
+            @endif
 
             {{-- Class Title Card --}}
             <div class="col-span-1 sm:col-span-2 lg:col-span-2 bg-white p-6 rounded-lg shadow-md relative">
@@ -29,28 +32,30 @@
                 <p class="text-gray-600">Upcoming events or deadlines.</p>
             </div>
 
-            {{-- Create Post Button --}}
-            <div class="col-span-1 sm:col-span-2 lg:col-span-2 bg-white p-6 rounded-lg shadow-lg">
-                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Post Something to Class</h2>
-                <p class="text-gray-600 mb-6">Create a post for the class. Engage with your peers by sharing updates, assignments, or resources.</p>
-            
-                <div class="space-y-4 sm:space-y-0 sm:flex sm:justify-start sm:space-x-4">
-                    <!-- Create Post Button -->
-                    <button
-                        class="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-2 rounded-md hover:from-blue-600 hover:to-blue-500 transition duration-200 ease-in-out focus:outline-none"
-                        onclick="togglePopupModule(true)">
-                        <i class="fas fa-pencil-alt mr-2"></i> Create Post
-                    </button>
-            
-                    <!-- Create Assignment Button -->
-                    <button
-                        class="w-full sm:w-auto bg-gradient-to-r from-green-500 to-green-600 text-white px-5 py-2 rounded-md hover:from-green-600 hover:to-green-500 transition duration-200 ease-in-out focus:outline-none"
-                        onclick="togglePopupModule2(true)">
+            {{-- Faculty: Create Post Button --}}
+            @if (Auth::user()->hasRole('faculty'))
+                <div class="col-span-1 sm:col-span-2 lg:col-span-2 bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Post Something to Class</h2>
+                    <p class="text-gray-600 mb-6">Create a post for the class. Engage with your peers by sharing updates, assignments, or resources.</p>
+                
+                    <div class="space-y-4 sm:space-y-0 sm:flex sm:justify-start sm:space-x-4">
+                        <!-- Create Post Button -->
+                        <button
+                            class="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-2 rounded-md hover:from-blue-600 hover:to-blue-500 transition duration-200 ease-in-out focus:outline-none"
+                            onclick="togglePopupModule(true)">
+                            <i class="fas fa-pencil-alt mr-2"></i> Create Post
+                        </button>
+                
+                        <!-- Create Assignment Button -->
+                        <button
+                            class="w-full sm:w-auto bg-gradient-to-r from-green-500 to-green-600 text-white px-5 py-2 rounded-md hover:from-green-600 hover:to-green-500 transition duration-200 ease-in-out focus:outline-none"
+                            onclick="togglePopupModule2(true)">
 
-                        <i class="fas fa-file-alt mr-2"></i> Create Assignment
-                    </button>
+                            <i class="fas fa-file-alt mr-2"></i> Create Assignment
+                        </button>
+                    </div>
                 </div>
-            </div>
+            @endif
 
             {{-- Filter Bar --}}
             <div class="col-span-1 sm:col-span-2 lg:col-span-3 bg-white p-6 rounded-lg shadow-md">
