@@ -19,7 +19,6 @@ return new class extends Migration
                     AS
                     BEGIN
                         SET NOCOUNT ON;
-
                         SELECT 
                             C.courseID,
                             S.assignmentID,

@@ -15,24 +15,31 @@ return new class extends Migration
         // faculty view classwork
         DB::unprepared('DROP PROCEDURE IF EXISTS GetCourseAssignments');
         DB::unprepared('
-                    CREATE PROCEDURE GetCourseAssignments
-                        @courseID INT
-                    AS
-                    BEGIN
-                        SELECT 
-                        	A.assignmentID
-                            ,C.courseID
-                            ,A.title
-                            ,A.filePath
-                            ,A.instructions
-                            ,A.dueDate
-                            ,A.createdAt
-                            ,A.updatedAt
-                        FROM courses AS C
-                        INNER JOIN assignments AS A
+                        CREATE PROCEDURE GetCourseAssignments
+                    @studentID INT,
+                    @courseID INT
+                AS
+                BEGIN
+                    SET NOCOUNT ON;
+
+                    SELECT DISTINCT
+                        A.assignmentID,
+                        C.courseID,
+                        A.title,
+                        A.filePath,
+                        A.instructions,
+                        A.dueDate,
+                        A.createdAt,
+                        A.updatedAt
+                    FROM courses AS C
+                    INNER JOIN assignments AS A
                         ON C.courseID = A.courseID
-                        WHERE C.courseID = @courseID;
-                    END;;
+                    LEFT JOIN submissions AS S
+                        ON S.assignmentID = A.assignmentID AND S.studentID = @studentID
+                    WHERE S.submissionID IS NULL
+                    AND C.courseID = @courseID;
+                END;
+
         ');
 
 
@@ -91,8 +98,7 @@ return new class extends Migration
                             inner join submissions as S
                             on A.assignmentID = S.assignmentID
                         WHERE C.courseID = @courseID
-                        AND U.role = 'student'
-                        AND S.grade IS NULL;
+                        AND U.role = 'student';
                     END;
         ");
     }

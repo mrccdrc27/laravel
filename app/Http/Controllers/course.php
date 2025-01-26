@@ -72,7 +72,7 @@ class course extends Controller
 
         // Execute the stored procedure with the courseID parameter
         $course = DB::select('EXEC GetCourseByCourseID @CourseID = ?', [$courseID]);
-        $assignment = DB::select('EXEC GetCourseAssignments @CourseID = ?', [$courseID]);
+        $assignment = DB::select('EXEC GetCourseAssignments @studentID = ?,@CourseID = ?', [auth()->user()->id,$courseID]);
 
         // Return the view with the course data
         $course = $course[0]; 
@@ -89,10 +89,16 @@ class course extends Controller
         if (Auth::user()->hasRole('student')) {
             $studentID = Auth::user()->id;
             $assignment = DB::select('EXEC GetStudentSubmissions @studentID = ?, @courseID = ?', [$studentID, $courseID]);
+            $assignment = collect($assignment); // Convert array to Collection
         } 
+
         if (Auth::user()->hasRole('faculty')){
-            $assignment = DB::select('EXEC GetStudentAssignmentsByCourse @CourseID = ?', [$courseID]);
+            $assignment = DB::select('EXEC GetStudentAssignmentsByCourse @CourseID = ?', [$courseID]
+            
+        );
+            $assignment = collect($assignment);
         }
+
         // Return the view with the course data
         $course = $course[0]; 
         return view('dashboard.faculty.courseviewsubmission', compact('course', 'assignment'));

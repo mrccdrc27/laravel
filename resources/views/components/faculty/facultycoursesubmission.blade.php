@@ -7,12 +7,38 @@
                 <x-faculty.coursenavbar :course="$course"/>
             </div>         
             {{-- Content goes here --}}
-            <div class="col-span-8 relative">
-                    @foreach ($assignment as $assign)
-                        <x-faculty.views.submittedassignments :assignment="$assign"/>
-                        <br>
-                    @endforeach
+            @php
+            use Illuminate\Pagination\LengthAwarePaginator;
+
+            // Define the number of items per page
+            $perPage = 10; 
+            $currentPage = request()->input('page', 1); // Get the current page or default to 1
+            $offset = ($currentPage - 1) * $perPage;
+
+            // Create a paginated collection
+            $paginatedAssignments = new LengthAwarePaginator(
+                $assignment->slice($offset, $perPage), // Slice the collection for the current page
+                $assignment->count(), // Total number of items
+                $perPage, // Items per page
+                $currentPage, // Current page
+                [
+                    'path' => request()->url(), // Ensure proper URL structure
+                    'query' => request()->query() // Retain query string parameters
+                ]
+            );
+        @endphp
+
+        <div class="col-span-8 relative">
+            <div>
+                {{ $paginatedAssignments->links() }}
             </div>
+            
+            @foreach ($paginatedAssignments as $assign)
+                <x-faculty.views.submittedassignments :assignment="$assign"/>
+                <br>
+            @endforeach
+            <!-- Render Pagination Links -->
+        </div>
         </div>
 
     </div>

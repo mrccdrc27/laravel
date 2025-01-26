@@ -14,7 +14,6 @@
                             <x-faculty.views.assignments :assignment="$assign" :course="$course"/>
                         </div>
                     @endforeach
-                    
                     <div class="text-center mt-4" x-show="visibleCount < totalCount">
                         <button @click="visibleCount += 3" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600">
                             Load More
