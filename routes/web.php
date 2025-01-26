@@ -124,6 +124,7 @@ Route::get('/testing', function () {
 
     // enrollment 
     Route::post('/enrollment', [enrollments::class, 'getCoursesByStudent'])->name('enrollment');
+    Route::post('/enrollment/delete', [enrollments::class, 'delete'])->name('enrollment.delete');
 
 
     
@@ -157,11 +158,7 @@ Route::middleware('role:admin|student|faculty')->group(function () {
     
     Route::post('/faculty/assignment/delete', function () { return 'faculty.assignment.delete'; })->name('faculty.assignment.delete');
     
-    Route::post('/enrollment/delete', function () { return 'enrollment.delete'; })->name('enrollment.delete');
-    
     Route::get('/faculty/enrollment/read', function () { return 'faculty.enrollment.read'; })->name('faculty.enrollment.read');
-    
-    Route::post('/faculty/enrollment/delete', function () { return 'faculty.enrollment.delete'; })->name('faculty.enrollment.delete');
     
     Route::post('/course/insert', function () { return 'course.insert'; })->name('course.insert');
     

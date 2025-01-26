@@ -39,6 +39,23 @@ return new class extends Migration
                 WHERE enrollmentID = @enrollmentID;
             END;
         ');
+
+        //Gets enrollmentID
+        DB::unprepared('DROP PROCEDURE IF EXISTS GetStudentEnrollment');
+        DB::unprepared('
+                    CREATE PROCEDURE GetStudentEnrollment  
+                        @StudentID INT,  
+                        @CourseID INT  
+                    AS  
+                    BEGIN  
+                        SET NOCOUNT ON;  
+
+                        SELECT *  
+                        FROM enrollment AS E  
+                        INNER JOIN courses AS C ON E.courseID = C.courseID  
+                        WHERE E.studentID = @StudentID AND C.courseID = @CourseID;  
+                    END;
+        ');
     }
 
     /**

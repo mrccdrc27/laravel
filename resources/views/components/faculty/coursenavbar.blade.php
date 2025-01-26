@@ -10,11 +10,9 @@
     <a href="{{ route('course.submission', ['courseID' => $course->courseID]) }}" class="text-black hover:text-gray-600 text-base sm:text-lg">
         Submissions
     </a>
-    @if (Auth::user()->hasRole('faculty'))
     <a href="{{ route('course.settings', ['courseID' => $course->courseID]) }}" class="text-black hover:text-gray-600 text-base sm:text-lg">
         Settings
     </a>
-    @endif
 </div>
 
 <!-- Responsive hamburger menu for mobile -->

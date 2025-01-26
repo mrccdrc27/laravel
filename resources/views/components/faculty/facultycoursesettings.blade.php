@@ -8,13 +8,20 @@
             </div>         
             
             {{-- Content goes here --}}
-            <div class="col-span-8 bg-white p-6 rounded-lg shadow-md relative">
-                <x-faculty.update.updatecourse :course="$course"/>
+            @if (Auth::user()->hasRole('faculty'))
+                <div class="col-span-8 bg-white p-6 rounded-lg shadow-md relative">
+                    <x-faculty.update.updatecourse :course="$course"/>
+                </div>       
+                <div class="col-span-8 bg-white p-6 rounded-lg shadow-md relative">
+                    <x-faculty.delete.deletecourseinit :course="$course" />
+                </div>       
+            @endif
 
-            </div>       
-            <div class="col-span-8 bg-white p-6 rounded-lg shadow-md relative">
-                <x-faculty.delete.deletecourseinit :course="$course"/>
-            </div>       
+            @if (Auth::user()->hasRole('student'))
+                <div class="col-span-8 bg-white p-6 rounded-lg shadow-md relative">
+                    <x-faculty.delete.deletecourseinit :course="$course" :enrollment="$enrollment" />
+                </div>       
+            @endif
 
         </div>
     </div>

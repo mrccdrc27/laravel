@@ -26,8 +26,12 @@
 </div>
 
 <!-- Grade Input -->
-<form id="gradeForm-{{ $submit->submissionID }}" method="POST" action="#">
+<form id="gradeForm-{{ $submit->submissionID }}" method="POST" action="{{ route('submission.grade', $submit->submissionID) }}">
+    @csrf
+
     <div class="mb-4">
+        <input type="hidden" name="oldgrade" value="{{$submit->grade}}">
+        <input type="hidden" name="submissionID" value="{{$submit->submissionID}}">
         <label for="grade-{{ $submit->submissionID }}" class="block text-sm font-medium text-gray-700">Grade</label>
         <input 
             type="number" 
@@ -37,7 +41,6 @@
             min="1" max="100" step="1"
             class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
             required
-            maxlength="3"
         >
     </div>
 
@@ -47,6 +50,7 @@
         Update Grade
     </button>
 </form>
+
 
 <script>
     document.getElementById("gradeForm-{{ $submit->submissionID }}").addEventListener("submit", function(event) {

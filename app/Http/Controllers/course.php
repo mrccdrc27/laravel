@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -99,13 +100,28 @@ class course extends Controller
     public function settings (Request $request){
         // Ensure $courseID is cast to a BIGINT (integer in PHP)
         $courseID = $request->courseID;
+        if (Auth::user()->hasRole('student')){
+            // Execute the stored procedure with the courseID parameter
+            $course = DB::select('EXEC GetCourseByCourseID @CourseID = ?', [$courseID]);
+            $enrollment = DB::select('EXEC GetStudentEnrollment @StudentID = ?, @CourseID=?', [Auth()->user()->id, $courseID,]);
+            
+            // $enrollment =  DB::statement('EXEC GetUserEnrollment ?, ?', [
+            //     1,2
+            // ]);
+            // Return the view with the course 
+            $course = $course[0]; 
+            $enrollment = $enrollment[0]; 
+            return view('dashboard.faculty.courseviewsettings', compact('course','enrollment'));
+            }
 
-        // Execute the stored procedure with the courseID parameter
-        $course = DB::select('EXEC GetCourseByCourseID @CourseID = ?', [$courseID]);
+        else if (Auth::user()->hasRole('faculty')){
+            // Execute the stored procedure with the courseID parameter
+            $course = DB::select('EXEC GetCourseByCourseID @CourseID = ?', [$courseID]);
+            // Return the view with the course data
+            $course = $course[0]; 
+            return view('dashboard.faculty.courseviewsettings', compact('course'));
+            }
 
-        // Return the view with the course data
-        $course = $course[0]; 
-        return view('dashboard.faculty.courseviewsettings', compact('course'));
     }
 
 

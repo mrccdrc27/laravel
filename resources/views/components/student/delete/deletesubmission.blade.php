@@ -12,7 +12,7 @@
         <div class="flex justify-end space-x-4">
             <!-- Cancel Button -->
             <button 
-                onclick="closedeleteassignment({{$assign->submissionID}})" 
+                onclick="closeDeleteAssignment({{$assign->submissionID}})" 
                 class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition">
                 Cancel
             </button>

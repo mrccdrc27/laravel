@@ -16,7 +16,10 @@ class submissions extends Controller
          $request->validate([
             'submissionID' => 'required|integer|exists:submissions,submissionID',
             'grade' => 'nullable|integer', // Optional file, adjust size if needed
+            'oldgrade' => 'nullable|integer'
         ]);
+
+        $grade = $request->input('oldgrade');
 
         try {
             DB::statement('EXEC updateSubmissionGrade ?, ?', [

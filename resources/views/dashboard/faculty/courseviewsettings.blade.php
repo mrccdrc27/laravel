@@ -12,7 +12,11 @@
         </div>
         <!-- Main Content -->
         <div class="flex-1">
-            <x-faculty.facultycoursesettings :course="$course"/>
+            @if (Auth::user()->hasRole('student'))
+                <x-faculty.facultycoursesettings :course="$course" :enrollment="$enrollment"/>
+            @elseif (Auth::user()->hasRole('faculty'))
+                <x-faculty.facultycoursesettings :course="$course"/>
+            @endif
         </div>
     </div>        
 </x-app-layout>
