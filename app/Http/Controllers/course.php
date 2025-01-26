@@ -87,7 +87,7 @@ class course extends Controller
 
         if (Auth::user()->hasRole('student')) {
             $studentID = Auth::user()->id;
-            $assignment = DB::select('EXEC GetStudentSubmissions @studentID = ?', [$studentID]);
+            $assignment = DB::select('EXEC GetStudentSubmissions @studentID = ?, @courseID = ?', [$studentID, $courseID]);
         } 
         if (Auth::user()->hasRole('faculty')){
             $assignment = DB::select('EXEC GetStudentAssignmentsByCourse @CourseID = ?', [$courseID]);

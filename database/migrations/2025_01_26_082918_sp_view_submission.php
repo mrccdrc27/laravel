@@ -13,12 +13,15 @@ return new class extends Migration
     {
         DB::unprepared('DROP PROCEDURE IF EXISTS GetStudentSubmissions');
         DB::unprepared("
-                        CREATE PROCEDURE GetStudentSubmissions
-                        @studentID INT
+                    CREATE PROCEDURE GetStudentSubmissions
+                        @studentID INT,
+                        @courseID INT
                     AS
                     BEGIN
                         SET NOCOUNT ON;
+
                         SELECT 
+                            C.courseID,
                             S.assignmentID,
                             S.filePath,
                             S.grade,
@@ -32,8 +35,10 @@ return new class extends Migration
                         INNER JOIN users AS U
                             ON S.studentID = U.id	
                         INNER JOIN assignments AS A
-                            On S.assignmentID = A.assignmentID
-                        WHERE U.id = @studentID;
+                            ON S.assignmentID = A.assignmentID
+                        INNER JOIN courses AS C
+                            ON C.courseID = A.courseID
+                        WHERE U.id = @studentID AND C.courseID = @courseID;
                     END;
         ");
     }
