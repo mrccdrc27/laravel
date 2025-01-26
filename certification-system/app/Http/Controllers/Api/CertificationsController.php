@@ -488,4 +488,39 @@ class CertificationsController extends Controller
             return response()->json(['error' => $e->getMessage()], 404);
         }
     }
+
+    public function getCertificationCount()
+    {
+        try {
+            // Call the procedure to get the total count
+            $result = DB::connection('sqlsrv')
+                ->select('EXEC sp_certification_get_count');
+            $totalCertifications = $result[0]->TotalCertifications ?? 0;
+    
+            // Call the procedure to get the signed certifications count
+            $signedResult = DB::connection('sqlsrv')
+                ->select('EXEC sp_certification_get_signed_count');
+            $signedCertifications = $signedResult[0]->TotalSignedCertificates ?? 0;
+    
+            return response()->json([
+                'success' => true,
+                'count' => $totalCertifications,
+                'signedCount' => $signedCertifications
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error fetching certification count: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'count' => 0,
+                'signedCount' => 0,
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+
+
+
+
 }

@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
             'username' => 'adminUser',
             'email' => 'admin@example.com',  // Add email here
             'password' => Hash::make('adminPassword123'),
-            'is_active' => true,
+
             'last_login_at' => now(),
         ]);
 
@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
             'username' => 'employeeUser',
             'email' => 'employee@example.com',  // Add email here
             'password' => Hash::make('employeePassword123'),
-            'is_active' => true,
+
             'last_login_at' => now(),
         ]);
 
@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
             'username' => 'managerUser',
             'email' => 'manager@example.com',  // Add email here
             'password' => Hash::make('managerPassword123'),
-            'is_active' => true,
+
             'last_login_at' => now(),
         ]);
 
@@ -43,7 +43,7 @@ class UserSeeder extends Seeder
             'username' => 'Adi',
             'email' => 'adibentulan@gmail.com',  // Add email here
             'password' => Hash::make('123'),
-            'is_active' => true,
+
             'last_login_at' => now(),
         ]);
 

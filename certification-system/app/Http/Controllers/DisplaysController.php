@@ -42,7 +42,7 @@ class DisplaysController extends Controller
     ];
 
     // Return the counts to the view with the compacted variable
-    return view('dashboard.count', compact('data'));
+    return view('dashboard.body', compact('data'));
 }
 
 
