@@ -26,7 +26,6 @@ if (Auth::user()->hasRole('student')) {
             </button>
         @endif
     </div>
-
     <ul id="course-list" class="space-y-4 px-2">
         <?php foreach ($courses as $course): ?>
             <li class="w-full">

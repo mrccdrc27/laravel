@@ -113,7 +113,7 @@
             >
                 &times;
             </button>
-            <x-student.update.updatesubmission/>
+            <x-student.update.updatesubmission :assignment="$assignment"/>
         </div>
     </div>
 @endif
@@ -123,8 +123,8 @@
 <div 
     id="assignmentdelete-{{$assignment->submissionID}}"
     class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50"
->           
-    {{-- <x-faculty.delete.deleteassignment :assignment="$assignment"/> --}}
+>
+    <x-student.delete.deletesubmission :assign="$assignment"/>
 </div>
 
 <script>

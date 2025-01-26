@@ -118,6 +118,8 @@ Route::get('/testing', function () {
     Route::post('submission/grade', [submissions::class, 'grade'])->name('submission.grade');
     // submission - Student
     Route::post('submission/post', [submissions::class, 'insert'])->name('submission.post');
+    Route::post('submission/update', [submissions::class, 'update'])->name('submission.update');
+    Route::post('submission/delete', [submissions::class, 'delete'])->name('submission.delete');
     // 
 
     // enrollment 

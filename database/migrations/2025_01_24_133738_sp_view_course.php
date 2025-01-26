@@ -45,10 +45,13 @@ return new class extends Migration
                         BEGIN
                             SELECT 
                                 E.enrollmentID,
-                                E.courseID
+                                E.courseID,
+                                C.title
                             FROM users AS U
                             INNER JOIN enrollment AS E
                                 ON U.id = E.studentID
+                            INNER JOIN courses as C
+                                ON C.courseID = E.courseID
                             WHERE U.role = 'student' AND U.id = @student_id;
                         END;
         ");
