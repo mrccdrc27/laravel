@@ -7,15 +7,17 @@ use App\Http\Controllers\DisplaysController;
 use App\Http\Controllers\Api\V1\IssuersController;
 use App\Http\Controllers\TestsControllers;
 
-Route::get('home', [DisplaysController::class, 'count'])->name('home');
-Route::get('/', function () {
-    return redirect()->route('home');
-});
+// Route::get('home', [DisplaysController::class, 'count'])->name('home');
 
 Route::get('certificate', function () {
     return view('dashboard.certificate');
 })->name('certificate');
 
+Route::get('/', function () {
+    return view('dashboard.home');
+})->name('home');
+
+Route::get('/api/certifications/count', [CertificationsController::class, 'getCertificationCount']);
 // Route::get('home', function () {
 //     return view('dashboard.home');
 // })->name('home');
@@ -23,6 +25,7 @@ Route::get('certificate', function () {
 //     return view('dashboard.home');
 // });
 
+Route::get('/api/certification-count', [CertificationsController::class, 'getCertificationCount'])->name('getCertificationCount');
 Route::get('cert/details/{id}', [CertificationsController::class, 'getByID'])->name('cert.details');
 
 
@@ -33,6 +36,10 @@ Route::get('about', function () {
 Route::get('search', function () {
     return view('dashboard.search');
 })->name('search');
+
+Route::get('org', function () {
+    return view('dashboard.org');
+})->name('org');
 
 Route::get('certificate/user', function () {
     return view('dashboard.cert.user');
@@ -57,7 +64,7 @@ Route::get('organizations/create-test', [OrganizationsController::class, 'create
 Route::prefix('test')->group(function () {
     // Test route for certificate not found error
     Route::get('certificate-not-found', [TestsControllers::class, 'testCertificateNotFound'])->name('test.certificate_not_found');
-    
+
     // Test route for a generic error
     Route::get('generic-error', [TestsControllers::class, 'testGenericError'])->name('test.generic_error');
     // http://127.0.0.1:8000/test/generic-error
@@ -74,7 +81,7 @@ Route::prefix('test')->group(function () {
 //     // Asset routes
 //     Route::get('/{id}/logo', [IssuerInformationController::class, 'getLogo'])->name('logo');
 //     Route::get('/{id}/signature', [IssuerInformationController::class, 'getSignature'])->name('signature');
-    
+
 //     /* Example in a view:
 //     <img src="{{ route('issuers.signature', $issuer->IssuerID) }}" alt="Issuer Signature">
 //     */
@@ -82,5 +89,5 @@ Route::prefix('test')->group(function () {
 
 
 Route::fallback(function () {
-    return view('errors.404');
+    return view('errors.generic_error');
 });

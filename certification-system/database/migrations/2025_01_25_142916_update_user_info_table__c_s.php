@@ -32,10 +32,9 @@ return new class extends Migration {
             $table->dropColumn('birthPlace');
 
             // Add new columns
-            $table->enum('role', ['admin', 'employee', 'manager'])->default('employee');
+            $table->enum('role', ['1', '2', '3'])->default('1');
             $table->string('username')->nullable()->unique();
             $table->string('password')->nullable();
-            $table->boolean('is_active')->default(true);
             $table->softDeletes();
             $table->timestamp('last_login_at')->nullable();
         });
@@ -54,7 +53,6 @@ return new class extends Migration {
                 'role',
                 'username',
                 'password',
-                'is_active',
                 'deleted_at',
                 'last_login_at'
             ]);

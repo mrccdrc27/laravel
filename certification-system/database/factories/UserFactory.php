@@ -17,7 +17,6 @@ class UserFactory extends Factory
             'role' => $this->faker->randomElement(['admin', 'employee', 'manager']),
             'username' => $this->faker->unique()->userName(),
             'password' => Hash::make('password123'), // Default password for seeding
-            'is_active' => $this->faker->boolean,
             'last_login_at' => $this->faker->dateTime(),
         ];
     }
