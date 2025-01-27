@@ -71,64 +71,53 @@
     <!-- API Documentation Section -->
     <div class="container">
         <div class="api-documentation">
-            <h2 class="mb-4">API Endpoint for Certification Creation</h2>
+            <h2 class="mb-4">API Documentation</h2>
 
-            <div class="endpoint-description">
-                <h3 class="h4 mb-3">Endpoint Details</h3>
-                <p><strong>Method:</strong> POST</p>
-                <p><strong>URL:</strong> <code>/api/cert</code></p>
-                <p><strong>Method:</strong> DELETE</p>
-                <p><strong>URL:</strong> <code>/api/cert/{id}</code></p>
-            </div>
-            
+            @php
+                $createCertParams = [
+                    'certificationNumber' => 'Unique identifier for the certification',
+                    'courseID' => 'ID of the course from your LMS',
+                    'title' => 'Title of the certification',
+                    'description' => 'Description of the certification',
+                    'issuedAt' => 'Date of certification issuance',
+                    'expiryDate' => 'Expiration date | Optional',
+                    'issuerID' => 'Official issuer ID | Optional',
+                    'userID' => 'ID of the student user',
+                ];
 
-            <div class="endpoint-description">
-                <h3 class="h4 mb-3">Required Parameters</h3>
-                <ul>
-                    <li><strong>certificationNumber:</strong> Unique identifier for the certification</li>
-                    <li><strong>courseID:</strong> ID of the course from the LMS</li>
-                    <li><strong>title:</strong> Title of the certification</li>
-                    <li><strong>description:</strong> Description of the certification</li>
-                    <li><strong>issuedAt:</strong> Date of certification issuance</li>
-                </ul>
-            </div>
-
-
-            <div class="step-content">
-                <h3 class="step-title">Optional: Digital Signature</h3>
-                <p class="step-description">
-                    For enhanced credibility, consider adding a digital signature
-                    from an authorized representative of your organization.
-                </p>
-            </div>
-
-
-
-
-            <div class="code-block">
-                <pre class="text-white m-0">{
+                $createCertRequest = '{
     "certificationNumber": "CERT-2025-001",
     "courseID": 12345,
     "title": "Advanced Python Programming",
     "description": "Certification for completing advanced Python course",
     "issuedAt": "2024-01-26",
-    "expiryDate": "2025-01-26", // Optional
-    "issuerID": 67890, // Optional
-    "userID": 54321 // Optional
-}</pre>
-            </div>
+    "expiryDate": "2025-01-26",
+    "issuerID": 67890,
+    "userID": 54321
+}';
 
-            <div class="endpoint-description">
-                <h3 class="h4 mb-3">Successful Response</h3>
-                <div class="code-block">
-                    <pre class="text-white m-0">{
+                $createCertResponse = '{
     "success": true,
     "certificationID": 123,
     "certificationNumber": "CERT-2025-001",
     "viewCertificateLink": "http://your-domain.com/cert/details/123"
-}</pre>
-                </div>
-            </div>
+}';
+            @endphp
+
+            <x-api-docs method="POST" endpoint="/api/cert" :parameters="$createCertParams" :requestExample="$createCertRequest" :responseExample="$createCertResponse" />
+
+            @php
+                $deleteCertRequest = '{
+    "certificationID": 123
+}';
+
+                $deleteCertResponse = '{
+    "success": true,
+    "message": "Certificate successfully deleted"
+}';
+            @endphp
+
+            <x-api-docs method="DELETE" endpoint="/api/cert/{id}" :requestExample="$deleteCertRequest" :responseExample="$deleteCertResponse" />
 
             <div class="alert alert-info">
                 <i class="bi bi-info-circle me-2"></i>
