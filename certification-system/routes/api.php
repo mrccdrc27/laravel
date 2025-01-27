@@ -12,6 +12,8 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+
+// GET http://127.0.0.1:8000/api/cert/verify/CERT-001
 Route::get('/cert/verify/{code}', [CertificationsController::class, 'verifyCertificate']);
 
 Route::apiResource('user_info', UsersController::class);
@@ -24,7 +26,7 @@ Route::get('search/cert', [CertificationsController::class, 'showname']);
 
 Route::get('cert/details/{id}', [CertificationsController::class, 'getByID'])->name('cert.details');
 
-
+Route::get('certification-count', [CertificationsController::class, 'getCertificationCount'])->name('getCertificationCount');
 
 // use App\Http\Controllers\Api\V1\CertificationController;
 // use App\Http\Controllers\Api\V1\IssuerInformationController;

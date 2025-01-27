@@ -18,7 +18,7 @@ class CertificationsController extends Controller
      */
     public function index(Request $request)
     {
-        // Example: GET /certifications?courseID=101&issuedAt=2024-01-01&expiryDate=2025-01-01
+        // Example: GET http://127.0.0.1:8000/api/cert?courseID=7
         try {
             // Optional filtering parameters
             $courseID = $request->query('courseID');

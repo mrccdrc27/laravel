@@ -19,7 +19,9 @@ class Course extends Model
     protected $fillable = [
         'title',
         'description',
-        // Add later if needed
+        'facultyID',
+        'isPublic',
+        ''
     ];
 
     // Relationship with Certification

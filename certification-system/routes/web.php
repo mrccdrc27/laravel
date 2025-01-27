@@ -30,7 +30,7 @@ Route::get('/api/certifications/count', [CertificationsController::class, 'getCe
 Route::get('search/cert', [CertificationsController::class, 'showname']);
 // Example: GET: http://127.0.0.1:8000/search/cert?firstName=Jane&lastName=Lee
 
-Route::get('certification-count', [CertificationsController::class, 'getCertificationCount'])->name('getCertificationCount');
+
 
 Route::get('cert/details/{id}', [CertificationsController::class, 'getByID'])->name('cert.details');
 
