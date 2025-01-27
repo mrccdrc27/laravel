@@ -12,15 +12,16 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-// Route::get('/', function(){
-// return 'API';
-// });
+Route::get('/cert/verify/{code}', [CertificationsController::class, 'verifyCertificate']);
 
 Route::apiResource('user_info', UsersController::class);
 Route::apiResource('issuer', IssuersController::class);
 Route::apiResource('org', OrganizationsController::class);
 Route::apiResource('cert', CertificationsController::class);
+
 Route::get('search/cert', [CertificationsController::class, 'showname']);
+// Example: GET: http://127.0.0.1:8000/api/search/cert?firstName=Jane&lastName=Lee
+
 Route::get('cert/details/{id}', [CertificationsController::class, 'getByID'])->name('cert.details');
 
 

@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+
 class CertificationsController extends Controller
 {
     /**
@@ -181,7 +182,6 @@ class CertificationsController extends Controller
                     'certificationNumber' => $validatedData['certificationNumber'],
                     'viewCertificateLink' => $certificateLink
                 ], 201);
-
             } catch (\Exception $e) {
                 DB::rollBack();
 
@@ -229,7 +229,6 @@ class CertificationsController extends Controller
     public function show(Request $request, $id)
     {
         try {
-
             $certificate = DB::select('EXEC sp_certification_get_by_id ?', [$id]);
 
             if (empty($certificate)) {
@@ -239,12 +238,15 @@ class CertificationsController extends Controller
                 ], 404);
             }
 
+            // Generate certificate link
+            $certificateLink = url("/cert/details/{$id}");
+
             return response()->json([
                 'success' => true,
                 'data' => $certificate[0],
+                'certificateLink' => $certificateLink,
             ]);
         } catch (\Exception $e) {
-            // Handle any unexpected exceptions
             return response()->json([
                 'success' => false,
                 'message' => 'An error occurred while fetching the certification.',
@@ -252,6 +254,7 @@ class CertificationsController extends Controller
             ], 500);
         }
     }
+
 
     public function getByID($id)
     {
@@ -366,12 +369,16 @@ class CertificationsController extends Controller
             return response()->json(['error' => 'At least one name parameter is required'], 400);
         }
 
+
         try {
+
+
             // Query users_info in the LMS database
             $usersQuery = DB::connection('sqlsrv_lms')
                 ->table('users_info')
                 ->join('users', 'users_info.userID', '=', 'users.id')
                 ->where('users.role', 'student');
+
 
 
             if ($firstName) {
@@ -388,8 +395,11 @@ class CertificationsController extends Controller
             $userIds = $usersQuery->pluck('users.id');
 
 
+            // If no student is found, return an error message
             if ($userIds->isEmpty()) {
-                return response()->json([]);
+                return response()->json([
+                    'error' => 'No student found with the given name or the user is not a student'
+                ], 404); // 404 Not Found
             }
 
             // Fetch certifications for the user IDs using the certifications database
@@ -398,10 +408,20 @@ class CertificationsController extends Controller
                 ->whereIn('userID', $userIds)
                 ->get();
 
+            // If no certifications found for the student, return an error message
+            if ($certifications->isEmpty()) {
+                return response()->json([
+                    'error' => 'No certifications found for the student'
+                ], 404); // 404 Not Found
+            }
+
+            // Return the certifications if found
             return response()->json($certifications);
         } catch (\Exception $e) {
             Log::error('Error in showname method: ' . $e->getMessage());
-            return response()->json(['error' => 'An error occurred while searching certifications'], 500);
+            return response()->json([
+                'error' => 'An error occurred while searching certifications'
+            ], 500); // Internal Server Error
         }
     }
 
@@ -496,12 +516,12 @@ class CertificationsController extends Controller
             $result = DB::connection('sqlsrv')
                 ->select('EXEC sp_certification_get_count');
             $totalCertifications = $result[0]->TotalCertifications ?? 0;
-    
+
             // Call the procedure to get the signed certifications count
             $signedResult = DB::connection('sqlsrv')
                 ->select('EXEC sp_certification_get_signed_count');
             $signedCertifications = $signedResult[0]->TotalSignedCertificates ?? 0;
-    
+
             return response()->json([
                 'success' => true,
                 'count' => $totalCertifications,
@@ -518,9 +538,53 @@ class CertificationsController extends Controller
         }
     }
 
+    public function verifyCertificate(Request $request, $certificationNumber)
+    {
+        try {
+            // Fetch certification from CS-System
+            $certificate = DB::select('EXEC sp_certification_get_by_code ?', [$certificationNumber]);
 
+            if (empty($certificate)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid or nonexistent certification number.',
+                ], 404);
+            }
 
+            $certificate = $certificate[0];
 
+            // Fetch user and course data from LMS-System
+            $userInfo = DB::connection('sqlsrv_lms')->table('users_info')
+                ->join('users', 'users.id', '=', 'users_info.userID')
+                ->where('users_info.userID', $certificate->userID)
+                ->select(
+                    'users_info.firstName',
+                    'users_info.middleName',
+                    'users_info.lastName',
+                    'users.email'
+                )
+                ->first();
 
+            $courseInfo = DB::connection('sqlsrv_lms')->table('courses')
+                ->where('courseID', $certificate->courseID)
+                ->select('title', 'description')
+                ->first();
 
+            // Compile response
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'certificate' => $certificate,
+                    'user' => $userInfo,
+                    'course' => $courseInfo,
+                ],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while verifying the certificate.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }
