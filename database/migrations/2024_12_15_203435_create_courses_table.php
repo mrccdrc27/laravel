@@ -27,6 +27,8 @@ return new class extends Migration {
         // Foreign keys with NO ACTION to avoid multiple cascade paths
         $table->foreign('facultyID')->references('id')->on('users')->onDelete('no action');
     });
+
+    //DB::statement('ALTER TABLE courses AUTO_INCREMENT = 100000');
 }
 
 

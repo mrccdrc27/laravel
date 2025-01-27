@@ -40,6 +40,53 @@ return new class extends Migration
                         WHERE U.id = @studentID AND C.courseID = @courseID;
                     END;
         ");
+
+        DB::unprepared('DROP PROCEDURE IF EXISTS GetUngradedSubmissionsByCourse');
+        DB::unprepared("
+        CREATE PROCEDURE GetUngradedSubmissionsByCourse
+            @CourseID INT
+        AS
+        BEGIN
+            SELECT 
+                S.submissionID, 
+                S.assignmentID, 
+                A.title,
+                S.submittedAt,
+                CONCAT(UI.firstName, ' ', COALESCE(UI.middleName, ''), ' ', UI.lastName) AS FullName
+            FROM submissions AS S
+            INNER JOIN assignments AS A ON S.assignmentID = A.assignmentID
+            INNER JOIN courses AS C ON A.courseID = C.courseID
+            INNER JOIN users AS ST ON ST.id = S.studentID
+            INNER JOIN users_info AS UI ON ST.id = UI.userID
+            WHERE ST.role = 'student' 
+            AND S.grade IS NULL
+            AND C.courseID = @CourseID
+            ORDER BY S.submittedAt ASC;
+        END;
+        ");
+
+        DB::unprepared('DROP PROCEDURE IF EXISTS Getpendingassignments');
+        DB::unprepared("
+                CREATE PROCEDURE Getpendingassignments
+                    @CourseID INT,
+                    @StudentID INT
+                AS
+                BEGIN
+                    SELECT 
+                    A.assignmentID,
+                    A.dueDate,
+                    A.title,
+                    A.instructions
+                    FROM courses AS C
+                    INNER JOIN assignments AS A ON C.courseID = A.courseID
+                    INNER JOIN submissions AS S ON A.assignmentID = S.assignmentID
+                    WHERE C.courseID = 2
+                    AND S.studentID = 2
+                    And S.grade IS NULL
+                    Order BY A.dueDate
+                END
+
+        ");
     }
 
     /**

@@ -1,50 +1,66 @@
+<?php
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
+// Fetch user ID and courses
+if (Auth::user()->hasRole('student')) {
+    $studentID = Auth::user()->id;
+    $courses = DB::select('EXEC GetStudentCourses @student_id = ?', [$studentID]);
+} elseif (Auth::user()->hasRole('faculty')) {
+    $facultyID = Auth::user()->id;
+    $courses = DB::select('EXEC GetCoursesByFaculty ?', [$facultyID]);
+}
+?>
+
 <div class="container mx-auto py-6">
-    {{-- Course List --}}
-    <div class="flex justify-center">
-        <ul id="course-list-2" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {{-- Courses will be dynamically added here via JavaScript --}}
-        </ul>
-    </div>
+    <ul id="course-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <?php foreach ($courses as $course): ?>
+            <?php 
+                // Get the first digit of the courseID
+                $firstDigit = substr((string)$course->courseID, 0, 1);
+                
+                // Set the icon based on the first digit
+                switch ($firstDigit) {
+                    case '1':
+                    case '6':
+                        $icon = 'fas fa-book'; // Icon 1
+                        break;
+                    case '2':
+                    case '7':
+                        $icon = 'fas fa-chalkboard-teacher'; // Icon 2
+                        break;
+                    case '3':
+                    case '8':
+                        $icon = 'fas fa-laptop-code'; // Icon 3
+                        break;
+                    case '4':
+                    case '9':
+                        $icon = 'fas fa-graduation-cap'; // Icon 4
+                        break;
+                    case '5':
+                        $icon = 'fas fa-users'; // Icon 5
+                        break;
+                    default:
+                        $icon = 'fas fa-question'; // Default icon if no match
+                        break;
+                }
+            ?>
+            <li class="w-full">
+                <a href="{{ url('/courses/id/' . $course->courseID) }}" 
+                    class="block py-6 px-8 rounded-lg border border-gray-400 bg-white text-lg text-black flex items-center transition duration-200 ease-in-out 
+                           {{ 
+                               Request::is('courses/id/' . $course->courseID) || 
+                               Request::is('courses/classwork/id/' . $course->courseID) ||
+                               Request::is('courses/submissions/id/' . $course->courseID) ||
+                               Request::is('courses/settings/id/' . $course->courseID) ||
+                               Request::is('courses/certification/id/' . $course->courseID) 
+                               ? 'bg-red-900 text-white font-bold' 
+                               : 'hover:bg-red-900 hover:text-white' 
+                           }}">
+                     <i class="<?= $icon ?> mr-4"></i>
+                     <?= htmlspecialchars($course->title) ?>
+                 </a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        const userId = "{{ Auth::user()->id }}"; // Blade resolves this server-side
-        const response = await fetch(`{{ url('/courses/get') }}/${userId}`); // Use backticks for template literals
-        const courses = await response.json();
-
-        // Get the course list container
-        const courseList = document.getElementById('course-list-2');
-
-        // Clear any existing list items
-        courseList.innerHTML = '';
-
-        // Populate the course list with cards
-        courses.forEach(course => {
-            // Extract the first letter of each word in the title
-            const titleWords = course.title.split(' '); // Split the title into words
-            const courseCodePrefix = titleWords.map(word => word.charAt(0).toUpperCase()).join(''); // Take the first letter of each word
-
-            // Combine the first letters with the courseID
-            const modifiedCourseCode = `${courseCodePrefix}${course.courseID}`;
-
-            const card = document.createElement('li');
-            card.id = `course-card-${course.courseID}`; // Set unique ID based on courseID
-            card.classList.add('bg-white', 'p-4', 'rounded-lg', 'shadow-md', 'transition', 'hover:shadow-lg', 'cursor-pointer');
-
-            card.innerHTML = `
-                <a href="{{ url('/courses/id/') }}/${course.courseID}" class="block">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">${course.title}</h3>
-                    <p class="text-gray-600 mb-2">Course Code: ${modifiedCourseCode}</p>
-                    <p class="text-gray-500 text-sm">Some brief description or details about the course.</p>
-                </a>
-            `;
-
-            courseList.appendChild(card);
-        });
-    } catch (error) {
-        console.error('Error fetching courses:', error);
-    }
-});
-</script>

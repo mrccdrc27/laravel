@@ -9,11 +9,20 @@
             {{-- Content goes here --}}
             <div class="col-span-8 relative">
                 <div x-data="{ visibleCount: 3, totalCount: {{ count($assignment) }} }">
-                    @foreach ($assignment as $index => $assign)
+                    @forelse ($assignment as $index => $assign)
                         <div x-show="{{ $index }} < visibleCount" class="mb-4">
                             <x-faculty.views.assignments :assignment="$assign" :course="$course"/>
                         </div>
-                    @endforeach
+                    @empty
+                    @if (Auth::user()->hasRole('faculty'))
+                        <div class="text-center py-8">
+                            <p class="text-gray-600 font-semibold text-xl">No classwork, create one.</p>
+                            <button class="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600">
+                                <a href="/courses/id/{{$course->courseID}}" class="text-white">Create Assignment</a>
+                            </button>
+                        </div>
+                    @endif
+                    @endforelse
                     <div class="text-center mt-4" x-show="visibleCount < totalCount">
                         <button @click="visibleCount += 3" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600">
                             Load More
@@ -21,6 +30,7 @@
                     </div>
                 </div>
             </div>
+            
             
         </div>
 

@@ -19,95 +19,100 @@ class Users extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run()
+
+public function run()
 {
+    // Configurable values for scaling the seed data
+    $numUsers = 20;  // Number of users
+    $numCourses = 5; // Number of courses
+    $maxEnrollmentsPerUser = 5; // Max courses a user can enroll in
+    $modulesPerCourse = 20; // Modules per course
+    $assignmentsPerCourse = 5; // Assignments per course
+    $submissionsPerStudent = 50; // Submissions per student
 
-        // Configurable values for scaling the seed data
-        $numUsers = 25;  // Number of users
-        $numCourses = 50; // Number of courses
-        $maxEnrollmentsPerUser = 10; // Max courses a user can enroll in
-        $modulesPerCourse = 1; // Modules per course
-        $assignmentsPerCourse = 5; // Assignments per course
-        $submissionsPerStudent = 50; // Submissions per student
+    $faker = Faker::create();
 
-        $faker = Faker::create();
+    // Generate Users
+    $users = UserInfo::factory()->count($numUsers)->create();
 
-        // Generate Users
-        $users = UserInfo::factory()->count($numUsers)->create();
+    // Generate Courses
+    $courses = Course::factory()->count($numCourses)->make()->each(function ($course) use ($users, $faker) {
+        $course->facultyID = $users->random()->userID;
+        $course->title = $faker->words(3, true);
+        $course->description = $faker->sentence();
+        $course->save();
+    });
 
-        // Generate Courses
-        $courses = Course::factory()->count($numCourses)->make()->each(function ($course) use ($users) {
-            $course->facultyID = $users->random()->userID;
-            $course->save();
-        });
-
-        // Generate Enrollments
-        $enrolledUsers = collect();
-        $enrollments = [];
-        foreach ($users as $user) {
-            $availableCourses = $courses->shuffle()->take(rand(3, $maxEnrollmentsPerUser));
-            foreach ($availableCourses as $course) {
-                if (!$enrolledUsers->contains([$user->userID, $course->courseID])) {
-                    $enrolledUsers->push([$user->userID, $course->courseID]);
-                    $enrollments[] = [
-                        'courseID' => $course->courseID,
-                        'studentID' => $user->userID,
-                        'enrolledAt' => now(),
-                    ];
-                }
-            }
-        }
-        DB::table('enrollment')->insert($enrollments);
-
-        // Generate Modules
-        $modules = [];
-        foreach ($courses as $course) {
-            for ($i = 0; $i < $modulesPerCourse; $i++) {
-                $modules[] = [
+    // Generate Enrollments
+    $enrolledUsers = collect();
+    $enrollments = [];
+    foreach ($users as $user) {
+        $availableCourses = $courses->shuffle()->take(rand(3, $maxEnrollmentsPerUser));
+        foreach ($availableCourses as $course) {
+            $enrollmentKey = $user->userID . '-' . $course->courseID;
+            if (!$enrolledUsers->contains($enrollmentKey)) {
+                $enrolledUsers->push($enrollmentKey);
+                $enrollments[] = [
                     'courseID' => $course->courseID,
-                    'createdAt' => now(),
-                    'updatedAt' => now(),
-                    'title' => $faker->words(3, true),
+                    'studentID' => $user->userID,
+                    'enrolledAt' => now(),
                 ];
             }
         }
-        DB::table('modules')->insert($modules);
-
-        // Generate Assignments
-        $assignments = [];
-        $assignmentPairs = collect();
-        foreach ($courses as $course) {
-            for ($i = 0; $i < $assignmentsPerCourse; $i++) {
-                $assignments[] = [
-                    'courseID' => $course->courseID,
-                    'createdAt' => now(),
-                    'updatedAt' => now(),
-                    'title' => $faker->words(3, true),
-                    'filePath' => $faker->words(3, true),
-                    'instructions' => $faker->sentence(),
-                    'dueDate' => now()->addDays(rand(1, 30)),
-                ];
-            }
-        }
-        DB::table('assignments')->insert($assignments);
-
-        // Generate Submissions
-        $assignmentIds = DB::table('assignments')->pluck('assignmentID');
-        $submittedPairs = collect();
-        $submissions = [];
-        foreach ($users as $user) {
-            foreach ($assignmentIds->shuffle()->take(rand(1, $submissionsPerStudent)) as $assignmentID) {
-                if (!$submittedPairs->contains([$user->userID, $assignmentID])) {
-                    $submissions[] = [
-                        'assignmentID' => $assignmentID,
-                        'studentID' => $user->userID,
-                        'submittedAt' => now(),
-                    ];
-                    $submittedPairs->push([$user->userID, $assignmentID]);
-                }
-            }
-        }
-        DB::table('submissions')->insert($submissions);
     }
+    DB::table('enrollment')->insert($enrollments);
+
+    // Generate Modules
+    $modules = [];
+    foreach ($courses as $course) {
+        for ($i = 0; $i < $modulesPerCourse; $i++) {
+            $modules[] = [
+                'courseID' => $course->courseID,
+                'createdAt' => now(),
+                'updatedAt' => now(),
+                'title' => $faker->words(3, true),
+                'content' => $faker->paragraph(),  // Adding meaningful content
+            ];
+        }
+    }
+    DB::table('modules')->insert($modules);
+
+    // Generate Assignments
+    $assignments = [];
+    foreach ($courses as $course) {
+        for ($i = 0; $i < $assignmentsPerCourse; $i++) {
+            $assignments[] = [
+                'courseID' => $course->courseID,
+                'createdAt' => now(),
+                'updatedAt' => now(),
+                'title' => $faker->words(3, true),
+                'filePath' => 'files/' . $faker->word() . '.pdf',  // More realistic file path
+                'instructions' => $faker->realText($maxNbChars = 255, $indexSize = 2),
+                'dueDate' => now()->addDays(rand(1, 30)),
+            ];
+        }
+    }
+    DB::table('assignments')->insert($assignments);
+
+    // Generate Submissions
+    $assignmentIds = DB::table('assignments')->pluck('assignmentID');
+    $submittedPairs = collect();
+    $submissions = [];
+    foreach ($users as $user) {
+        foreach ($assignmentIds->shuffle()->take(rand(1, $submissionsPerStudent)) as $assignmentID) {
+            $submissionKey = $user->userID . '-' . $assignmentID;
+            if (!$submittedPairs->contains($submissionKey)) {
+                $submissions[] = [
+                    'assignmentID' => $assignmentID,
+                    'studentID' => $user->userID,
+                    'submittedAt' => now(),
+                    'content' => $faker->realText($maxNbChars = 255, $indexSize = 2),
+                ];
+                $submittedPairs->push($submissionKey);
+            }
+        }
+    }
+    DB::table('submissions')->insert($submissions);
+}
 
 }
