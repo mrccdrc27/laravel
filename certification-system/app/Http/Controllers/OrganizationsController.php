@@ -12,10 +12,35 @@ class OrganizationsController extends Controller
 {
 
 
+    function getOrganizations()
+    {
+        $organizations = DB::connection('sqlsrv')
+            ->select('EXEC sp_getOrganization');
+
+        return $organizations;
+    }
+
+    public function showCarousel()
+    {
+        $organizations = $this->getOrganizations();
+
+        $preparedData = array_map(function ($organization) {
+            return [
+                'id' => $organization->organizationID,
+                'name' => $organization->name,
+                'logo' => 'data:image/png;base64,' . base64_encode($organization->logo),
+            ];
+        }, $organizations);
+
+        return view('dashboard.org', ['organizations' => $preparedData]);
+    }
+
+
+
     public function createTestOrganization()
     {
         try {
-            
+
             $organization = Organization::createTestOrganization();
 
             // Return success response with the organization data
@@ -107,10 +132,7 @@ class OrganizationsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateorganizationRequest $request, organization $organization)
-    {
-        //
-    }
+
 
     /**
      * Remove the specified resource from storage.

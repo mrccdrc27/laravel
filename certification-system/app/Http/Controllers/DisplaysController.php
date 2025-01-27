@@ -44,7 +44,7 @@ class DisplaysController extends Controller
     // Return the counts to the view with the compacted variable
     return view('dashboard.body', compact('data'));
 }
-
+    
 
     /**
      * Show the form for creating a new resource.

@@ -4,7 +4,7 @@ use App\Http\Controllers\OrganizationsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CertificationsController;
 use App\Http\Controllers\DisplaysController;
-use App\Http\Controllers\Api\V1\IssuersController;
+use App\Http\Controllers\IssuersController;
 use App\Http\Controllers\TestsControllers;
 
 // Route::get('home', [DisplaysController::class, 'count'])->name('home');
@@ -16,6 +16,8 @@ Route::get('certificate', function () {
 Route::get('/', function () {
     return view('dashboard.home');
 })->name('home');
+
+Route::get('/org', [IssuersController::class, 'showOrganizationsWithIssuers'])->name('org');
 
 Route::get('/api/certifications/count', [CertificationsController::class, 'getCertificationCount']);
 // Route::get('home', function () {
@@ -37,9 +39,6 @@ Route::get('search', function () {
     return view('dashboard.search');
 })->name('search');
 
-Route::get('org', function () {
-    return view('dashboard.org');
-})->name('org');
 
 Route::get('certificate/user', function () {
     return view('dashboard.cert.user');
