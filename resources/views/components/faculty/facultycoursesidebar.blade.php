@@ -30,7 +30,8 @@ if (Auth::user()->hasRole('student')) {
         <?php foreach ($courses as $course): ?>
             <li class="w-full">
                 <a href="{{ url('/courses/id/' . $course->courseID) }}" 
-                   class="text-black block w-full py-3 px-4 hover:bg-red-900 hover:text-white rounded border border-gray-400 text-lg flex items-center transition duration-200 ease-in-out">
+                   class="block w-full py-3 px-4 rounded border border-gray-400 text-lg flex items-center transition duration-200 ease-in-out 
+                          {{ Request::is('courses/id/' . $course->courseID) ? 'bg-red-900 text-white font-bold' : 'text-black hover:bg-red-900 hover:text-white' }}">
                     <i class="fas fa-book mr-2"></i>
                     <?= htmlspecialchars($course->title) ?>
                 </a>
