@@ -19,9 +19,10 @@ Route::apiResource('issuer', IssuersController::class);
 Route::apiResource('org', OrganizationsController::class);
 Route::apiResource('cert', CertificationsController::class);
 
+Route::get('search/cert', [CertificationsController::class, 'showname']);
+// Example: GET: http://127.0.0.1:8000/api/search/cert?firstName=Jane&lastName=Lee
 
-
-// Route::get('cert/details/{id}', [CertificationsController::class, 'getByID'])->name('cert.details');
+Route::get('cert/details/{id}', [CertificationsController::class, 'getByID'])->name('cert.details');
 
 
 
