@@ -66,7 +66,7 @@ jobs:
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_EEC2EF31E4F84692807B6D320ADF0234 }}
 
       - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v4
+        uses: azure/webapps-deploy@v5
         id: deploy-to-webapp
         with:
           app-name: 'GensysLMS'
