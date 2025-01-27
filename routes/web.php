@@ -6,17 +6,19 @@ use App\Http\Controllers\display;
 use App\Http\Controllers\Api\V1\IssuerInformationController;
 use App\Http\Controllers\DashboardController;
 
-// Route::get('home', function () {
-//     return view('dashboard.home');
-// })->name('home');
-// Route::get('home', function () {
-//     return view('dashboard.home');
-// });
+Route::get('home', function () {
+    return view('test');
+})->name('home');
+Route::get('/', function () {
+    return view('test');
+});
+
+
 
 // Public routes
-Route::get('/', function () {
-    return redirect()->route('home');
-});
+// Route::get('/', function () {
+//     return redirect()->route('home');
+// });
 
 Route::get('about', function () {
     return view('dashboard.about');
