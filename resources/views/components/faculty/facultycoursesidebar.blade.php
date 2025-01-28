@@ -26,18 +26,58 @@ if (Auth::user()->hasRole('student')) {
             </button>
         @endif
     </div>
-    <ul id="course-list" class="space-y-4 px-2">
-        <?php foreach ($courses as $course): ?>
-            <li class="w-full">
-                <a href="{{ url('/courses/id/' . $course->courseID) }}" 
-                   class="block w-full py-3 px-4 rounded border border-gray-400 text-lg flex items-center transition duration-200 ease-in-out 
-                          {{ Request::is('courses/id/' . $course->courseID) ? 'bg-red-900 text-white font-bold' : 'text-black hover:bg-red-900 hover:text-white' }}">
-                    <i class="fas fa-book mr-2"></i>
-                    <?= htmlspecialchars($course->title) ?>
-                </a>
-            </li>
-        <?php endforeach; ?>
-    </ul>
+    <div class="w-full md:w-64 course bg-gray-900 text-white py-4 space-y-6 min-h-screen shadow-right">
+        <ul id="course-list" class="space-y-4 px-2">
+            <?php foreach ($courses as $course): ?>
+                <?php 
+                    // Get the first digit of the courseID
+                    $firstDigit = substr((string)$course->courseID, 0, 1);
+                    
+                    // Set the icon based on the first digit
+                    switch ($firstDigit) {
+                        case '1':
+                        case '6':
+                            $icon = 'fas fa-book'; // Icon 1
+                            break;
+                        case '2':
+                        case '7':
+                            $icon = 'fas fa-chalkboard-teacher'; // Icon 2
+                            break;
+                        case '3':
+                        case '8':
+                            $icon = 'fas fa-laptop-code'; // Icon 3
+                            break;
+                        case '4':
+                        case '9':
+                            $icon = 'fas fa-graduation-cap'; // Icon 4
+                            break;
+                        case '5':
+                            $icon = 'fas fa-users'; // Icon 5
+                            break;
+                        default:
+                            $icon = 'fas fa-question'; // Default icon if no match
+                            break;
+                    }
+                ?>
+                <li class="w-full">
+                    <a href="{{ url('/courses/id/' . $course->courseID) }}" 
+                        class="block w-full py-3 px-4 rounded border border-gray-400 text-lg flex items-center transition duration-200 ease-in-out 
+                               {{ 
+                                   Request::is('courses/id/' . $course->courseID) || 
+                                   Request::is('courses/classwork/id/' . $course->courseID) ||
+                                   Request::is('courses/submissions/id/' . $course->courseID) ||
+                                   Request::is('courses/settings/id/' . $course->courseID) ||
+                                   Request::is('courses/certification/id/' . $course->courseID) 
+                                   ? 'bg-red-900 text-white font-bold' 
+                                   : 'text-black hover:bg-red-900 hover:text-white' 
+                               }}">
+                         <i class="<?= $icon ?> mr-2"></i>
+                         <?= htmlspecialchars($course->title) ?>
+                     </a>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
 </div>
 
 @if (Auth::user()->hasRole('faculty'))

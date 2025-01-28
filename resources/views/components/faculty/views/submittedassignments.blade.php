@@ -55,12 +55,32 @@
             <div class="text-gray-700 mb-4">
                 <strong>Submission Content:</strong> {{$assignment->content}}
             </div>
+
+            {{-- Due Date and Submission Date Logic --}}
             <div class="text-gray-500 text-sm mb-4">
                 <strong>Due on:</strong> {{ \Carbon\Carbon::parse($assignment->dueDate)->format('Y-m-d, h:i A') }}
             </div>
             <div class="text-gray-500 text-sm mb-4">
-                <strong>Submitted At:</strong> {{ \Carbon\Carbon::parse($assignment->submittedAt)->format('Y-m-d, h:i A') }}
+                <strong>Submitted At:</strong> 
+                {{ \Carbon\Carbon::parse($assignment->submittedAt)->diffForHumans() }}
             </div>
+
+            {{-- Check if submission is late --}}
+            @php
+                $dueDate = \Carbon\Carbon::parse($assignment->dueDate);
+                $submittedAt = \Carbon\Carbon::parse($assignment->submittedAt);
+                $isLate = $submittedAt->isAfter($dueDate);
+            @endphp
+
+            @if ($isLate)
+                <div class="text-red-600 text-sm mb-4">
+                    <strong>Status:</strong> Late
+                </div>
+            @else
+                <div class="text-green-600 text-sm mb-4">
+                    <strong>Status:</strong> On Time
+                </div>
+            @endif
 
             @if ($assignment->grade)
                 <div class="text-gray-700 mb-4">

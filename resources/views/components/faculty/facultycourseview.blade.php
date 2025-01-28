@@ -25,12 +25,97 @@
                 <h2 class="text-xl font-semibold mb-2">{{$course->title}}</h2>
                 <p class="text-gray-600">{{$course->description}}</p>
             </div>
-
+            
             {{-- Upcoming Events --}}
-            <div class="col-span-1 sm:col-span-2 lg:col-span-1 bg-white p-4 rounded-lg shadow-md">
-                <h2 class="text-xl font-semibold mb-2">Upcoming</h2>
-                <p class="text-gray-600">Upcoming events or deadlines.</p>
+            @php
+                if (Auth::user()->hasRole('faculty')){
+                    $submissions = DB::select('EXEC GetUngradedSubmissionsByCourse ?', [
+                        $course->courseID
+                    ]);
+                }
+                elseif (Auth::user()->hasRole('student')){
+                    $submissions = DB::select('EXEC Getpendingassignments ?,?', [
+                        $course->courseID,
+                        Auth::user()->id
+                    ]);
+                }
+            @endphp
+            
+            <div class="col-span-1 sm:col-span-2 lg:col-span-1 bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Upcoming</h2>
+            
+                @if (Auth::user()->hasRole('faculty'))
+                    <!-- Make the content scrollable within the container -->
+                    <div class="max-h-56 overflow-y-auto">
+                        @forelse ($submissions as $submit)
+                            <div class="mb-3 p-3 border-b border-gray-200">
+                                <h3 class="text-sm font-medium text-gray-800">{{ $submit->FullName }}</h3>
+                                <p class="text-gray-600 text-xs mb-1">{{ $submit->title }}</p>
+                                <p class="text-gray-500 text-xs">
+                                    @php
+                                        $submittedAt = \Carbon\Carbon::parse($submit->submittedAt);
+                                    @endphp
+                                    {{ $submittedAt->diffForHumans() }} <!-- Shows time like "x minutes ago" -->
+                                </p>
+                            </div>
+                        @empty
+                            <p class="text-gray-500">No upcoming submissions</p>
+                        @endforelse
+                    </div>
+            
+                @elseif (Auth::user()->hasRole('student'))
+                    <div class="max-h-56 overflow-y-auto">
+                        @forelse ($submissions as $submit)
+                            <div class="mb-3 p-3 border-b border-gray-200">
+                                <p class="text-gray-600 text-xs mb-1">{{ $submit->title }}</p>
+            
+                                {{-- Instructions truncated to 30 characters --}}
+                                <p class="text-gray-500 text-xs mb-1">
+                                    {{ \Str::limit($submit->instructions, 30, '...') }}
+                                </p>
+                                {{-- Due date logic --}}
+                                @php
+                                $dueDate = \Carbon\Carbon::parse($submit->dueDate);
+                                $now = \Carbon\Carbon::now();
+                                
+                                // Check if the submission is late (due date is in the past)
+                                $isLate = $dueDate->isPast();
+                            @endphp
+
+                            {{-- Time left and due date --}}
+                            <p class="text-gray-500 text-xs flex items-center">
+                                {{-- Display red icon if submission is late --}}
+                                @if ($isLate)
+                                    <i class="fas fa-exclamation-circle text-red-600 mr-2"></i>
+                                    <span class="text-red-600">
+                                        {{ $dueDate->diffForHumans($now, true) }} ago
+                                    </span>
+                                    <span class="text-blue-600 ml-2">
+                                        ({{ $dueDate->format('l, F j, Y') }})
+                                    </span>
+                                @else
+                                    {{-- Display time left --}}
+                                    <i class="fas fa-clock text-green-500 mr-2"></i>
+                                    <span class="text-green-500">
+                                        {{ $dueDate->diffForHumans($now, true) }} left
+                                    </span>
+                                    <span class="text-blue-600 ml-2">
+                                        ({{ $dueDate->format('l, F j, Y') }})
+                                    </span>
+                                @endif
+                            </p>
+
+                              
+
+                        </div>
+                        @empty
+                            <p class="text-gray-500">No upcoming submissions</p>
+                        @endforelse
+                    </div>
+                @endif
             </div>
+            
+            
 
             {{-- Faculty: Create Post Button --}}
             @if (Auth::user()->hasRole('faculty'))
@@ -57,26 +142,70 @@
                 </div>
             @endif
 
-            {{-- Filter Bar --}}
-            <div class="col-span-1 sm:col-span-2 lg:col-span-3 bg-white p-6 rounded-lg shadow-md">
-                <h1 class="text-2xl font-bold flex items-center">
-                    <i class="fas fa-filter text-sm mr-2"></i> <!-- Filter icon -->
-                    <p class="text-lg">Filter</p>
-                    <span class="ml-auto flex items-center">
-                        <i class="fas fa-search text-sm mr-2 cursor-pointer"></i> <!-- Search icon -->
-                        <i class="fas fa-sort text-sm mr-2 cursor-pointer"></i> <!-- Sort icon -->
-                        <i class="fas fa-sliders-h text-sm cursor-pointer"></i> <!-- Settings/Sliders icon -->
-                    </span>
-                </h1>
+            <div class="col-span-1 sm:col-span-2 lg:col-span-3 mb-6">
+                <!-- Filter Form -->
+                <form method="GET" action="{{ request()->url() }}" class="space-y-4">
+                    <!-- Input Group -->
+                    <div class="flex flex-wrap gap-4 items-center">
+                        <!-- Search Input -->
+                        <div class="flex-1 min-w-[200px]">
+                            <input 
+                                type="text" 
+                                name="search" 
+                                placeholder="Search by title" 
+                                value="{{ request('search') }}" 
+                                class="border border-gray-300 rounded-lg p-2 w-full focus:ring focus:ring-blue-300"
+                            >
+                        </div>
+            
+                        <!-- Sort Toggle -->
+                        <div class="flex items-center gap-2">
+                            <input 
+                                type="checkbox" 
+                                id="sort" 
+                                name="sort" 
+                                value="desc" 
+                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-300"
+                                {{ request('sort') === 'desc' ? 'checked' : '' }}
+                            >
+                            <label for="sort" class="text-sm font-medium text-gray-700">Sort Descending</label>
+                        </div>
+            
+                        <!-- Submit Button -->
+                        <div>
+                            <button 
+                                type="submit" 
+                                class="bg-blue-500 text-white p-2 px-4 rounded-lg hover:bg-blue-600 transition"
+                            >
+                                Apply
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
-
-            {{-- Modules --}}
+            
+            <!-- Pagination Links -->
             <div class="col-span-1 sm:col-span-2 lg:col-span-3">
-                @foreach ($modules as $module)
-                    <x-faculty.moduleview :module="$module" :course="$course"/>
-                    <br>
-                @endforeach
+                <div class="mt-4">
+                    {{ $modulesPaginated->appends(request()->query())->links() }}
+                </div>
             </div>
+            
+            <!-- Modules -->
+            <div class="col-span-1 sm:col-span-2 lg:col-span-3">
+                @if($modulesPaginated->isEmpty())
+                    <p class="text-gray-500 text-center">No modules available</p>
+                @else
+                    @foreach ($modulesPaginated as $module)
+                        <x-faculty.moduleview :module="$module" :course="$course"/>
+                        <br>
+                    @endforeach
+                @endif
+            </div>
+            
+            
+            
+
         </div>
 
         {{-- Popup Modal --}}

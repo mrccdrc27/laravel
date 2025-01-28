@@ -30,7 +30,6 @@ return new class extends Migration {
             $table->unsignedBigInteger('userID')->unique(); 
             $table->foreign('userID')->unique()->references('id')->on('users')->onDelete('cascade');
         });
-
     }
 
     /**

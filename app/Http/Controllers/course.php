@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Pagination\LengthAwarePaginator;
 // use app\Http\Controllers\modules;
 
 class course extends Controller
@@ -38,34 +39,71 @@ class course extends Controller
 
     // View Courses
 
-    public function getCourseByCourseID($courseID)
-    {
-        // call instance of modules controller
-        
-        try {
-            // Call the stored procedure and pass the courseID parameter
-            $course = DB::select('EXEC GetCourseByCourseID @CourseID = ?', [$courseID]);
-            $modules = DB::select('EXEC GetModulesByCourse :courseID', ['courseID' => $courseID]);
-            
-            // Check if the course exists
-            if (empty($course)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Course not found',
-                ], 404);
-            }
-            $course = $course[0]; // Now $course is an object
-            return view('dashboard.faculty.courseview',compact('course','modules'));
-            
-        } catch (\Exception $e) {
-            // Handle exceptions
+    public function getCourseByCourseID(Request $request, $courseID)
+{
+    try {
+        // Call the stored procedure and pass the courseID parameter
+        $course = DB::select('EXEC GetCourseByCourseID @CourseID = ?', [$courseID]);
+
+        // Get modules from the stored procedure
+        $modules = DB::select('EXEC GetModulesByCourse :courseID', ['courseID' => $courseID]);
+
+        // Check if the course exists
+        if (empty($course)) {
             return response()->json([
                 'success' => false,
-                'message' => 'An error occurred while fetching the course',
-                'error' => $e->getMessage(),
-            ], 500);
+                'message' => 'Course not found',
+            ], 404);
         }
+
+        $course = $course[0]; // Now $course is an object
+
+        // Convert to a collection for filtering and pagination
+        $modulesCollection = collect($modules);
+
+        // Apply search filter
+        $search = $request->input('search');
+        if ($search) {
+            $modulesCollection = $modulesCollection->filter(function ($module) use ($search) {
+                return stripos($module->title, $search) !== false;
+            });
+        }
+
+        // Apply sorting
+        $sortOrder = $request->input('sort', 'asc'); // Default to ascending
+
+        if ($sortOrder === 'desc') {
+            $modulesCollection = $modulesCollection->sortByDesc('createdAt');
+        } else {
+            $modulesCollection = $modulesCollection->sortBy('createdAt');
+        }
+
+
+        // Paginate
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $perPage = 5; // Define the number of items per page
+        $currentItems = $modulesCollection->slice(($currentPage - 1) * $perPage, $perPage)->all();
+        $modulesPaginated = new LengthAwarePaginator(
+            $currentItems,
+            $modulesCollection->count(),
+            $perPage,
+            $currentPage,
+            ['path' => LengthAwarePaginator::resolveCurrentPath()]
+        );
+
+        // Return the view with paginated and filtered modules
+        return view('dashboard.faculty.courseview', compact('course', 'modulesPaginated', 'search', 'sortOrder'));
+    } catch (\Exception $e) {
+        // Handle exceptions
+        return response()->json([
+            'success' => false,
+            'message' => 'An error occurred while fetching the course',
+            'error' => $e->getMessage(),
+        ], 500);
     }
+}
+
+    
     public function classwork (Request $request){
         // Ensure $courseID is cast to a BIGINT (integer in PHP)
         $courseID = $request->courseID;

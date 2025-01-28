@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\assignment;
+use App\Http\Controllers\certification;
 use App\Http\Controllers\Course;
 
 use App\Http\Controllers\enrollments;
@@ -97,6 +98,7 @@ Route::get('/testing', function () {
     Route::get('/courses/classwork/id/{courseID}', [Course::class, 'classwork'])->name('course.classwork');
     Route::get('/courses/submissions/id/{courseID}', [Course::class, 'submission'])->name('course.submission');
     Route::get('/courses/settings/id/{courseID}', [Course::class, 'settings'])->name('course.settings');
+    Route::get('/courses/certification/id/{courseID}', [certification::class,'certification'])->name('course.certification');
     
 
 // Data routes
@@ -126,6 +128,8 @@ Route::get('/testing', function () {
     Route::post('/enrollment', [enrollments::class, 'getCoursesByStudent'])->name('enrollment');
     Route::post('/enrollment/delete', [enrollments::class, 'delete'])->name('enrollment.delete');
 
+    // certifications - Faculty
+    //Route::post('/certification', [enrollments::class, 'getCoursesByStudent'])->name('certification');
 
     
     
