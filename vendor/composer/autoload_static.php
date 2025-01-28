@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit26d4d942d8ec35fda0ae829f0d062ce1
+class ComposerStaticInit8093c65a0d218ba8b8f7827b2cdb6b55
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -548,20 +548,40 @@ class ComposerStaticInit26d4d942d8ec35fda0ae829f0d062ce1
 
     public static $classMap = array (
         'App\\Http\\Controllers\\Api\\CertificationsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/CertificationsController.php',
+        'App\\Http\\Controllers\\Api\\V1\\CertificationControllerOld' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/V1/CertificationControllerOld.php',
+        'App\\Http\\Controllers\\Api\\V1\\IssuerInformationControllerOld' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/V1/IssuerInformationControllerOld.php',
+        'App\\Http\\Controllers\\CertificationsController' => __DIR__ . '/../..' . '/app/Http/Controllers/CertificationsController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\DashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/DashboardController.php',
         'App\\Http\\Controllers\\DisplaysController' => __DIR__ . '/../..' . '/app/Http/Controllers/DisplaysController.php',
+        'App\\Http\\Controllers\\IssuerInformationController' => __DIR__ . '/../..' . '/app/Http/Controllers/IssuerInformationController.php',
         'App\\Http\\Controllers\\IssuersController' => __DIR__ . '/../..' . '/app/Http/Controllers/IssuersController.php',
         'App\\Http\\Controllers\\IssuersControllerOld' => __DIR__ . '/../..' . '/app/Http/Controllers/IssuersControllerOld.php',
+        'App\\Http\\Controllers\\OrganizationController' => __DIR__ . '/../..' . '/app/Http/Controllers/OrganizationController.php',
         'App\\Http\\Controllers\\OrganizationsController' => __DIR__ . '/../..' . '/app/Http/Controllers/OrganizationsController.php',
         'App\\Http\\Controllers\\PostController' => __DIR__ . '/../..' . '/app/Http/Controllers/PostController.php',
         'App\\Http\\Controllers\\TestsControllers' => __DIR__ . '/../..' . '/app/Http/Controllers/TestsControllers.php',
+        'App\\Http\\Controllers\\UserInfoController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserInfoController.php',
         'App\\Http\\Controllers\\UsersController' => __DIR__ . '/../..' . '/app/Http/Controllers/UsersController.php',
+        'App\\Http\\Controllers\\issuer' => __DIR__ . '/../..' . '/app/Http/Controllers/issuer.php',
+        'App\\Http\\Controllers\\organization' => __DIR__ . '/../..' . '/app/Http/Controllers/organization.php',
+        'App\\Http\\Middleware\\IntegratedSystemsMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/IntegratedSystemsMiddleware.php',
+        'App\\Http\\Middleware\\LMSAuthorizationMiddlewareOld' => __DIR__ . '/../..' . '/app/Http/Middleware/LMSAuthorizationMiddlewareOld.php',
+        'App\\Http\\Requests\\StorecertificationsRequest' => __DIR__ . '/../..' . '/app/Http/Requests/StorecertificationsRequest.php',
+        'App\\Http\\Requests\\StoreorganizationRequest' => __DIR__ . '/../..' . '/app/Http/Requests/StoreorganizationRequest.php',
+        'App\\Http\\Requests\\UpdatecertificationsRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UpdatecertificationsRequest.php',
+        'App\\Http\\Requests\\UpdateorganizationRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UpdateorganizationRequest.php',
         'App\\Models\\Certification' => __DIR__ . '/../..' . '/app/Models/Certification.php',
         'App\\Models\\Course' => __DIR__ . '/../..' . '/app/Models/Course.php',
         'App\\Models\\Issuer' => __DIR__ . '/../..' . '/app/Models/Issuer.php',
         'App\\Models\\Post' => __DIR__ . '/../..' . '/app/Models/Post.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
+        'App\\Models\\certifications' => __DIR__ . '/../..' . '/app/Models/certifications.php',
+        'App\\Models\\issuer_information' => __DIR__ . '/../..' . '/app/Models/issuer_information.php',
+        'App\\Models\\organization' => __DIR__ . '/../..' . '/app/Models/organization.php',
+        'App\\Models\\user_info' => __DIR__ . '/../..' . '/app/Models/user_info.php',
         'App\\Policies\\CertificationsPolicy' => __DIR__ . '/../..' . '/app/Policies/CertificationsPolicy.php',
+        'App\\Policies\\IssuerInformationPolicy' => __DIR__ . '/../..' . '/app/Policies/IssuerInformationPolicy.php',
         'App\\Policies\\IssuerPolicy' => __DIR__ . '/../..' . '/app/Policies/IssuerPolicy.php',
         'App\\Policies\\OrganizationPolicy' => __DIR__ . '/../..' . '/app/Policies/OrganizationPolicy.php',
         'App\\Policies\\PostPolicy' => __DIR__ . '/../..' . '/app/Policies/PostPolicy.php',
@@ -762,17 +782,22 @@ class ComposerStaticInit26d4d942d8ec35fda0ae829f0d062ce1
         'DASPRiD\\Enum\\NullValue' => __DIR__ . '/..' . '/dasprid/enum/src/NullValue.php',
         'Database\\Factories\\CertificationFactory' => __DIR__ . '/../..' . '/database/factories/CertificationFactory.php',
         'Database\\Factories\\CertificationLogFactory' => __DIR__ . '/../..' . '/database/factories/CertificationLogFactory.php',
+        'Database\\Factories\\CertificationsFactory' => __DIR__ . '/../..' . '/database/factories/CertificationsFactory.php',
         'Database\\Factories\\IssuerFactory' => __DIR__ . '/../..' . '/database/factories/IssuerFactory.php',
+        'Database\\Factories\\IssuerInformationFactory' => __DIR__ . '/../..' . '/database/factories/IssuerInformationFactory.php',
         'Database\\Factories\\OrganizationFactory' => __DIR__ . '/../..' . '/database/factories/OrganizationFactory.php',
         'Database\\Factories\\PostFactory' => __DIR__ . '/../..' . '/database/factories/PostFactory.php',
         'Database\\Factories\\UserFactory' => __DIR__ . '/../..' . '/database/factories/UserFactory.php',
+        'Database\\Factories\\UserInfoFactory' => __DIR__ . '/../..' . '/database/factories/UserInfoFactory.php',
         'Database\\Seeders\\CertificationLogSeeder' => __DIR__ . '/../..' . '/database/seeders/CertificationLogSeeder.php',
         'Database\\Seeders\\CertificationSeeder' => __DIR__ . '/../..' . '/database/seeders/CertificationSeeder.php',
         'Database\\Seeders\\CertificationsSeeder' => __DIR__ . '/../..' . '/database/seeders/CertificationsSeeder.php',
         'Database\\Seeders\\DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeders/DatabaseSeeder.php',
+        'Database\\Seeders\\IssuerInformationSeeder' => __DIR__ . '/../..' . '/database/seeders/IssuerInformationSeeder.php',
         'Database\\Seeders\\IssuerSeeder' => __DIR__ . '/../..' . '/database/seeders/IssuerSeeder.php',
         'Database\\Seeders\\OrganizationSeeder' => __DIR__ . '/../..' . '/database/seeders/OrganizationSeeder.php',
         'Database\\Seeders\\PostSeeder' => __DIR__ . '/../..' . '/database/seeders/PostSeeder.php',
+        'Database\\Seeders\\UserInfoSeeder' => __DIR__ . '/../..' . '/database/seeders/UserInfoSeeder.php',
         'Database\\Seeders\\UserSeeder' => __DIR__ . '/../..' . '/database/seeders/UserSeeder.php',
         'DateError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateError.php',
         'DateException' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateException.php',
@@ -6796,9 +6821,9 @@ class ComposerStaticInit26d4d942d8ec35fda0ae829f0d062ce1
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit26d4d942d8ec35fda0ae829f0d062ce1::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit26d4d942d8ec35fda0ae829f0d062ce1::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit26d4d942d8ec35fda0ae829f0d062ce1::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit8093c65a0d218ba8b8f7827b2cdb6b55::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit8093c65a0d218ba8b8f7827b2cdb6b55::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit8093c65a0d218ba8b8f7827b2cdb6b55::$classMap;
 
         }, null, ClassLoader::class);
     }
