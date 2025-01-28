@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Http\Requests\Updateuser_infoRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class UsersController extends Controller
 {
@@ -22,7 +23,7 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         // Validate the request data
-        \Log::info($request->all());
+        Log::info($request->all());
 
         $validatedData = $request->validate([
             'studentID' => 'required|integer',
