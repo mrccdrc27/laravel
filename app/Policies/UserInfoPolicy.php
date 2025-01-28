@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\user_info;
 use Illuminate\Auth\Access\Response;
 
 class UserInfoPolicy
@@ -19,7 +18,7 @@ class UserInfoPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, user_info $userInfo): bool
+    public function view(User $user, User $userInfo): bool
     {
         return false;
     }
@@ -35,7 +34,7 @@ class UserInfoPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, user_info $userInfo): bool
+    public function update(User $user, User $userInfo): bool
     {
         return false;
     }
@@ -43,7 +42,7 @@ class UserInfoPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, user_info $userInfo): bool
+    public function delete(User $user, User $userInfo): bool
     {
         return false;
     }
@@ -51,7 +50,7 @@ class UserInfoPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, user_info $userInfo): bool
+    public function restore(User $user, User $userInfo): bool
     {
         return false;
     }
@@ -59,7 +58,7 @@ class UserInfoPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, user_info $userInfo): bool
+    public function forceDelete(User $user, User $userInfo): bool
     {
         return false;
     }

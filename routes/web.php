@@ -1,24 +1,39 @@
 <?php
 
+use App\Http\Controllers\OrganizationsController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\CertificationController;
-use App\Http\Controllers\display;
-use App\Http\Controllers\Api\V1\IssuerInformationController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Api\CertificationsController;
+use App\Http\Controllers\DisplaysController;
+use App\Http\Controllers\IssuersController;
+use App\Http\Controllers\TestsControllers;
 
-Route::get('home', function () {
-    return view('test');
-})->name('home');
+// Route::get('home', [DisplaysController::class, 'count'])->name('home');
+
+Route::get('certificate', function () {
+    return view('dashboard.certificate');
+})->name('certificate');
+
 Route::get('/', function () {
-    return view('test');
-});
+    return view('dashboard.home');
+})->name('home');
 
+Route::get('/org', [IssuersController::class, 'showOrganizationsWithIssuers'])->name('org');
 
-
-// Public routes
-// Route::get('/', function () {
-//     return redirect()->route('home');
+Route::get('/api/certifications/count', [CertificationsController::class, 'getCertificationCount']);
+// Route::get('home', function () {
+//     return view('dashboard.home');
+// })->name('home');
+// Route::get('home', function () {
+//     return view('dashboard.home');
 // });
+
+Route::get('search/cert', [CertificationsController::class, 'showname']);
+// Example: GET: http://127.0.0.1:8000/search/cert?firstName=Jane&lastName=Lee
+
+
+
+Route::get('cert/details/{id}', [CertificationsController::class, 'getByID'])->name('cert.details');
+
 
 Route::get('about', function () {
     return view('dashboard.about');
@@ -28,41 +43,35 @@ Route::get('search', function () {
     return view('dashboard.search');
 })->name('search');
 
-// Protected routes
-Route::middleware(['auth:sanctum', 'integrated.systems'])->group(function () {
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('dashboard/counts', [DashboardController::class, 'counts'])->name('dashboard.counts');
-    Route::get('dashboard/stats', [DashboardController::class, 'getStats'])->name('dashboard.stats');
+
+Route::get('certificate/user', function () {
+    return view('dashboard.cert.user');
+})->name('certificate/user');
+
+Route::get('certificate/issuer', function () {
+    return view('dashboard.cert.issuer');
+})->name('certificate/issuer');
+
+Route::get('certificate/org', function () {
+    return view('dashboard.cert.org');
+})->name('certificate/org');
+
+Route::get('certificate/create', function () {
+    return view('dashboard.cert.create');
+})->name('certificate/create');
+
+// routes/web.php or routes/api.php
+Route::get('organizations/create-test', [OrganizationsController::class, 'createTestOrganization']);
+
+
+Route::prefix('test')->group(function () {
+    // Test route for certificate not found error
+    Route::get('certificate-not-found', [TestsControllers::class, 'testCertificateNotFound'])->name('test.certificate_not_found');
+
+    // Test route for a generic error
+    Route::get('generic-error', [TestsControllers::class, 'testGenericError'])->name('test.generic_error');
+    // http://127.0.0.1:8000/test/generic-error
 });
-
-    // Certificate routes
-    Route::prefix('certificate')->name('certificate.')->group(function () {
-        Route::get('/', function () {
-            return view('dashboard.certificate');
-        });
-
-        Route::get('/user', function () {
-            return view('dashboard.cert.user');
-        })->name('user');
-
-        Route::get('/issuer', function () {
-            return view('dashboard.cert.issuer');
-        })->name('issuer');
-
-        Route::get('/org', function () {
-            return view('dashboard.cert.org');
-        })->name('org');
-
-        Route::get('/create', function () {
-            return view('dashboard.cert.create');
-        })->name('create');
-    });
-
-// Fallback route
-Route::fallback(function () {
-    return view('errors.404');
-});
-
 
 // // Certification Routes
 // Route::prefix('certifications')->name('certifications.')->group(function () {
@@ -83,5 +92,5 @@ Route::fallback(function () {
 
 
 Route::fallback(function () {
-    return view('errors.404');
+    return view('errors.generic_error');
 });

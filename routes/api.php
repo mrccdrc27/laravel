@@ -1,40 +1,32 @@
 <?php
 
 
-use App\Http\Controllers\CertificationsController;
-use App\Http\Controllers\IssuerInformationController;
-use App\Http\Controllers\OrganizationController;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\UserInfoController;
-use App\Models\user_info;
+use App\Http\Controllers\Api\CertificationsController;
+use App\Http\Controllers\IssuersController;
+use App\Http\Controllers\OrganizationsController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
-
-// Route::get('/', function(){
-// return 'API';
-// });
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
 
 
-// Public routes
+// GET http://127.0.0.1:8000/api/cert/verify/CERT-001
+Route::get('/cert/verify/{code}', [CertificationsController::class, 'verifyCertificate']);
+
+Route::apiResource('user_info', UsersController::class);
+Route::apiResource('issuer', IssuersController::class);
+Route::apiResource('org', OrganizationsController::class);
+Route::apiResource('cert', CertificationsController::class);
+
 Route::get('search/cert', [CertificationsController::class, 'showname']);
+// Example: GET: http://127.0.0.1:8000/api/search/cert?firstName=Jane&lastName=Lee
 
-// Protected routes
-Route::middleware(['auth:sanctum', 'integrated.systems'])->group(function () {
-    // User routes
-    Route::apiResource('user_info', UserInfoController::class);
-    
-    // Certification System routes
-    Route::prefix('certification')->group(function () {
-        Route::apiResource('issuer', IssuerInformationController::class);
-        Route::apiResource('org', OrganizationController::class);
-        Route::apiResource('cert', CertificationsController::class);
-    });
-});
+Route::get('cert/details/{id}', [CertificationsController::class, 'getByID'])->name('cert.details');
 
+Route::get('certification-count', [CertificationsController::class, 'getCertificationCount'])->name('getCertificationCount');
 
 // use App\Http\Controllers\Api\V1\CertificationController;
 // use App\Http\Controllers\Api\V1\IssuerInformationController;
