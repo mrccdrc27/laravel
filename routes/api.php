@@ -24,7 +24,7 @@ Route::apiResource('org', OrganizationsController::class);
 
 
 
-// Example: GET: http://127.0.0.1:8000/search/cert?firstName=Jane&lastName=Lee Returns JSON response
+// Example: GET: http://127.0.0.1:8000/api/search/cert?firstName=Jane Returns JSON response
 Route::get('search/cert', [CertificationsController::class, 'showname']);
 
 Route::get('/user/{id}/certificates', [CertificationsController::class, 'getUserCertificates']);

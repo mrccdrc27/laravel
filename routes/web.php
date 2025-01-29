@@ -36,7 +36,7 @@ Route::get('certifications/count', [CertificationsController::class, 'getCertifi
 
 Route::view('/certifications/create', 'components.create')->name('certifications.create');
 
-
+// Example GET: http://127.0.0.1:8000/certificates/search?query=Jane
 Route::get('/certificates/search', [CertificationsController::class, 'search'])->name('certificates.search');
 
 
