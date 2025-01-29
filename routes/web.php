@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\OrganizationsController;
+use App\Http\Controllers\WebCertificateController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CertificationsController;
 use App\Http\Controllers\DisplaysController;
@@ -9,28 +10,29 @@ use App\Http\Controllers\TestsControllers;
 
 // Route::get('home', [DisplaysController::class, 'count'])->name('home');
 
-Route::get('certificate', function () {
-    return view('dashboard.certificate');
-})->name('certificate');
+Route::get('api-doc', function () {
+    return view('dashboard.api-doc');
+})->name('api-doc');
 
 Route::get('/', function () {
     return view('dashboard.home');
 })->name('home');
 
+
+// For web certificates (made in the site)
+Route::post('/web-certificates', [WebCertificateController::class, 'store'])->name('web.certificates.store');
+Route::get('/web-certificates/{id}', [WebCertificateController::class, 'show'])->name('web.certificates.show');
+Route::get('/web-check/{id}', [WebCertificateController::class, 'getWebCertificationCount'])->name('web.certificates.count');
+
 Route::get('/org', [IssuersController::class, 'showOrganizationsWithIssuers'])->name('org');
 
-Route::get('/api/certifications/count', [CertificationsController::class, 'getCertificationCount']);
-// Route::get('home', function () {
-//     return view('dashboard.home');
-// })->name('home');
-// Route::get('home', function () {
-//     return view('dashboard.home');
-// });
+Route::get('certifications/count', [CertificationsController::class, 'getCertificationCount']);
 
-Route::get('search/cert', [CertificationsController::class, 'showname']);
 // Example: GET: http://127.0.0.1:8000/search/cert?firstName=Jane&lastName=Lee
+Route::get('search/cert', [CertificationsController::class, 'showname']);
 
 
+Route::view('/certifications/create', 'components.create')->name('certifications.create');
 
 Route::get('cert/details/{id}', [CertificationsController::class, 'getByID'])->name('cert.details');
 
@@ -56,9 +58,7 @@ Route::get('certificate/org', function () {
     return view('dashboard.cert.org');
 })->name('certificate/org');
 
-Route::get('certificate/create', function () {
-    return view('dashboard.cert.create');
-})->name('certificate/create');
+
 
 // routes/web.php or routes/api.php
 Route::get('organizations/create-test', [OrganizationsController::class, 'createTestOrganization']);

@@ -114,7 +114,6 @@
     </div>
 
     <!-- Certification Counter Section -->
-    <!-- Certification Counter Section -->
     <div class="container py-5">
         <div class="row justify-content-center">
             <!-- First Column: Certifications Created -->
@@ -125,15 +124,14 @@
                     </h3>
                     <div id="certification-counter-container" class="counter-container">
                         <div class="counter-box">
-                            
                             <div id="count-value" class="display-4 fw-bold text-dark">0</div>
                             <h4>Certifications created</h4>
                             <p class="lead text-muted">...and counting</p>
-                            
                         </div>
                     </div>
                 </div>
             </div>
+
             <!-- Second Column: Signed Certifications -->
             <div class="col-md-6 col-lg-4 text-center mb-4">
                 <div class="bg-light p-4 rounded-4 shadow-sm d-flex flex-column justify-content-between">
@@ -143,7 +141,19 @@
                     <div class="counter-box">
                         <div id="signed-certificates-counter" class="display-4 fw-bold text-dark">0</div>
                         <h4>Certifications officially signed</h4>
-                           
+                    </div>
+                </div>
+            </div>
+
+            <!-- Third Column: Web Certifications -->
+            <div class="col-md-6 col-lg-4 text-center mb-4">
+                <div class="bg-light p-4 rounded-4 shadow-sm d-flex flex-column justify-content-between">
+                    <h3 class="mb-3 text-primary">
+                        <i class="bi bi-cloud-check me-2"></i>Web Certifications
+                    </h3>
+                    <div class="counter-box">
+                        <div id="web-certifications-counter" class="display-4 fw-bold text-dark">0</div>
+                        <h4>Web Certifications issued</h4>
                     </div>
                 </div>
             </div>
@@ -179,8 +189,11 @@
                     </li>
                 </ul>
                 <!-- Button for Certification Process -->
-                <a class="btn btn-primary btn-lg mt-4" href="{{ route('certificate') }}">
-                    Certification Process
+                <a class="btn btn-primary btn-lg mt-4" href="{{ route('certifications.create') }}">
+                    Create Certificate
+                </a>
+                <a class="btn btn-primary btn-lg mt-4" href="{{ route('api-doc') }}">
+                    API certifications
                 </a>
             </div>
         </div>
@@ -224,15 +237,20 @@
     function updateCertificationCount() {
         const countElement = document.getElementById('count-value');
         const signedElement = document.getElementById('signed-certificates-counter');
+        const webElement = document.getElementById('web-certifications-counter');
         const currentCount = parseInt(countElement.textContent.replace(/,/g, '')) || 0;
         const currentSignedCount = parseInt(signedElement.textContent.replace(/,/g, '')) || 0;
+        const currentWebCount = parseInt(webElement.textContent.replace(/,/g, '')) || 0;
 
         fetch("{{ route('getCertificationCount') }}")
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    const targetCount = data.count;
+                    const targetCount = parseInt(data.count) + parseInt(data
+                    .webCertificationsCount); // Adding both counts as numbers
                     const targetSignedCount = data.signedCount;
+                    const targetWebCount = data.webCertificationsCount;
+
 
                     // Animate if changes
                     if (targetCount !== currentCount) {
@@ -242,6 +260,10 @@
                     if (targetSignedCount !== currentSignedCount) {
                         animateCounter(signedElement, currentSignedCount, targetSignedCount,
                             2000); // 2-second animation
+                    }
+
+                    if (targetWebCount !== currentWebCount) {
+                        animateCounter(webElement, currentWebCount, targetWebCount, 2000); // 2-second animation
                     }
                 }
             })
@@ -254,5 +276,5 @@
     window.addEventListener('load', updateCertificationCount);
 
     // Periodic updates
-    setInterval(updateCertificationCount, 10000); // 20 seconds interval
+    setInterval(updateCertificationCount, 10000); // 10 seconds interval
 </script>
