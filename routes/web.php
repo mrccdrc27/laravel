@@ -26,15 +26,13 @@ Route::get('/cert/details/{id}', [CertificationsController::class, 'getByID'])->
 // For web certificates (made in the site)
 Route::post('/web-certificates', [WebCertificateController::class, 'store'])->name('web.certificates.store');
 Route::get('/web-certificates/{id}', [WebCertificateController::class, 'show'])->name('web.certificates.show');
-Route::get('/web-check/{id}', [WebCertificateController::class, 'getWebCertificationCount'])->name('web.certificates.count');
+// Route::get('/web-check/{id}', [WebCertificateController::class, 'getWebCertificationCount'])->name('web.certificates.count');
 
 Route::get('/org', [IssuersController::class, 'showOrganizationsWithIssuers'])->name('org');
 
 Route::get('certifications/count', [CertificationsController::class, 'getCertificationCount']);
 
-// Certificate Verification
-Route::get('/certificates/verify/{certificationNumber}', [CertificationsController::class, 'verifyCertificate'])
-     ->name('certificate.verify');
+
 
 Route::view('/certifications/create', 'components.create')->name('certifications.create');
 

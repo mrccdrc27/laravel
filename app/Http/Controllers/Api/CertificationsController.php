@@ -428,7 +428,7 @@ class CertificationsController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'certificationNumber' => 'sometimes|string|max:100',
+            // 'certificationNumber' => 'sometimes|string|max:100',
             'courseID' => [
                 'sometimes',
                 'integer',
@@ -624,6 +624,72 @@ class CertificationsController extends Controller
                 'query' => $query,
                 'error' => 'An error occurred while searching for certificates.'
             ]);
+        }
+    }
+    public function getUserCertificates($userId)
+    {
+        try {
+            // Check if user exists and is a student
+            $user = DB::connection('sqlsrv_lms')
+                ->table('users')
+                ->where('id', $userId)
+                ->where('role', 'student')
+                ->first();
+
+            if (!$user) {
+                return response()->json(['error' => 'User not found or not a student'], 404);
+            }
+
+
+            // Fetch certificates using the stored procedure
+            $certificates = DB::connection('sqlsrv')
+                ->select('EXEC GetUserCertificates ?', [$userId]);
+
+            // Handle empty results
+            if (empty($certificates)) {
+                return response()->json([
+                    'success' => true,
+                    'data' => [],
+                    'message' => 'No certificates found for this user.'
+                ]);
+            }
+
+            // Fetch user info (first name, middle name, last name)
+            $userInfo = DB::connection('sqlsrv_lms')
+                ->table('users_info')
+                ->where('userID', $userId)
+                ->first();
+
+            if (!$userInfo) {
+                return response()->json(['error' => 'User information not found'], 404);
+            }
+
+            foreach ($certificates as &$certificate) {
+
+                $certificate->certificateLink = url("/cert/details/{$certificate->certificationID}");
+            }
+            // Combine user's full name (first, middle, last) into one field
+            $userFullName = $userInfo->firstName;
+            if ($userInfo->middleName) {
+                $userFullName .= ' ' . $userInfo->middleName;
+            }
+            $userFullName .= ' ' . $userInfo->lastName;
+
+            return response()->json([
+                'success' => true,
+                'data' => $certificates,
+                'userFullName' => $userFullName,
+            ]);
+        } catch (\Exception $e) {
+
+            Log::error("Error in getUserCertificates: " . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'userId' => $userId
+            ]);
+
+            return response()->json([
+                'error' => 'Failed to fetch certificates. Check logs for details.'
+            ], 500);
         }
     }
 }
