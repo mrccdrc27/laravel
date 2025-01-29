@@ -34,8 +34,8 @@
                 {{-- FACULTY NAVBAR --}}
                 @elseif (Auth::user()->hasRole('faculty'))
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
-                        {{ __('Review') }}
+                    <x-nav-link href="{{ route('submissions') }}" :active="request()->routeIs('submissions')">
+                        {{ __('Submissions') }}
                     </x-nav-link>
                 </div>
 
@@ -62,7 +62,19 @@
                     </x-nav-link>
                 </div>
                 @endif
-            </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link href="{{ route('certifications') }}" :active="request()->routeIs('certifications')">
+                        {{ __('Certifications') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link href="{{ route('reports') }}" :active="request()->routeIs('reports')">
+                        {{ __('Reports') }}
+                    </x-nav-link>
+                </div>
+            </div> 
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <!-- Teams Dropdown -->

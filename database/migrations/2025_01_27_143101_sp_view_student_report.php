@@ -31,7 +31,34 @@ return new class extends Migration
         WHERE E.studentID = @studentID;
         END;
         ");
+        
+        DB::unprepared('DROP PROCEDURE IF EXISTS GetStudentDetailsByCourse');
+        DB::unprepared("
+            CREATE PROCEDURE GetStudentDetailsByCourse
+                @CourseID INT
+            AS
+            BEGIN
+                SELECT 
+                    S.id,
+                    UI.firstName,
+                    UI.middleName,
+                    UI.lastName,
+                    UI.birthDate,
+                    UI.sex,
+                    UI.nationality,
+                    UI.birthPlace,
+                    S.email
+                FROM users AS S
+                INNER JOIN users_info AS UI ON S.id = UI.userID
+                INNER JOIN enrollment AS E ON S.id = E.studentID
+                WHERE E.courseID = @CourseID;
+            END;
+        ");
+
+        
     }
+
+
 
     /**
      * Reverse the migrations.

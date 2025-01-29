@@ -101,12 +101,18 @@ Route::middleware([
 // View routes
 
     // Route for individual courses by course ID 
-    // Faculty View
+    // View
     Route::get('/courses/id/{courseID}', [Course::class, 'getCourseByCourseID'])->name('course.course');
     Route::get('/courses/classwork/id/{courseID}', [Course::class, 'classwork'])->name('course.classwork');
     Route::get('/courses/submissions/id/{courseID}', [Course::class, 'submission'])->name('course.submission');
     Route::get('/courses/settings/id/{courseID}', [Course::class, 'settings'])->name('course.settings');
     Route::get('/courses/certification/id/{courseID}', [certification::class,'certification'])->name('course.certification');
+
+    // New
+    Route::get('/certification', function () {return view('dashboard.certification');})->name('certifications');
+    Route::get('/reports', function () {return view('dashboard.reports');})->name('reports');
+    Route::get('/submissions', function () {return view('dashboard.submissions');})->name('submissions');
+    
     
 
 // Data routes

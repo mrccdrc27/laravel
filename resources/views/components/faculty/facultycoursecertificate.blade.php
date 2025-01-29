@@ -8,7 +8,7 @@
             </div>         
             {{-- Content goes here --}}
             <div class="col-span-8 relative">
-                <x-faculty.certification.createcertificate/>
+                <x-faculty.certification.createcertificate :course="$course"/>
             </div>
             
         </div>
