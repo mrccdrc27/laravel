@@ -1,3 +1,5 @@
+@extends('layout.certnav')
+@section('content')
 <!DOCTYPE html>
 <html lang="en">
 
@@ -159,7 +161,7 @@
         .signature-image {
             position: absolute;
             right: 1rem;
-            bottom: 6.6rem;
+            bottom: 5.4rem;
         }
 
         .issuer-signature-line {
@@ -169,10 +171,11 @@
         }
 
         .issuer-signature {
-            font-size: 1rem;
-            font-weight: bold;
+            font-size: 1.2rem;
+            font-style: italic;
+            font-family: Georgia;
             color: #000;
-            margin-top: 2px;
+            margin-top: 12px;
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
@@ -190,14 +193,15 @@
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
+            margin-top: 20px;
             top: 20px;
             width: 80px;
             height: 80px;
         }
 
         .issuer-logo img {
-            width: 100%;
-            height: 100%;
+            width: 150%;
+            height: 120%;
             margin-top: 0;
             outline: #2c0808 solid 2px;
             outline-style: outset;
@@ -248,20 +252,25 @@
 </head>
 
 <body>
-
+    
     <div class="main-container">
         <!-- Left Certificate Section -->
         <div class="certificate-container">
             <div class="certificate-title">CERTIFICATE OF COMPLETION</div>
             <div class="certificate-subtitle">This certificate is presented to</div>
-            <div class="recipient-name">{{ $certificateData->userInfo->firstName }}
-                {{ $certificateData->userInfo->lastName }}</div>
-            <div class="recipient-line"></div>
+            <div class="recipient-name">
+                @if($certificateData->userInfo->firstName || $certificateData->userInfo->lastName)
+                    {{ $certificateData->userInfo->firstName }}
+                    {{ $certificateData->userInfo->lastName }}
+                @else
+                    _________________
+                @endif
+            </div>
             <div class="certificate-description">
                 @if ($certificateData->issuer->firstName || $certificateData->issuer->lastName)
                     This signed certificate is awarded to recognize the completion of {{ $certificateData->courseName }}
                 @else
-                    This certificate is awarded to recognize the completion of {{ $certificateData->courseName }}
+                    Awarded in recognition for the completion of {{ $certificateData->courseName }}
                 @endif
             </div>
             <div class="footer-section">
@@ -293,7 +302,7 @@
 
                             @if ($certificateData->issuer->organization->logo_base64)
                                 <div class="issuer-logo">
-                                    <img class="issuer-logo" style="max-width: 80px; max-height: 80px;"
+                                    <img class="issuer-logo"
                                         src="data:image/png;base64,{{ $certificateData->issuer->organization->logo_base64 }}"
                                         alt="Organization Logo" />
                                 </div>
@@ -309,7 +318,6 @@
             </div>
         </div>
 
-        <!-- Right Additional Content -->
         <div class="certificate-right">
             <div class="certificate-content">
                 <!-- Certification Info -->
@@ -317,15 +325,12 @@
                     <div class="section-title">Certification Information</div>
                     <div class="info-row">
                         <span class="info-label">Title:</span>
-                        <span class="info-value">Certificate Title Placeholder</span>
+                        <span class="info-value">{{ $certificateData->title }}</span>
                     </div>
                     <div class="info-row">
                         <span class="info-label">Certification Number:</span>
                         <span class="info-value">{{ $certificateData->certificationNumber }}</span>
                     </div>
-                    {{-- <div class="certificate-description-2">
-                        This certificate is awarded to recognize the completion of {{ $certificateData->courseName }}
-                    </div> --}}
                     <div class="info-row">
                         <span class="info-label">Course:</span>
                         <span class="info-value">{{ $certificateData->courseName }}</span>
@@ -338,46 +343,46 @@
                         <span class="info-label">Issued At:</span>
                         <span class="info-value">{{ $certificateData->issuedAt }}</span>
                     </div>
+                    @if($certificateData->expiryDate)
                     <div class="info-row">
                         <span class="info-label">Expiry Date:</span>
                         <span class="info-value">{{ $certificateData->expiryDate }}</span>
                     </div>
+                    @endif
                 </div>
 
-                <!-- Student Info -->
+                <!-- Student Info - Only show if user information exists -->
+                @if($certificateData->userInfo->firstName || $certificateData->userInfo->lastName || $certificateData->userInfo->email)
                 <div class="certificate-column">
                     <div class="section-title">Student Information</div>
+                    @if($certificateData->userInfo->firstName || $certificateData->userInfo->lastName)
                     <div class="info-row">
                         <span class="info-label">Name:</span>
-                        <span
-                            class="info-value">{{ $certificateData->userInfo->firstName }}{{ $certificateData->userInfo->middleName }}
-                            {{ $certificateData->userInfo->lastName }}</span>
+                        <span class="info-value">
+                            {{ $certificateData->userInfo->firstName }}
+                            {{ $certificateData->userInfo->middleName }}
+                            {{ $certificateData->userInfo->lastName }}
+                        </span>
                     </div>
-                    {{-- <div class="info-row">
-                        <span class="info-label">Student ID:</span>
-                        <span class="info-value">{{ $certificateData->userInfo->studentID }}</span>
-                    </div> --}}
+                    @endif
+                    @if($certificateData->userInfo->email)
                     <div class="info-row">
                         <span class="info-label">Email:</span>
                         <span class="info-value">{{ $certificateData->userInfo->email }}</span>
                     </div>
-                    {{-- <div class="info-row">
-                        <span class="info-label">Nationality:</span>
-                        <span class="info-value">Filipino</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Birth Date:</span>
-                        <span class="info-value">January 1, 2000</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Sex:</span>
-                        <span class="info-value">Male</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Birth Place:</span>
-                        <span class="info-value">Manila, Philippines</span>
-                    </div> --}}
+                    @endif
                 </div>
-
+                @else
+                <div class="certificate-column">
+                    <div class="section-title">Certificate Recipient</div>
+                    <div class="info-row">
+                           Name: <br><br>
+                           
+                           Email:
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
+    </div>
+</body>

@@ -191,6 +191,84 @@ return new class extends Migration
                 WHERE certificationID = @certificationID;
             END;
         ');
+
+        DB::unprepared(
+            '
+            CREATE OR ALTER PROCEDURE sp_certification_get_by_id
+            @certificationID BIGINT
+        AS
+        BEGIN
+            SELECT 
+                c.*, 
+                i.firstName as issuerFirstName, 
+                i.lastName as issuerLastName,
+                i.issuerSignature as issuerSignatureBase64,
+                o.name as organizationName,
+                o.logo as organizationLogoBase64
+            FROM certifications c
+            LEFT JOIN issuer_information i ON c.issuerID = i.issuerID
+            LEFT JOIN organization o ON i.organizationID = o.organizationID
+            WHERE c.certificationID = @certificationID
+        END
+         '
+        );
+
+
+
+        DB::unprepared('
+            CREATE OR ALTER PROCEDURE sp_certification_get
+        @certificationID BIGINT
+    AS
+    BEGIN
+        SET NOCOUNT ON;
+        
+        BEGIN TRY
+            -- Check if the certification exists
+            IF NOT EXISTS (SELECT 1 FROM certifications WHERE certificationID = @certificationID)
+            BEGIN
+                -- Return an empty result set to indicate not found
+                SELECT NULL as certificationID;
+                RETURN;
+            END
+
+            -- Return certification details with issuer and organization information
+            SELECT 
+                c.certificationID,
+                c.certificationNumber,
+                c.courseID,
+                c.title,
+                c.description,
+                c.issuedAt,
+                c.expiryDate,
+                c.userID,
+                c.created_at,
+                c.updated_at,
+                -- Issuer information
+                i.firstName AS issuerFirstName,
+                i.lastName AS issuerLastName,
+                i.issuerID AS issuerID, 
+                -- Organization information
+                o.name AS organizationName
+            FROM 
+                certifications c
+                LEFT JOIN issuer_information i ON c.issuerID = i.issuerID
+                LEFT JOIN organization o ON i.organizationID = o.organizationID
+            WHERE 
+                c.certificationID = @certificationID;
+
+        END TRY
+        BEGIN CATCH
+            -- Return error information
+            SELECT 
+                ERROR_NUMBER() AS ErrorNumber,
+                ERROR_SEVERITY() AS ErrorSeverity,
+                ERROR_STATE() AS ErrorState,
+                ERROR_PROCEDURE() AS ErrorProcedure,
+                ERROR_LINE() AS ErrorLine,
+                ERROR_MESSAGE() AS ErrorMessage;
+        END CATCH
+    END;
+    ');
     }
 
     /**
@@ -210,5 +288,7 @@ return new class extends Migration
         DB::unprepared('DROP PROCEDURE IF EXISTS sp_certification_get_signed_count');
         DB::unprepared('DROP PROCEDURE IF EXISTS sp_certification_insert');
         DB::unprepared('DROP PROCEDURE IF EXISTS sp_certification_update');
+        DB::unprepared('DROP PROCEDURE IF EXISTS sp_certification_get_by_id');
+        DB::unprepared('DROP PROCEDURE IF EXISTS sp_certification_get');
     }
 };

@@ -168,20 +168,23 @@ class CertificationsController extends Controller
                     'userID' => $validatedData['userID'] ?? null
                 ]);
 
-                // The result should contain the certificationID
+                // Generates link to view the certificate
                 $certificationId = $result[0]->certificationID;
 
                 DB::commit();
 
-                // Generates link to view the certificate
-                $certificateLink = route('cert.details', ['id' => $certificationId]);
+                if ($request->wantsJson()) {
+                    return response()->json([
+                        'success' => true,
+                        'certificationID' => $certificationId,
+                        'certificationNumber' => $validatedData['certificationNumber'],
+                        'viewCertificateLink' => route('cert.details', ['id' => $certificationId])
+                    ], 201);
+                }
 
-                return response()->json([
-                    'success' => true,
-                    'certificationID' => $certificationId,
-                    'certificationNumber' => $validatedData['certificationNumber'],
-                    'viewCertificateLink' => $certificateLink
-                ], 201);
+                return redirect()
+                    ->route('cert.details', ['id' => $certificationId])
+                    ->with('success', 'Certificate created successfully.');
             } catch (\Exception $e) {
                 DB::rollBack();
 
@@ -229,7 +232,7 @@ class CertificationsController extends Controller
     public function show(Request $request, $id)
     {
         try {
-            $certificate = DB::select('EXEC sp_certification_get_by_id ?', [$id]);
+            $certificate = DB::select('EXEC sp_certification_get ?', [$id]);
 
             if (empty($certificate)) {
                 return response()->json([
@@ -308,7 +311,7 @@ class CertificationsController extends Controller
                 $userInfo ? (array) $userInfo[0] : []
             );
 
-            // Transform issuer details
+            // Transform issuer details with direct binary to base64 conversion
             $certificateData->issuer = (object) [
                 'firstName' => $certificateData->issuerFirstName ?? '',
                 'lastName' => $certificateData->issuerLastName ?? '',
@@ -322,6 +325,14 @@ class CertificationsController extends Controller
                         : null,
                 ],
             ];
+
+            // Add debug logging
+            Log::debug('Binary data info', [
+                'has_signature' => !empty($certificateData->issuerSignatureBase64),
+                'has_logo' => !empty($certificateData->organizationLogoBase64),
+                'signature_length' => !empty($certificateData->issuerSignatureBase64) ? strlen($certificateData->issuerSignatureBase64) : 0,
+                'logo_length' => !empty($certificateData->organizationLogoBase64) ? strlen($certificateData->organizationLogoBase64) : 0,
+            ]);
 
             // Fetch course information
             $course = DB::connection('sqlsrv_lms')
@@ -496,7 +507,7 @@ class CertificationsController extends Controller
     public function getCertificationCount()
     {
         try {
-            // Call the procedure to get the total count
+            // Call the procedure to get the total count of certifications (non-web)
             $result = DB::connection('sqlsrv')
                 ->select('EXEC sp_certification_get_count');
             $totalCertifications = $result[0]->TotalCertifications ?? 0;
@@ -506,10 +517,14 @@ class CertificationsController extends Controller
                 ->select('EXEC sp_certification_get_signed_count');
             $signedCertifications = $signedResult[0]->TotalSignedCertificates ?? 0;
 
+            // Get the web certifications count
+            $webCertificationsCount = DB::table('web_certifications')->count();
+
             return response()->json([
                 'success' => true,
-                'count' => $totalCertifications,
-                'signedCount' => $signedCertifications
+                'count' => $totalCertifications, // Only non-web certifications
+                'signedCount' => $signedCertifications,
+                'webCertificationsCount' => $webCertificationsCount
             ]);
         } catch (\Exception $e) {
             Log::error('Error fetching certification count: ' . $e->getMessage());
@@ -517,6 +532,7 @@ class CertificationsController extends Controller
                 'success' => false,
                 'count' => 0,
                 'signedCount' => 0,
+                'webCertificationsCount' => 0,
                 'error' => $e->getMessage()
             ], 500);
         }
