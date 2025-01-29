@@ -11,8 +11,54 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        DB::unprepared('DROP PROCEDURE IF EXISTS GetAssignmentStatusForStudent');
+        DB::unprepared("
+        CREATE PROCEDURE GetAssignmentStatusForStudent
+        @studentID INT
+        AS
+        BEGIN
+        SELECT 
+        C.title,
+        A.dueDate,
+            CASE
+            WHEN S.submissionID IS NULL THEN 'Pending'
+            ELSE 'Submitted'
+            END AS assignment_status
+        FROM enrollment E
+        INNER JOIN courses C ON E.courseID = C.courseID
+        INNER JOIN assignments A ON C.courseID = A.courseID
+        LEFT JOIN submissions S ON A.assignmentID = S.assignmentID AND E.studentID = S.studentID
+        WHERE E.studentID = @studentID;
+        END;
+        ");
+        
+        DB::unprepared('DROP PROCEDURE IF EXISTS GetStudentDetailsByCourse');
+        DB::unprepared("
+            CREATE PROCEDURE GetStudentDetailsByCourse
+                @CourseID INT
+            AS
+            BEGIN
+                SELECT 
+                    S.id,
+                    UI.firstName,
+                    UI.middleName,
+                    UI.lastName,
+                    UI.birthDate,
+                    UI.sex,
+                    UI.nationality,
+                    UI.birthPlace,
+                    S.email
+                FROM users AS S
+                INNER JOIN users_info AS UI ON S.id = UI.userID
+                INNER JOIN enrollment AS E ON S.id = E.studentID
+                WHERE E.courseID = @CourseID;
+            END;
+        ");
+
+        
     }
+
+
 
     /**
      * Reverse the migrations.
