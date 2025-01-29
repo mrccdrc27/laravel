@@ -20,7 +20,39 @@ Route::get('cert/verify/{code}', [CertificationsController::class, 'verifyCertif
 Route::apiResource('user_info', UsersController::class);
 Route::apiResource('issuer', IssuersController::class);
 Route::apiResource('org', OrganizationsController::class);
+
+
+
+
+// Example: GET: http://127.0.0.1:8000/search/cert?firstName=Jane&lastName=Lee Returns JSON response
+Route::get('search/cert', [CertificationsController::class, 'showname']);
+
 Route::apiResource('cert', CertificationsController::class);
+// For retrieving certification details (show()):
+/* GET http://127.0.0.1:8000/api/cert/{id}
+Response: 
+{
+  "success": true,
+  "data": {
+    "certificationID": "1",
+    "certificationNumber": "CERT-001",
+    "courseID": "1",
+    "title": "Introduction to Computer Science Certification",
+    "description": "Certification for completing Introduction to Computer Science course.",
+    "issuedAt": "2025-01-27 21:12:04.740",
+    "expiryDate": "2026-01-27",
+    "userID": "3",
+    "created_at": "2025-01-27 21:12:04.740",
+    "updated_at": "2025-01-27 21:12:04.740",
+    "issuerFirstName": "Burt",
+    "issuerLastName": "Goodman",
+    "issuerID": "1",
+    "organizationName": "Lumon Industries"
+  },
+  "certificateLink": "http://127.0.0.1:8000/cert/details/1"
+}
+*/
+
 
 Route::get('search/cert', [CertificationsController::class, 'showname']);
 // Example: GET: http://127.0.0.1:8000/api/search/cert?firstName=Jane&lastName=Lee

@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Models\Certification;
 use App\Http\Requests\StoreCertificationRequest;
 use App\Http\Requests\UpdateCertificationRequest;
+use App\Models\WebCertificate;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 
 class CertificationsController extends Controller
 {
@@ -554,16 +556,12 @@ class CertificationsController extends Controller
             $certificate = $certificate[0];
 
             // Fetch user and course data from LMS-System
-            $userInfo = DB::connection('sqlsrv_lms')->table('users_info')
-                ->join('users', 'users.id', '=', 'users_info.userID')
-                ->where('users_info.userID', $certificate->userID)
-                ->select(
-                    'users_info.firstName',
-                    'users_info.middleName',
-                    'users_info.lastName',
-                    'users.email'
-                )
+            $userInfo = DB::connection('sqlsrv_lms')
+                ->table('users_info')
+                ->where('userID', $certificate->userID)
                 ->first();
+
+            $certificate->user = $userInfo;
 
             $courseInfo = DB::connection('sqlsrv_lms')->table('courses')
                 ->where('courseID', $certificate->courseID)
@@ -585,6 +583,47 @@ class CertificationsController extends Controller
                 'message' => 'An error occurred while verifying the certificate.',
                 'error' => $e->getMessage(),
             ], 500);
+        }
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        if (!$query) {
+            return view('search_certificates', ['certificates' => collect()]);
+        }
+
+        try {
+            // Use the stored procedure for searching regular certificates
+            $certificates = collect(DB::select('EXEC sp_certification_search ?', [$query]));
+
+            // Add web certificates search if needed
+            if (Schema::hasTable('web_certifications')) {
+                $webCertificates = WebCertificate::with(['issuer'])
+                    ->where(function ($q) use ($query) {
+                        $q->where('certificationNumber', 'LIKE', "%{$query}%")
+                            ->orWhere('title', 'LIKE', "%{$query}%")
+                            ->orWhere('name', 'LIKE', "%{$query}%")
+                            ->orWhere('courseName', 'LIKE', "%{$query}%");
+                    })
+                    ->get()
+                    ->map(function ($cert) {
+                        $cert->type = 'web';
+                        return $cert;
+                    });
+
+                $certificates = $certificates->concat($webCertificates);
+            }
+
+            return view('search_certificates', compact('certificates', 'query'));
+        } catch (\Exception $e) {
+            Log::error('Certificate search error: ' . $e->getMessage());
+            return view('search_certificates', [
+                'certificates' => collect(),
+                'query' => $query,
+                'error' => 'An error occurred while searching for certificates.'
+            ]);
         }
     }
 }
