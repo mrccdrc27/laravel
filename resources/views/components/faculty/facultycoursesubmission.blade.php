@@ -7,6 +7,7 @@
                 <x-faculty.coursenavbar :course="$course"/>
             </div>         
             {{-- Content goes here --}}
+            
             @php
             use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -26,12 +27,13 @@
                     'query' => request()->query() // Retain query string parameters
                 ]
             );
-        @endphp
+            @endphp
 
         <div class="col-span-8 relative">
             <div>
                 {{ $paginatedAssignments->links() }}
             </div>
+
             <div>
                 @forelse ($paginatedAssignments as $assign)
                     <x-faculty.views.submittedassignments :assignment="$assign"/>

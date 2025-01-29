@@ -90,6 +90,14 @@ Route::get('/testing', function () {
 
 
 
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+
+    
 // View routes
 
     // Route for individual courses by course ID 
@@ -130,6 +138,7 @@ Route::get('/testing', function () {
 
     // certifications - Faculty
     //Route::post('/certification', [enrollments::class, 'getCoursesByStudent'])->name('certification');
+});
 
     
     

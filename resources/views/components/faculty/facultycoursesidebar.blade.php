@@ -6,13 +6,14 @@ use Illuminate\Support\Facades\DB;
 if (Auth::user()->hasRole('student')) {
     $studentID = Auth::user()->id;
     $courses = DB::select('EXEC GetStudentCourses @student_id = ?', [$studentID]);
-} elseif (Auth::user()->hasRole('faculty')) {
+}
+elseif (Auth::user()->hasRole('faculty')) {
     $facultyID = Auth::user()->id;
     $courses = DB::select('EXEC GetCoursesByFaculty ?', [$facultyID]);
 }
 ?>
 
-<div class="w-full md:w-64 course bg-gray-900 text-white py-4 space-y-6 min-h-screen shadow-right">
+<div class="w-full md:w-64 text-white py-4 space-y-6 min-h-screen shadow-right">
     <div class="flex justify-center items-center py-4">
         @if (Auth::user()->hasRole('faculty'))
             <button class="off text-white px-6 py-3 rounded-md hover:bg-red-600 transition duration-200 ease-in-out"
@@ -26,7 +27,7 @@ if (Auth::user()->hasRole('student')) {
             </button>
         @endif
     </div>
-    <div class="w-full md:w-64 course bg-gray-900 text-white py-4 space-y-6 min-h-screen shadow-right">
+    <div class="w-full md:w-64 text-white py-4 space-y-6 min-h-screen">
         <ul id="course-list" class="space-y-4 px-2">
             <?php foreach ($courses as $course): ?>
                 <?php 
