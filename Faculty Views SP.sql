@@ -62,7 +62,8 @@ BEGIN
     SELECT 
         S.submissionID, 
         S.assignmentID, 
-        A.title, 
+        A.title,
+        S.submittedAt,
         CONCAT(UI.firstName, ' ', COALESCE(UI.middleName, ''), ' ', UI.lastName) AS FullName
     FROM submissions AS S
     INNER JOIN assignments AS A ON S.assignmentID = A.assignmentID
@@ -74,6 +75,8 @@ BEGIN
     AND C.courseID = @CourseID
     ORDER BY S.submittedAt ASC;
 END;
+
+GetUngradedSubmissionsByCourse 2
 
 go
 
@@ -137,4 +140,6 @@ WHERE A.dueDate > S.submittedAt and C.courseID = 2
 
 -- update assignment pass/fail
 -- assignment has passing grade
+
+GetStudentSubmissions 1
 

@@ -33,19 +33,6 @@
             <div>
                 {{ $paginatedAssignments->links() }}
             </div>
-            <div>
-                @forelse ($paginatedAssignments as $assign)
-                    <x-faculty.views.submittedassignments :assignment="$assign"/>
-                    <br>
-                @empty
-                    @if (Auth::user()->hasRole('faculty'))
-                        <p class="text-center text-gray-600 font-semibold">No student submissions</p>
-                    @elseif (Auth::user()->hasRole('student'))
-                        <p class="text-center text-gray-600 font-semibold">No pending classwork!</p>
-                    @endif
-                @endforelse
-
-            </div>
 
             <div>
                 @forelse ($paginatedAssignments as $assign)
