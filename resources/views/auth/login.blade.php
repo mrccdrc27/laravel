@@ -1,9 +1,8 @@
 <x-guest-layout>
     <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
+        <x-slot name="logo"> 
+            <x-application-logo/>
         </x-slot>
-
         <div class="text-center mb-6">
             <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">{{ __('Login') }}</h1>
             <p class="text-sm text-gray-600 dark:text-gray-400">Hello, Welcome back! Please log in to your account.</p>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin;
 use App\Http\Controllers\assignment;
 use App\Http\Controllers\certification;
 use App\Http\Controllers\Course;
@@ -13,6 +14,18 @@ use App\Http\Controllers\submissions;
 use App\Models\Enrollment;
 use App\Models\Submission;
 use Illuminate\Support\Facades\Route;
+
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
+
+Route::get('/download-pdf', function () {
+    $enrollments = DB::select('EXEC GetEnrollmentStatsForFaculty @facultyID = ?', [auth()->id()]);
+
+    $pdf = Pdf::loadView('pdf.enrollment-stats', compact('enrollments'));
+
+    return $pdf->download('enrollment_stats.pdf');
+})->name('download.pdf');
+
 
 // Public routes
 Route::get('/', function () {
@@ -100,6 +113,14 @@ Route::middleware([
     
 // View routes
 
+    // Admin
+    Route::get('/accounts',  function () { return view('dashboard.admin.Accounts');})
+    ->name('accounts');
+    Route::get('admin/announcements',  function () { return view('dashboard.admin.Announcement');})
+    ->name('admin.announcements');
+    Route::get('admin/reports',  function () { return view('dashboard.admin.Reports');})
+    ->name('admin.reports');
+
     // Route for individual courses by course ID 
     // View
     Route::get('/courses/id/{courseID}', [Course::class, 'getCourseByCourseID'])->name('course.course');
@@ -112,6 +133,13 @@ Route::middleware([
     Route::get('/certification', function () {return view('dashboard.certification');})->name('certifications');
     Route::get('/reports', function () {return view('dashboard.reports');})->name('reports');
     Route::get('/submissions', function () {return view('dashboard.submissions');})->name('submissions');
+
+    Route::get('/download-pdf', function () {
+        $enrollments = DB::select('EXEC GetEnrollmentStatsForFaculty @facultyID = ?', [auth()->id()]);
+    
+        $pdf = Pdf::loadView('pdf.enrollment-stats', compact('enrollments'));
+        return $pdf->download('enrollment_stats.pdf');
+    })->name('download.pdf');
     
     
 
