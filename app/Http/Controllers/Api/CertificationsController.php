@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Models\Certification;
 use App\Http\Requests\StoreCertificationRequest;
 use App\Http\Requests\UpdateCertificationRequest;
+use App\Models\WebCertificate;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 
 class CertificationsController extends Controller
 {
@@ -277,22 +279,7 @@ class CertificationsController extends Controller
             $userInfo = null;
             if ($certificateData->userID) {
                 $userInfo = DB::connection('sqlsrv_lms')
-                    ->select('
-                SELECT 
-                    ui.userInfoID,
-                    ui.firstName,
-                    ui.middleName,
-                    ui.lastName,
-                    ui.birthDate,
-                    ui.sex,
-                    ui.nationality,
-                    ui.birthPlace,
-                    u.email,
-                    u.id as studentID
-                FROM users_info ui
-                JOIN users u ON ui.userID = u.id
-                WHERE u.id = ? AND u.role = ?
-            ', [$certificateData->userID, 'student']);
+                    ->select('EXEC GetUserInfo ?, ?', [$certificateData->userID, 'student']);
             }
 
             // Transform user info
@@ -425,64 +412,106 @@ class CertificationsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'certificationNumber' => 'sometimes|string|max:100',
-            'courseID' => [
-                'sometimes',
-                'integer',
-                function ($attribute, $value, $fail) {
-                    try {
-                        $courseExists = DB::connection('sqlsrv_lms')
-                            ->select('SELECT 1 FROM Courses WHERE courseID = ?', [$value]);
+        try {
+            // Check if the request has any input
+            if (!$request->all()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No update data provided.',
+                ], 400);
+            }
 
-                        if (empty($courseExists)) {
-                            $fail("The selected course does not exist.");
-                        }
-                    } catch (\Exception $e) {
-                        $fail("Error validating course: " . $e->getMessage());
-                    }
-                }
-            ],
-            'title' => 'sometimes|string|max:100',
-            'description' => 'sometimes|string',
-            'issuedAt' => 'sometimes|date',
-            'expiryDate' => 'sometimes|nullable|date',
-            'issuerID' => 'sometimes|nullable|exists:issuer_information,issuerID',
-            'userID' => [
-                'sometimes',
-                'nullable',
-                function ($attribute, $value, $fail) {
-                    if ($value !== null) {
+            // Validate the input fields
+            $validated = $request->validate([
+                'courseID' => [
+                    'sometimes',
+                    'integer',
+                    function ($attribute, $value, $fail) {
                         try {
-                            // Check if user exists and is a student in the LMS system
-                            $userExists = DB::connection('sqlsrv_lms')
-                                ->select('SELECT 1 FROM users WHERE id = ? AND role = ?', [$value, 'student']);
+                            $courseExists = DB::connection('sqlsrv_lms')
+                                ->select('SELECT 1 FROM Courses WHERE courseID = ?', [$value]);
 
-                            if (empty($userExists)) {
-                                $fail("The selected user is not a valid student.");
+                            if (empty($courseExists)) {
+                                $fail("The selected course does not exist.");
                             }
                         } catch (\Exception $e) {
-                            $fail("Error validating user: " . $e->getMessage());
+                            $fail("Error validating course: " . $e->getMessage());
                         }
                     }
-                }
-            ],
-        ]);
+                ],
+                'title' => 'sometimes|string|max:100',
+                'description' => 'sometimes|string',
+                'issuedAt' => 'sometimes|date',
+                'expiryDate' => 'sometimes|nullable|date',
+                'issuerID' => 'sometimes|nullable|exists:issuer_information,issuerID',
+                'userID' => [
+                    'sometimes',
+                    'nullable',
+                    function ($attribute, $value, $fail) {
+                        if ($value !== null) {
+                            try {
+                                $userExists = DB::connection('sqlsrv_lms')
+                                    ->select('SELECT 1 FROM users WHERE id = ? AND role = ?', [$value, 'student']);
 
-        DB::statement('EXEC sp_certification_update ?, ?, ?, ?, ?, ?, ?, ?, ?', [
-            $id,
-            $validated['certificationNumber'] ?? null,
-            $validated['courseID'] ?? null,
-            $validated['title'] ?? null,
-            $validated['description'] ?? null,
-            $validated['issuedAt'] ?? null,
-            $validated['expiryDate'] ?? null,
-            $validated['issuerID'] ?? null,
-            $validated['userID'] ?? null,
-        ]);
+                                if (empty($userExists)) {
+                                    $fail("The selected user is not a valid student.");
+                                }
+                            } catch (\Exception $e) {
+                                $fail("Error validating user: " . $e->getMessage());
+                            }
+                        }
+                    }
+                ],
+            ]);
 
-        return response()->json(['message' => 'Certification updated successfully.'], 200);
+
+            if (empty($validated)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No valid fields provided for update.',
+                ], 400);
+            }
+
+            // Attempt to execute the stored procedure
+            try {
+                DB::statement('EXEC sp_certification_update ?, ?, ?, ?, ?, ?, ?, ?, ?', [
+                    $id,
+                    $validated['certificationNumber'] ?? null,
+                    $validated['courseID'] ?? null,
+                    $validated['title'] ?? null,
+                    $validated['description'] ?? null,
+                    $validated['issuedAt'] ?? null,
+                    $validated['expiryDate'] ?? null,
+                    $validated['issuerID'] ?? null,
+                    $validated['userID'] ?? null,
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Database error while updating certification.',
+                    'error' => $e->getMessage(),
+                ], 500);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Certification updated successfully.',
+            ], 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed.',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An unexpected error occurred.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -554,16 +583,12 @@ class CertificationsController extends Controller
             $certificate = $certificate[0];
 
             // Fetch user and course data from LMS-System
-            $userInfo = DB::connection('sqlsrv_lms')->table('users_info')
-                ->join('users', 'users.id', '=', 'users_info.userID')
-                ->where('users_info.userID', $certificate->userID)
-                ->select(
-                    'users_info.firstName',
-                    'users_info.middleName',
-                    'users_info.lastName',
-                    'users.email'
-                )
+            $userInfo = DB::connection('sqlsrv_lms')
+                ->table('users_info')
+                ->where('userID', $certificate->userID)
                 ->first();
+
+            $certificate->user = $userInfo;
 
             $courseInfo = DB::connection('sqlsrv_lms')->table('courses')
                 ->where('courseID', $certificate->courseID)
@@ -584,6 +609,113 @@ class CertificationsController extends Controller
                 'success' => false,
                 'message' => 'An error occurred while verifying the certificate.',
                 'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        if (!$query) {
+            return view('search_certificates', ['certificates' => collect()]);
+        }
+
+        try {
+            // Use the stored procedure for searching regular certificates
+            $certificates = collect(DB::select('EXEC sp_certification_search ?', [$query]));
+
+            // Add web certificates search if needed
+            if (Schema::hasTable('web_certifications')) {
+                $webCertificates = WebCertificate::with(['issuer'])
+                    ->where(function ($q) use ($query) {
+                        $q->where('certificationNumber', 'LIKE', "%{$query}%")
+                            ->orWhere('title', 'LIKE', "%{$query}%")
+                            ->orWhere('name', 'LIKE', "%{$query}%")
+                            ->orWhere('courseName', 'LIKE', "%{$query}%");
+                    })
+                    ->get()
+                    ->map(function ($cert) {
+                        $cert->type = 'web';
+                        return $cert;
+                    });
+
+                $certificates = $certificates->concat($webCertificates);
+            }
+
+            return view('search_certificates', compact('certificates', 'query'));
+        } catch (\Exception $e) {
+            Log::error('Certificate search error: ' . $e->getMessage());
+            return view('search_certificates', [
+                'certificates' => collect(),
+                'query' => $query,
+                'error' => 'An error occurred while searching for certificates.'
+            ]);
+        }
+    }
+    public function getUserCertificates($userId)
+    {
+        try {
+            // Check if user exists and is a student
+            $user = DB::connection('sqlsrv_lms')
+                ->table('users')
+                ->where('id', $userId)
+                ->where('role', 'student')
+                ->first();
+
+            if (!$user) {
+                return response()->json(['error' => 'User not found or not a student'], 404);
+            }
+
+
+            // Fetch certificates using the stored procedure
+            $certificates = DB::connection('sqlsrv')
+                ->select('EXEC GetUserCertificates ?', [$userId]);
+
+            // Handle empty results
+            if (empty($certificates)) {
+                return response()->json([
+                    'success' => true,
+                    'data' => [],
+                    'message' => 'No certificates found for this user.'
+                ]);
+            }
+
+            // Fetch user info (first name, middle name, last name)
+            $userInfo = DB::connection('sqlsrv_lms')
+                ->table('users_info')
+                ->where('userID', $userId)
+                ->first();
+
+            if (!$userInfo) {
+                return response()->json(['error' => 'User information not found'], 404);
+            }
+
+            foreach ($certificates as &$certificate) {
+
+                $certificate->certificateLink = url("/cert/details/{$certificate->certificationID}");
+            }
+            // Combine user's full name (first, middle, last) into one field
+            $userFullName = $userInfo->firstName;
+            if ($userInfo->middleName) {
+                $userFullName .= ' ' . $userInfo->middleName;
+            }
+            $userFullName .= ' ' . $userInfo->lastName;
+
+            return response()->json([
+                'success' => true,
+                'data' => $certificates,
+                'userFullName' => $userFullName,
+            ]);
+        } catch (\Exception $e) {
+
+            Log::error("Error in getUserCertificates: " . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'userId' => $userId
+            ]);
+
+            return response()->json([
+                'error' => 'Failed to fetch certificates. Check logs for details.'
             ], 500);
         }
     }

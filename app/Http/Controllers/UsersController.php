@@ -68,24 +68,24 @@ class UsersController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user_info)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    // public function update(Updateuser_infoRequest $request, User  $user_info)
+    // public function show(User $user_info)
     // {
     //     //
     // }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(User $user_info)
-    {
-        //
-    }
+    // /**
+    //  * Update the specified resource in storage.
+    //  */
+    // // public function update(Updateuser_infoRequest $request, User  $user_info)
+    // // {
+    // //     //
+    // // }
+
+    // /**
+    //  * Remove the specified resource from storage.
+    //  */
+    // public function destroy(User $user_info)
+    // {
+    //     //
+    // }
 }

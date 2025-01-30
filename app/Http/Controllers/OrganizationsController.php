@@ -86,6 +86,7 @@ class OrganizationsController extends Controller
                 'created_at' => $organization->created_at,
                 'updated_at' => $organization->updated_at,
             ];
+            
         }
 
         // Return the organizations data as JSON
@@ -100,45 +101,52 @@ class OrganizationsController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate the incoming request
-        $request->validate([
-            'OrganizationName' => 'required|string|max:50',
-            'Logo' => 'required|file|mimes:png,jpg,jpeg|max:5120',
-        ]);
-
-        // Convert Logo to binary
-        $logo = file_get_contents($request->file('Logo')->getRealPath());
-        $logoData = unpack("H*hex", $logo); // Unpack to hexadecimal string
-        $logoData = '0x' . $logoData['hex']; // Prefix with '0x' to indicate binary data
-
-        // Create the new organization record
-        $organization = Organization::create([
-            'name' => $request->OrganizationName,
-            'logo' => DB::raw("CONVERT(VARBINARY(MAX), {$logoData})"), // Store logo as binary in database
-        ]);
-
-        // Return response with success message and the created organization
-        return response()->json(['success' => true, 'data' => $organization], 201);
+        try {
+            // Validate the incoming request
+            $request->validate([
+                'OrganizationName' => 'required|string|max:50',
+                'Logo' => 'required|file|mimes:png,jpg,jpeg|max:5120',
+            ]);
+        
+            // Convert Logo to binary
+            $logo = file_get_contents($request->file('Logo')->getRealPath());
+            $logoData = unpack("H*hex", $logo); // Unpack to hexadecimal string
+            $logoData = '0x' . $logoData['hex']; // Prefix with '0x' to indicate binary data
+        
+            // Create the new organization record
+            $organization = Organization::create([
+                'name' => $request->OrganizationName,
+                'logo' => DB::raw("CONVERT(VARBINARY(MAX), {$logoData})"), // Store logo as binary in database
+            ]);
+        
+            // Return response with success message and the created organization
+            return response()->json(['success' => true, 'data' => $organization], 201);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['success' => false, 'message' => 'Validation failed', 'errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'An error occurred', 'error' => $e->getMessage()], 500);
+        }
+        
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Organization $organization)
-    {
-        //
-    }
+    // public function show(Organization $organization)
+    // {
+    //     //
+    // }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    // /**
+    //  * Update the specified resource in storage.
+    //  */
 
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Organization $organization)
-    {
-        //
-    }
+    // /**
+    //  * Remove the specified resource from storage.
+    //  */
+    // public function destroy(Organization $organization)
+    // {
+    //     //
+    // }
 }

@@ -113,17 +113,16 @@ return [
 
         'sqlsrv_lms' => [
             'driver' => 'sqlsrv',
-            'url' => env('LMS_DB_URL'),
-            'host' => env('LMS_DB_HOST', '127.0.0.1'),
+            // 'url' => env('LMS_DB_URL'),
+            'host' => env('LMS_DB_HOST', ''),
             'port' => env('LMS_DB_PORT', '1433'),
-            'database' => env('LMS_DB_DATABASE', 'LMS-System'),
+            'database' => env('LMS_DB_DATABASE', 'LMS'),
             'username' => env('LMS_DB_USERNAME', ''),
             'password' => env('LMS_DB_PASSWORD', ''),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
             'trust_server_certificate' => true,
-
         ],
 
     

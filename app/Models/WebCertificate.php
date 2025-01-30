@@ -3,6 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Course;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Issuer;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class WebCertificate extends Model
 {
@@ -23,6 +28,9 @@ class WebCertificate extends Model
         'name',
     ];
 
-
+    public function issuer()
+    {
+        return $this->belongsTo(Issuer::class, 'issuerID');
+    }
 
 }

@@ -19,22 +19,25 @@ Route::get('/', function () {
 })->name('home');
 
 
+// Retrieves certificate details as a view
+// Example: GET http://127.0.0.1:8000/cert/details/1
+Route::get('/cert/details/{id}', [CertificationsController::class, 'getByID'])->name('cert.details');
+
 // For web certificates (made in the site)
 Route::post('/web-certificates', [WebCertificateController::class, 'store'])->name('web.certificates.store');
 Route::get('/web-certificates/{id}', [WebCertificateController::class, 'show'])->name('web.certificates.show');
-Route::get('/web-check/{id}', [WebCertificateController::class, 'getWebCertificationCount'])->name('web.certificates.count');
+// Route::get('/web-check/{id}', [WebCertificateController::class, 'getWebCertificationCount'])->name('web.certificates.count');
 
 Route::get('/org', [IssuersController::class, 'showOrganizationsWithIssuers'])->name('org');
 
 Route::get('certifications/count', [CertificationsController::class, 'getCertificationCount']);
 
-// Example: GET: http://127.0.0.1:8000/search/cert?firstName=Jane&lastName=Lee
-Route::get('search/cert', [CertificationsController::class, 'showname']);
 
 
 Route::view('/certifications/create', 'components.create')->name('certifications.create');
 
-Route::get('cert/details/{id}', [CertificationsController::class, 'getByID'])->name('cert.details');
+// Example GET: http://127.0.0.1:8000/certificates/search?query=Jane
+Route::get('/certificates/search', [CertificationsController::class, 'search'])->name('certificates.search');
 
 
 Route::get('about', function () {

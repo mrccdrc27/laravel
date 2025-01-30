@@ -108,8 +108,8 @@
                             href="{{ route('about') }}">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('search') ? 'active' : '' }}"
-                            href="{{ route('search') }}">Search</a>
+                        <a class="nav-link {{ request()->routeIs('certificates.search') ? 'active' : '' }}"
+                            href="{{ route('certificates.search') }}">Search</a>
                     </li>
                 </ul>
             </div>
