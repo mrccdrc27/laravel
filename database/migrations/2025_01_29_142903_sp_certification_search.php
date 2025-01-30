@@ -40,9 +40,9 @@ return new class extends Migration
             CONCAT(ui.firstName, ' ', ui.middleName, ' ', ui.lastName) as fullName
         FROM 
             certifications c
-            LEFT JOIN [LMS-System].dbo.users_info ui ON c.userID = ui.userID
-            LEFT JOIN [LMS-System].dbo.users u ON ui.userID = u.id
-            LEFT JOIN [LMS-System].dbo.courses co ON c.courseID = co.courseID
+            LEFT JOIN users_info ui ON c.userID = ui.userID
+            LEFT JOIN users u ON ui.userID = u.id
+            LEFT JOIN courses co ON c.courseID = co.courseID
         WHERE 
             c.certificationNumber LIKE '%' + @searchQuery + '%'
             OR c.title LIKE '%' + @searchQuery + '%'

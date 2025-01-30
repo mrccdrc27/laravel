@@ -77,31 +77,38 @@ class IssuersControllerOld extends Controller
             'organizationID' => $request->organizationID,
         ]);
 
+        $return = ([
+            'firstName' => $request->firstName,
+            'middleName' => $request->middleName,
+            'lastName' => $request->lastName,
+            'organizationID' => $request->organizationID,
+        ]);
+
         // Return response with success message and the created issuer information
-        return response()->json(['success' => true, 'data' => $issuerInformation], 201);
+        return response()->json(['success' => true, 'data' => $return], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Issuer $issuer_information)
-    {
-        //
-    }
+    // public function show(Issuer $issuer_information)
+    // {
+    //     //
+    // }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Updateissuer_informationRequest $request, Issuer $issuer_information)
-    {
-        //
-    }
+    // public function update(Updateissuer_informationRequest $request, Issuer $issuer_information)
+    // {
+    //     //
+    // }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Issuer $issuer_information)
-    {
-        //
-    }
+    // /**
+    //  * Remove the specified resource from storage.
+    //  */
+    // public function destroy(Issuer $issuer_information)
+    // {
+    //     //
+    // }
 }

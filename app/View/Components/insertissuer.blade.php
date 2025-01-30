@@ -1,5 +1,5 @@
 <div>
-    <form method="POST" action="http://127.0.0.1:8000/api/issuer/{id}" enctype="multipart/form-data">
+    <form method="POST" action="{{ url()->current() }}/api/issuer/{id}" enctype="multipart/form-data">
         @method('PUT')
         @csrf
         

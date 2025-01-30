@@ -20,7 +20,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: #224DA8;
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='30' viewBox='0 0 1000 120'%3E%3Cg fill='none' stroke='%23E6E6E6' stroke-width='0.9' %3E%3Cpath d='M-500 75c0 0 125-30 250-30S0 75 0 75s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 45c0 0 125-30 250-30S0 45 0 45s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 105c0 0 125-30 250-30S0 105 0 105s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 15c0 0 125-30 250-30S0 15 0 15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500-15c0 0 125-30 250-30S0-15 0-15s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3Cpath d='M-500 135c0 0 125-30 250-30S0 135 0 135s125 30 250 30s250-30 250-30s125-30 250-30s250 30 250 30s125 30 250 30s250-30 250-30'/%3E%3C/g%3E%3C/svg%3E");
+            
         }
 
         .hero-text {
@@ -40,7 +42,10 @@
         }
 
         .code-block {
-            background-color: #2c3e50;
+            background-color: #000000;
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 800 800'%3E%3Cg fill-opacity='0.19'%3E%3Ccircle fill='%23000000' cx='400' cy='400' r='600'/%3E%3Ccircle fill='%23001428' cx='400' cy='400' r='500'/%3E%3Ccircle fill='%23001c31' cx='400' cy='400' r='400'/%3E%3Ccircle fill='%2300253b' cx='400' cy='400' r='300'/%3E%3Ccircle fill='%23002e45' cx='400' cy='400' r='200'/%3E%3Ccircle fill='%230B384F' cx='400' cy='400' r='100'/%3E%3C/g%3E%3C/svg%3E");
+background-attachment: fixed;
+background-size: cover;
             color: #ecf0f1;
             padding: 1.5rem;
             border-radius: 0.5rem;
@@ -125,7 +130,7 @@
         "issuerID": "1",
         "organizationName": "Lumon Industries"
     },
-    "certificateLink": "http://127.0.0.1:8000/cert/details/1"
+    "certificateLink": "{{ url()->current() }}/cert/details/1"
 }';
             @endphp
 

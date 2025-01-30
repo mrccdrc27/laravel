@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\Api\CertificationsController;
 use App\Http\Controllers\IssuersController;
+use App\Http\Controllers\IssuersControllerOld;
 use App\Http\Controllers\OrganizationsController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
@@ -19,6 +20,7 @@ Route::get('cert/verify/{code}', [CertificationsController::class, 'verifyCertif
 
 Route::apiResource('user_info', UsersController::class);
 Route::apiResource('issuer', IssuersController::class);
+Route::apiResource('issuerV2', IssuersControllerOld::class);
 Route::apiResource('org', OrganizationsController::class);
 
 

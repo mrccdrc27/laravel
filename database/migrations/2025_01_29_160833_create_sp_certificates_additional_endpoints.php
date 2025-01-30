@@ -22,7 +22,7 @@ return new class extends Migration
                 lms_courses.title AS courseTitle,
                 lms_courses.description AS courseDescription
             FROM certifications c
-            INNER JOIN [LMS-System].[dbo].[courses] lms_courses 
+            INNER JOIN courses lms_courses 
                 ON c.courseID = lms_courses.courseID
             WHERE c.userID = @UserId;
         END;

@@ -60,29 +60,29 @@ class IssuersController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store() {}
+    // public function store() {}
 
-    /**
-     * Display the specified resource.
-     */
-    public function show()
-    {
-        //
-    }
+    // /**
+    //  * Display the specified resource.
+    //  */
+    // public function show()
+    // {
+    //     //
+    // }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update()
-    {
-        //
-    }
+    // /**
+    //  * Update the specified resource in storage.
+    //  */
+    // public function update()
+    // {
+    //     //
+    // }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy()
-    {
-        //
-    }
+    // /**
+    //  * Remove the specified resource from storage.
+    //  */
+    // public function destroy()
+    // {
+    //     //
+    // }
 }
