@@ -279,22 +279,7 @@ class CertificationsController extends Controller
             $userInfo = null;
             if ($certificateData->userID) {
                 $userInfo = DB::connection('sqlsrv_lms')
-                    ->select('
-                SELECT 
-                    ui.userInfoID,
-                    ui.firstName,
-                    ui.middleName,
-                    ui.lastName,
-                    ui.birthDate,
-                    ui.sex,
-                    ui.nationality,
-                    ui.birthPlace,
-                    u.email,
-                    u.id as studentID
-                FROM users_info ui
-                JOIN users u ON ui.userID = u.id
-                WHERE u.id = ? AND u.role = ?
-            ', [$certificateData->userID, 'student']);
+                    ->select('EXEC GetUserInfo ?, ?', [$certificateData->userID, 'student']);
             }
 
             // Transform user info
@@ -479,7 +464,7 @@ class CertificationsController extends Controller
                 ],
             ]);
 
-            
+
             if (empty($validated)) {
                 return response()->json([
                     'success' => false,
@@ -734,5 +719,4 @@ class CertificationsController extends Controller
             ], 500);
         }
     }
-    
 }
