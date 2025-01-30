@@ -1,40 +1,65 @@
-<php?
+<?php
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 ?>
-
 @php
-      $assignments = DB::select('EXEC GetAssignmentStatusForStudent ?', [auth()->user()->id]);
+    $assignments = DB::select('EXEC GetAssignmentStatusForStudent ?', [auth()->user()->id]);
+    $announcements = DB::select('EXEC GetActiveAnnouncements');
+    $submissions = DB::select('EXEC GetIncompleteAssignments ?', [auth()->user()->id]);
+    $statistics = DB::select('EXEC GetLMSStatistics');
+    $perPage = 1;
+    $currentPage = request()->input('page', 1); // Default to page 1 if not provided
+    $offset = ($currentPage - 1) * $perPage;
+
+    // Paginate manually
+    $totalAnnouncements = count($announcements); // Get the total count of announcements
+    $paginatedAnnouncements = array_slice($announcements, $offset, $perPage); // Slice the announcements array for pagination
+
+    // Create a paginator instance manually
+    $announcementsPaginator = new LengthAwarePaginator(
+        $paginatedAnnouncements, // Data for current page
+        $totalAnnouncements,     // Total number of announcements
+        $perPage,               // Items per page
+        $currentPage,           // Current page
+        ['path' => request()->url(), 'query' => request()->query()] // Keep current query parameters in pagination links
+    );
 @endphp
 
 <x-app-layout>
   <x-slot name="header">
-    <h2 class="font-semibold text-xl text-blue-600 dark:text-blue-400 leading-tight">
-        {{ __('faculty dashboard') }}
+    <h2 class="font-semibold text-xl text-red-800 dark:text-blue-400 leading-tight">
+        {{ __('Faculty dashboard') }}
     </h2>        
 </x-slot>
 
 <div>
   <div class="container mx-auto p-8 space-y-8">
-
-    <!-- 1st Row: University Announcements -->
     <div class="bg-white p-6 rounded-lg shadow-lg">
         <h2 class="text-3xl font-semibold text-gray-800 mb-4">University Announcements</h2>
+        <div class="mt-4">
+            {{ $announcementsPaginator->links() }}
+        </div>
         <ul class="space-y-4">
-            <li class="text-gray-700">
-                <p class="font-semibold">Semester Break Dates Updated</p>
-                <p class="text-sm text-gray-500">The university has revised the semester break dates. Please take note of the new schedule.</p>
-                <span class="text-sm text-gray-400">1 hour ago</span>
-            </li>
-            <li class="text-gray-700">
-                <p class="font-semibold">New Policy for Online Exams</p>
-                <p class="text-sm text-gray-500">All online exams will now require ID verification. Read the full guidelines on the website.</p>
-                <span class="text-sm text-gray-400">2 days ago</span>
-            </li>
-            <li class="text-gray-700">
-                <p class="font-semibold">Guest Lecture on AI</p>
-                <p class="text-sm text-gray-500">Don't miss the guest lecture by Dr. Smith on Artificial Intelligence next Friday.</p>
-                <span class="text-sm text-gray-400">3 days ago</span>
-            </li>
+            @foreach($announcementsPaginator as $announcement)
+                <li class="flex items-start space-x-6 bg-white">
+                    <!-- Image Section -->
+                    <div class="w-1/3 h-48 rounded-lg flex-shrink-0 overflow-hidden">
+                        {{-- Determine the SVG based on the last digit of the announcement's ID --}}
+                        @php
+                            $imageIndex = $announcement->id % 10; // Get the last digit of the ID
+                        @endphp
+                        <img src="{{ asset('images/' . $imageIndex . '.svg') }}" alt="Announcement Image" class="w-full h-full object-contain"/>
+                    </div>
+
+                    <!-- Text Section -->
+                    <div class="w-2/3 flex flex-col justify-between">
+                        <p class="font-semibold text-xl text-gray-800">{{ $announcement->title }}</p>
+                        <p class="text-sm text-gray-500 truncate">{{ $announcement->body }}</p>
+                        <span class="text-xs text-gray-400 mt-2">{{ \Carbon\Carbon::parse($announcement->date_posted)->diffForHumans() }}</span>
+                    </div>
+                </li>
+            @endforeach
+
         </ul>
     </div>
 
@@ -43,21 +68,49 @@ use Illuminate\Http\Request;
 
         <!-- 2nd Row, 1st Column: Submissions Card -->
         <div class="bg-white p-6 rounded-lg shadow-lg">
-            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Recent Submissions</h2>
-            <ul class="space-y-4">
-                <li class="flex justify-between text-gray-700">
-                    <span>Math 101 - Assignment 1</span>
-                    <span class="text-green-600">Submitted: 2 hours ago</span>
-                </li>
-                <li class="flex justify-between text-gray-700">
-                    <span>History 202 - Essay</span>
-                    <span class="text-yellow-600">Submitted: 1 day ago</span>
-                </li>
-                <li class="flex justify-between text-gray-700">
-                    <span>Physics 303 - Lab Report</span>
-                    <span class="text-red-600">Late: 3 days ago</span>
-                </li>
-            </ul>
+            <div class="max-w-4xl mx-auto p-4">
+                <!-- Header with Total Submissions Count -->
+                <h2 class="text-3xl font-semibold text-gray-800 mb-4">Recent Submissions</h2>
+                {{-- <p class="text-sm text-gray-600 mb-4">Total submissions: {{ count($submissions) }}</p> --}}
+            
+                <!-- Scrollable container for the list -->
+                <div class="max-h-96 overflow-y-auto">
+                    <ul class="space-y-4">
+                        @foreach ($submissions as $submission)
+                            <li class="flex justify-between items-center p-4 border rounded-lg 
+                                {{ $submission->submissionStatus == 'Not Submitted' ? 'bg-gray-100' : '' }}
+                                {{ $submission->submissionStatus == 'On Time' ? 'bg-green-100' : '' }}
+                                {{ $submission->submissionStatus == 'Late' ? 'bg-red-100' : '' }}">
+                
+                                <div class="flex flex-col">
+                                    <!-- Full Name -->
+                                    <span class="font-semibold text-lg">{{ $submission->fullName }}</span>
+                
+                                    <!-- Course Title -->
+                                    <span class="text-sm text-gray-600">{{ $submission->courseTitle }}</span>
+                
+                                    <!-- Assignment Title -->
+                                    <span class="text-sm text-gray-600">{{ $submission->assignmentTitle }}</span>
+                                </div>
+                
+                                <div class="flex flex-col items-end">
+                                    <!-- Submitted At (formatted as relative time) -->
+                                    <span class="text-sm text-gray-500">{{ \Carbon\Carbon::parse($submission->submittedAt)->diffForHumans() }}</span>
+                
+                                    <!-- Submission Status -->
+                                    <span class="text-sm font-bold 
+                                        {{ $submission->submissionStatus == 'Not Submitted' ? 'text-gray-500' : '' }}
+                                        {{ $submission->submissionStatus == 'On Time' ? 'text-green-600' : '' }}
+                                        {{ $submission->submissionStatus == 'Late' ? 'text-red-600' : '' }}">
+                                        {{ $submission->submissionStatus }}
+                                    </span>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>                
+            </div>
+                    
         </div>
 
         <!-- 2nd Row, 2nd Column: Calendar View -->

@@ -15,10 +15,12 @@
        class="text-base sm:text-lg text-gray-600 {{ Route::is('course.settings') ? 'lmstext font-bold' : 'text-black hover:text-red-600' }}">
         Settings
     </a>
-    <a href="{{ route('course.certification', ['courseID' => $course->courseID]) }}"
-        class="text-base sm:text-lg text-gray-600 {{ Route::is('course.certification') ? 'lmstext font-bold' : 'text-black hover:text-red-600' }}">
-         certificates
-     </a>
+    @if (Auth::user()->hasRole('faculty'))
+        <a href="{{ route('course.certification', ['courseID' => $course->courseID]) }}"
+            class="text-base sm:text-lg text-gray-600 {{ Route::is('course.certification') ? 'lmstext font-bold' : 'text-black hover:text-red-600' }}">
+            certificates
+        </a>
+    @endif
 </div>
 
 <!-- Responsive hamburger menu for mobile -->

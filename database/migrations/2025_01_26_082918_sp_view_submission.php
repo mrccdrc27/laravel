@@ -80,8 +80,8 @@ return new class extends Migration
                     FROM courses AS C
                     INNER JOIN assignments AS A ON C.courseID = A.courseID
                     INNER JOIN submissions AS S ON A.assignmentID = S.assignmentID
-                    WHERE C.courseID = 2
-                    AND S.studentID = 2
+                    WHERE C.courseID = @CourseID
+                    AND S.studentID = @StudentID
                     And S.grade IS NULL
                     Order BY A.dueDate
                 END

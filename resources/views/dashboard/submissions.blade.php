@@ -7,8 +7,8 @@ use Illuminate\Support\Collection;
 
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-blue-600 dark:text-blue-400 leading-tight">
-            {{ __('submissions') }}
+        <h2 class="font-semibold text-xl text-red-800 dark:text-blue-400 leading-tight">
+            {{ __('Submissions') }}
         </h2>        
     </x-slot>
 

@@ -25,11 +25,11 @@ use Illuminate\Pagination\LengthAwarePaginator;
 @endphp
 
 <x-app-layout>
-  <x-slot name="header">
-    <h2 class="font-semibold text-xl text-blue-600 dark:text-blue-400 leading-tight">
-        {{ __('faculty dashboard') }}
-    </h2>        
-</x-slot>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-red-800 dark:text-blue-400 leading-tight">
+            {{ __('Admin dashboard') }}
+        </h2>        
+    </x-slot>
 
 <div>
   <div class="container mx-auto p-8 space-y-8">

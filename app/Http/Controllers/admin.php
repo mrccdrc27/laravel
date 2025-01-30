@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class admin extends Controller
@@ -11,9 +11,17 @@ class admin extends Controller
         return view('');
     }
 
-    public function insert($facultyID)
+    public function insert(Request $request)
     {
-        return view('');
+        DB::statement('EXEC InsertAnnouncement ?, ?, ?, ?, ?, ?', [
+            $request->title,
+            $request->body,
+            $request->author,
+            $request->date_posted,
+            $request->date_expiry,
+            $request->is_active,
+        ]);
+        return redirect()->back()->with('success', 'Course created successfully.');
     }
 
     public function update($facultyID)

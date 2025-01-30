@@ -55,6 +55,27 @@ return new class extends Migration
             END;
         ");
 
+        DB::unprepared('DROP PROCEDURE IF EXISTS GetPendingAssignmentsStudent');
+        DB::unprepared("
+        CREATE PROCEDURE GetPendingAssignmentsStudent
+        @studentID INT
+        AS
+        BEGIN
+        SELECT 
+        C.title,
+        A.dueDate,
+            CASE
+            WHEN S.submissionID IS NULL THEN 'Pending'
+            ELSE 'Submitted'
+            END AS assignment_status
+        FROM enrollment E
+        INNER JOIN courses C ON E.courseID = C.courseID
+        INNER JOIN assignments A ON C.courseID = A.courseID
+        LEFT JOIN submissions S ON A.assignmentID = S.assignmentID AND E.studentID = S.studentID
+        WHERE E.studentID = @studentID;
+        END;
+        ");
+        
         
     }
 

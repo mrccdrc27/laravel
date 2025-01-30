@@ -18,13 +18,7 @@ use Illuminate\Support\Facades\Route;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 
-Route::get('/download-pdf', function () {
-    $enrollments = DB::select('EXEC GetEnrollmentStatsForFaculty @facultyID = ?', [auth()->id()]);
 
-    $pdf = Pdf::loadView('pdf.enrollment-stats', compact('enrollments'));
-
-    return $pdf->download('enrollment_stats.pdf');
-})->name('download.pdf');
 
 
 // Public routes
@@ -134,6 +128,7 @@ Route::middleware([
     Route::get('/reports', function () {return view('dashboard.reports');})->name('reports');
     Route::get('/submissions', function () {return view('dashboard.submissions');})->name('submissions');
 
+
     Route::get('/download-pdf', function () {
         $enrollments = DB::select('EXEC GetEnrollmentStatsForFaculty @facultyID = ?', [auth()->id()]);
     
@@ -172,6 +167,32 @@ Route::middleware([
 
     // certifications - Faculty
     //Route::post('/certification', [enrollments::class, 'getCoursesByStudent'])->name('certification');
+
+    // announcement
+    Route::post('/createannouncement', [admin::class, 'insert'])->name('create.announcement');
+
+
+    // pdf
+
+    Route::get('/download-pdf', function () {
+
+        $enrollments = DB::select('EXEC GetEnrollmentStatsForFaculty @facultyID = ?', [auth()->id()]);
+    
+        $pdf = Pdf::loadView('pdf.enrollment-stats', compact('enrollments'));
+    
+        return $pdf->download('enrollment_stats.pdf');
+
+    })->name('download.pdf');
+    
+    Route::get('/download-pdf-2', function () {
+    
+        $enrollments = $enrollments = DB::select('EXEC GetEnrollmentStatsForAdmin');
+    
+        $pdf = Pdf::loadView('pdf.enrollment-stats', compact('enrollments'));
+    
+        return $pdf->download('enrollment_stats.pdf');
+        
+    })->name('LMSbreakdown.pdf');
 });
 
     

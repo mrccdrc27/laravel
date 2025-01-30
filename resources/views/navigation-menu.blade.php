@@ -28,15 +28,15 @@
 
 
                 {{-- STUDENT NAVBAR --}}
-                @if (Auth::user()->hasRole('student'))
+                {{-- @if (Auth::user()->hasRole('student'))
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
                             {{ __('Submission') }}
                         </x-nav-link>
-                    </div>
+                    </div> --}}
 
                 {{-- FACULTY NAVBAR --}}
-                @elseif (Auth::user()->hasRole('faculty'))
+                @if (Auth::user()->hasRole('faculty'))
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link href="{{ route('submissions') }}" :active="request()->routeIs('submissions')">
                             {{ __('Submissions') }}
@@ -62,12 +62,12 @@
                     </div>
                 @endif
 
-                @if (Auth::user()->hasRole('student') || Auth::user()->hasRole('faculty'))
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                @if (Auth::user()->hasRole('faculty'))
+                    {{-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link href="{{ route('certifications') }}" :active="request()->routeIs('certifications')">
                             {{ __('Certifications') }}
                         </x-nav-link>
-                    </div>
+                    </div> --}}
 
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link href="{{ route('reports') }}" :active="request()->routeIs('reports')">
