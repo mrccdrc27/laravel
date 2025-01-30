@@ -4,9 +4,9 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
- */
+// /**
+//  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
+//  */
 class UserInfoFactory extends Factory
 {
     protected $model = \App\Models\UserInfo::class; // Replace with the correct namespace of your UserInfo model
