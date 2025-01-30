@@ -95,7 +95,14 @@ Route::get('/testing', function () {
     return view('test');
 })->name('testing');
 
+//Routes for Terms and policy
+Route::get('/terms-of-service', function () {
+    return view('terms');
+})->name('terms.show');
 
+Route::get('/privacy-policy', function () {
+    return view('policy');
+})->name('policy.show');
 
 
 Route::middleware([
@@ -195,7 +202,7 @@ Route::middleware([
     })->name('LMSbreakdown.pdf');
 });
 
-    
+
     
 
 
