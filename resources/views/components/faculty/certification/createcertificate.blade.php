@@ -1,15 +1,10 @@
 <h1 class="text-center mb-4 text-2xl font-semibold">Certification Form</h1>
-<form action="{{ url('/api/cert') }}" method="POST" class="p-6 border bg-white rounded-lg shadow-lg">
-    @csrf
-    {{-- <div class="mb-4">
-        <label for="certificationNumber" class="block text-sm font-medium text-gray-700">Certification Number:</label>
-        <input type="text" class="form-input mt-1 block w-full px-4 py-2 border rounded-md shadow-sm" id="certificationNumber" name="certificationNumber" maxlength="100" required>
-    </div> --}}
+<form action="{{ env('CERT_API_URL') }}" method="POST" class="p-6 border bg-white rounded-lg shadow-lg">
 
-    {{-- <div class="mb-4">
-        <label for="courseID" class="block text-sm font-medium text-gray-700">Course ID:</label>
-        <input type="number" class="form-input mt-1 block w-full px-4 py-2 border rounded-md shadow-sm" id="courseID" name="courseID" required>
-    </div> --}}
+    @csrf
+
+    <input type="hidden" name="issuerID" value="{{Auth::user()->id}}">
+    <input type="hidden" name="courseID" value="{{$course->courseID}}">
 
     <div class="mb-4">
         <label for="title" class="block text-sm font-medium text-gray-700">Title:</label>
@@ -31,10 +26,6 @@
         <input type="date" class="form-input mt-1 block w-full px-4 py-2 border rounded-md shadow-sm" id="expiryDate" name="expiryDate">
     </div>
 
-    {{-- <div class="mb-4">
-        <label for="issuerID" class="block text-sm font-medium text-gray-700">Issuer ID:</label>
-        <input type="number" class="form-input mt-1 block w-full px-4 py-2 border rounded-md shadow-sm" id="issuerID" name="issuerID" required>
-    </div> --}}
     @php
         $users = DB::select('EXEC GetStudentDetailsByCourse ?', [$course->courseID]);
     @endphp

@@ -62,18 +62,26 @@ return new class extends Migration
         AS
         BEGIN
         SELECT 
-        C.title,
-        A.dueDate,
+            C.title AS CourseTitle,
+            A.title AS AssignmentTitle,
+            A.dueDate,
             CASE
-            WHEN S.submissionID IS NULL THEN 'Pending'
-            ELSE 'Submitted'
-            END AS assignment_status
-        FROM enrollment E
-        INNER JOIN courses C ON E.courseID = C.courseID
-        INNER JOIN assignments A ON C.courseID = A.courseID
-        LEFT JOIN submissions S ON A.assignmentID = S.assignmentID AND E.studentID = S.studentID
-        WHERE E.studentID = @studentID;
-        END;
+                WHEN A.dueDate < GETDATE() THEN 'Past Due'
+                ELSE 'Pending'
+            END AS SubmissionStatus
+        FROM enrollment AS E
+        INNER JOIN courses AS C
+            ON E.courseID = C.courseID
+        INNER JOIN assignments AS A
+            ON C.courseID = A.courseID
+        LEFT JOIN submissions AS S
+            ON A.assignmentID = S.assignmentID
+            AND S.studentID = @StudentID
+        WHERE E.studentID = @StudentID
+            AND S.submissionID IS NULL
+        ORDER BY A.dueDate;
+    END;
+
         ");
         
         

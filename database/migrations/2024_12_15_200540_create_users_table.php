@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->integer('CSID')->nullable(true);
             $table->string('email', 100)->nullable(false)->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
@@ -20,6 +21,7 @@ return new class extends Migration
             $table->enum('role', ['admin', 'student', 'faculty', 'root']); // removed deafult    
             $table->rememberToken();
             $table->timestamps();
+
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

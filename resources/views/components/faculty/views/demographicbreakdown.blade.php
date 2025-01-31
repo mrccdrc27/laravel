@@ -24,7 +24,7 @@
 
     @if (Auth::user()->hasRole('admin'))
         <div class="flex justify-end mb-4">
-            <a href="{{ route('download.pdf') }}" class="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition-all">
+            <a href="{{ route('LMSbreakdown.pdf') }}" class="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition-all">
                 Download PDF
             </a>
         </div>

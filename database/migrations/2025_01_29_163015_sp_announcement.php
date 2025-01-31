@@ -67,9 +67,22 @@ return new class extends Migration
                 @Id BIGINT
             AS
             BEGIN
-                SELECT id, title, body, author, date_posted, date_expiry, is_active, created_at, updated_at
+                SELECT *
+                    FROM announcements
+                    WHERE is_active = 1 AND date_expiry > GETDATE()
+                    ORDER BY date_posted Desc;
+            END;
+        ");
+
+        DB::unprepared('DROP PROCEDURE IF EXISTS GetActiveAnnouncements');
+        DB::unprepared("
+            CREATE PROCEDURE GetActiveAnnouncements
+            AS
+            BEGIN
+                SELECT *
                 FROM announcements
-                WHERE id = @Id;
+                WHERE is_active = 1 AND date_expiry > GETDATE()
+                ORDER BY date_posted Desc;
             END;
         ");
         

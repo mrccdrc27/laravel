@@ -128,14 +128,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 </div>
 
-<div class="bg-white p-6 rounded-lg shadow-lg">
-  <div id="tooltip">
-  </div>
-
-  <div id="calendar"></div>
-
-</div>
-
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>

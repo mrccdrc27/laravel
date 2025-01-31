@@ -116,28 +116,11 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
         <!-- 2nd Row, 2nd Column: Calendar View -->
         <div class="bg-white p-6 rounded-lg shadow-lg">
+            
           <div id="tooltip" class="tooltip"></div>
-        
           <div id="calendar"></div>
-
         </div>
-
-        
-
-
     </div>
-
-
-</div>
-
-</div>
-
-<div class="bg-white p-6 rounded-lg shadow-lg">
-  <div id="tooltip">
-  </div>
-
-  <div id="calendar"></div>
-
 </div>
 
 
