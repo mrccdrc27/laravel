@@ -14,6 +14,8 @@ return [
     */
 
     'name' => env('APP_NAME', 'LMS'),
+    'url' => env('APP_URL', 'https://genesiscs.azurewebsites.net'),
+
 
     /*
     |--------------------------------------------------------------------------
